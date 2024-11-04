@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Bookings</title>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+   <link rel="stylesheet" href="smconfirm.css">
+   
+
+</head>
+<body>
+   
+    <section class="header">
+        <div class="navbar">
+            <h1>SparkMobile</a></h1>
+            <div class="search-container">
+                <input type="text" placeholder="Search">
+                <button type="submit">Search</button>
+            </div>
+        
+            <a href="smdash1.html">Home</a>
+            <a href="smbook.html">Bookings</a>
+            <a href="smprod.html">Products</a>
+            <a href="sm.html">Log out</a>
+        </div>
+    </section> 
+
+    <div class="container-ser">
+        <div class="profile-info">
+            <h2></h2>
+            <div class="edit-profile">
+                <h1 style="color: orangered">Confirmation</h1>
+                <br>
+                <h2>Washer: <span>Dave's Car Wash</span> </h2>
+                <br>
+                <h2>Customer: <span>Tanjiro</h2>
+                <br>
+                <h2>Address: <span>Bago, Aplaya Davao Ctiy</span></h2>
+                <br>
+                <h2>Services: <span>Car Wash, Engine Checking, Tire Checking</span></h2>
+                <br>
+                <h2>Products: <span>Product 1</span></h2>
+                <br>
+                <h2>Total: <span>PHP 400.00 </h2>
+                  
+
+                <div class="container">
+            <button type="submit" class="btn" onclick="openPopup()">Submit</button>
+            <a href="smbook2.html" class="btn">Back</a>
+            <div class="popup" id="popup">
+                <img src="checkmark.png">
+                <h2>Thank You!</h2>
+                <p>Your details has been succesfully submitted. Washer's are on their way!</p>
+                <button type="button" onclick="closePopup()">OK</button>
+                <br>
+                
+            </div>
+    </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+        let popup = document.getElementById("popup");
+
+        function openPopup(){
+            popup.classList.add("open-popup");
+        }
+        function closePopup(){
+            popup.classList.remove("open-popup");
+        }
+    </script>
+</body>
+</html>

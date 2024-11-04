@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Register</title>
+	<link href="https://fonts.googleapis.com/css?family=Georgia" rel="stylesheet">
+	<style>
+		body {
+			background-color: #89CFF0;
+			font-family: 'Georgia', serif;
+			color: #444444;
+		}
+		h1 {
+			text-align: center;
+			color: #3F7FBF;
+			margin-top: 50px;
+		}
+		form {
+			margin-top: 30px;
+			text-align: center;
+		}
+		label {
+			display: block;
+			margin-top: 20px;
+			color: #3F7FBF;
+			font-size: 20px;
+		}
+		input[type="text"], input[type="password"], input[type="email"], select {
+			padding: 10px;
+			border-radius: 5px;
+			border: none;
+			background-color: #FFFFFF;
+			font-size: 18px;
+			color: #444444;
+			margin-top: 10px;
+			width: 300px;
+		}
+		input[type="submit"], input[type="button"] {
+			padding: 10px 20px;
+			border-radius: 5px;
+			border: none;
+			background-color: #3F7FBF;
+			font-size: 20px;
+			color: #FFFFFF;
+			margin-top: 20px;
+			cursor: pointer;
+		}
+		input[type="submit"]:hover, input[type="button"]:hover {
+			background-color: #89CFF0;
+			color: #3F7FBF;
+		}
+		.container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			margin-top: 10px;
+		}
+		.register-link {
+			margin-top: 20px;
+			font-size: 16px;
+		}
+		.register-link a {
+			color: #3F7FBF;
+			text-decoration: none;
+		}
+        
+	</style>
+</head>
+<body>
+	<h1>Registration Page</h1>
+	
+	<form action="loginpage.html">
+		<label for="username">Username:</label>
+		<input type="text" id="username" name="username">
+		<label for="id_number">ID Number:</label>
+		<input type="text" id="id_number">
+		<label for="email">Email:</label>
+		<input type="email" id="email" name="email">
+		<label for="course">Course:</label>
+		<select for="course" name="Courses">
+			<option value="">None</option>
+			<option value="BTLEd">BTLEd</option>
+			<option value="BSHM">BSHM</option>
+			<option value="BSCRIM">BSCRIM</option>
+			<option value="BSBA">BSBA</option>
+		</select>
+		<label for="password">Password:</label>
+		<input type="password" id="password" name="password">
+		<label for="confirm_password">Confirm Password:</label>
+		<input type="password" id="confirm_password" name="confirm_password">
+		
+		<div class="container">
+			<input type="submit" value="Register">
+		</div>
+		<div class="register-link">
+			Already have an account? <a href="loginpage.html">Login</a>
+		</div>
+	</form>
+	
+</body>
+</html>
+

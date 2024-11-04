@@ -1,0 +1,80 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Sidebar styles */
+.sidebar {
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    padding-top: 4.5rem; /* Adjust for the fixed navbar */
+}
+
+.sidebar-sticky {
+    top: 4.5rem; /* Adjust for the fixed navbar */
+    padding-top: 1rem;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable sidebar */
+}
+
+.sidebar h5 {
+    font-size: 1rem;
+}
+
+.sidebar .text-center {
+    margin-bottom: 1rem;
+}
+
+.sidebar .nav-link {
+    color: #333;
+}
+
+.sidebar .nav-link.active {
+    background-color: #f8f9fa;
+    color: #007bff;
+    border-left: 2px solid #007bff;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #f8f9fa;
+    color: #142538;
+}
+
+.sidebar .nav-link i {
+    width: 20px;
+}
+
+.sidebar .mt-auto {
+    margin-top: auto;
+}
+
+.sidebar .nav-link.text-dark {
+    color: #333;
+}
+
+/* Main content styles */
+main {
+    margin-left: 250px; /* Adjust for sidebar width */
+    padding: 20px;
+}
+
+/* Profile picture styles */
+.sidebar .rounded-circle {
+    width: 80px;
+    height: 80px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .sidebar {
+        position: relative;
+        height: auto;
+        padding-top: 1rem;
+    }
+
+    main {
+        margin-left: 0;
+    }
+}

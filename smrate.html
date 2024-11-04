@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="smrate.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css">
+</head>
+<body>
+    
+    <div class="navbar">
+        <h1 class="navbar h1">SparkMobile</h1>
+        <div class="search-container">
+            <input type="text" placeholder="Search">
+            <button type="submit">Search</button>
+        </div>
+        <a href="smdash1.html">Home</a>
+        <a href="smbook.html">Bookings</a>
+        <a href="smprod.html">Products</a>
+        <a href="sm.html">Log out</a>
+    </div>
+
+        <div class="person">
+                <img src="person1.jpg">
+            </div>
+    <div class="left-nav">
+        
+        <ul>
+            <li><a href="smdash.html">Profile</a></li>
+            <li><a href="smcars.html">Cars</a></li>
+            <li><a href="smadd.html">Address</a></li>
+            <li><a href="smreward.html">Rewards</a></li>
+            <li><a href="smrate.html">Ratings</a></li>
+            <li><a href="sm.html">Logout</a></li>
+        </ul>
+    </div>
+
+    <h1 class="center-heading">Rate your Washer</h1>
+    <p class="center-heading">How's our service?</p>
+
+    <div class="profile">
+        <div class="rank">
+            <div class="rank-info">
+                <div class="washer">
+                    <img src="carwash1.jpg">
+                </div>
+                <h2>Dave car wash</h2>
+                <div class="stars">
+                    <span class="star">&#9733</span>
+                    <span class="star">&#9733</span>
+                    <span class="star">&#9733</span>
+                    <span class="star">&#9733</span>
+                    <div class="star">&#9733</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <button type="submit" class="btn" onclick="openPopup('profile-popup')">Rate</button>
+            <div class="popup" id="profile-popup">
+                <img src="checkmark.png">
+                <h2>Thank You!</h2>
+                <p>Your feedback will help us grow</p>
+                <button type="button" onclick="closePopup('profile-popup')">OK</button>
+            </div> 
+        </div>
+    </div>
+
+    <script>
+        function openPopup(popupId) {
+            let popup = document.getElementById(popupId);
+            popup.classList.add("open-popup");
+        }
+        function closePopup(popupId) {
+            let popup = document.getElementById(popupId);
+            popup.classList.remove("open-popup");
+        }
+    </script>
+</body>
+</html>
