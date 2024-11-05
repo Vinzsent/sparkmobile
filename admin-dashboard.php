@@ -349,8 +349,8 @@ mysqli_close($connection);
               </a>
             </li>
             <li class="v-1">
-              <a href="admin-database-car-appearance.php" class="nav-link px-3">
-                <span class="me-2">Car Appearance</span>
+              <a href="admin-database-car-condition.php" class="nav-link px-3">
+                <span class="me-2">Car Condition</span>
               </a>
             </li>
           </ul>
