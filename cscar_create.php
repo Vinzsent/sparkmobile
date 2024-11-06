@@ -1,5 +1,8 @@
 <?php
 session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require_once "config.php";
 
 // Redirect to the login page if the user is not logged in
@@ -9,6 +12,11 @@ if (!isset($_SESSION['username'])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Check connection first
+    if ($connection->connect_error) {
+        die("Connection failed: " . $connection->connect_error);
+    }
+
     // Get user ID from the session
     $userID = $_SESSION['user_id'];
     $label = $_POST["label"];
@@ -59,6 +67,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     try {
+        // Debug: Print values being inserted
+        error_log("Attempting to insert: UserID=$userID, Label=$label, Plate=$platenumber");
+
         // Prepare and execute the database insertion using prepared statements
         $stmt = $connection->prepare("INSERT INTO vehicles (user_id, label, platenumber, chassisnumber, enginenumber, brand, model, color, profile) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
         
@@ -85,25 +96,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->close();
 
         // Success message and redirect
-        echo '<script>alert("Car registration successful!");</script>';
-        echo "<script>
-                setTimeout(function() {
-                    window.location.href = 'cars-profile.php';
-                }, 100);
-              </script>";
+        echo '<script>
+                alert("Car registration successful!");
+                window.location.href = "cars-profile.php";
+              </script>';
         exit;
 
     } catch (Exception $e) {
-        // Log the error (you should implement proper error logging)
+        // Log the error and display detailed message
         error_log("Error in car registration: " . $e->getMessage());
-        echo "An error occurred during registration. Please try again later.";
+        echo "An error occurred during registration: " . $e->getMessage();
         
         // Clean up uploaded file if database insertion failed
         if (!empty($profile_path) && file_exists($target_path)) {
             unlink($target_path);
         }
     }
-}
 
-mysqli_close($connection);
+    // Close the connection after all operations
+    $connection->close();
+}
 ?>
