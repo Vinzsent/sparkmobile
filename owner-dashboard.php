@@ -40,7 +40,7 @@ $online_percentage = ($total_users_in_db > 0) ? round(($online_count / $total_us
 $offline_percentage = ($total_users_in_db > 0) ? round(($offline_count / $total_users_in_db) * 100) : 0;
 
 // Count occupied slots (users currently online)
-$occupied_slots_query = "SELECT COUNT(*) as occupied_slots FROM queueing_slots WHERE is_serving = '1'";
+$occupied_slots_query = "SELECT COUNT(*) as occupied_slots FROM queuing_slots WHERE is_serving = '1'";
 $occupied_slots_result = mysqli_query($connection, $occupied_slots_query);
 $occupied_slots = mysqli_fetch_assoc($occupied_slots_result)['occupied_slots'];
 
