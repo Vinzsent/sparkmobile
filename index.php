@@ -315,6 +315,7 @@
         <div class="modal-body">
           <form action="cslogin.php" method="POST">
             <div class="mb-3">
+              <input type="hidden" id="status" name="status" value="online">
               <label for="email" class="form-label">Email</label>
               <input type="email" class="form-control" id="email" name="email" required>
             </div>

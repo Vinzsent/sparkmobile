@@ -12,12 +12,15 @@ if ($connection->connect_error) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
     $password = $_POST["password"];
-
+    $status = $_POST["status"];
     $sql = "SELECT * FROM users WHERE email=?";
     $stmt = $connection->prepare($sql);
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
+
+    $query = "UPDATE users SET status = '$status' WHERE email = '$email'";
+    $connection->query($query);
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
@@ -35,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['lastname'] = $row['lastname'];
             $_SESSION['email'] = $row['email'];
             $_SESSION['role'] = $row['role'];
-
+            $_SESSION['status'] = $status;
             if ($row['role'] === 'User') {
                 header("Location: user-dashboard.php");
                 exit();

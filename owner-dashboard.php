@@ -21,7 +21,36 @@ $query = "SELECT * FROM users WHERE user_id = '$userID'";
 $result = mysqli_query($connection, $query);
 $userData = mysqli_fetch_assoc($result);
 
+$total_users_query = "SELECT COUNT(*) as total_count FROM users WHERE role = 'User'";
+$total_result = mysqli_query($connection, $total_users_query);
+$total_users_in_db = mysqli_fetch_assoc($total_result)['total_count'];
 
+// Count online users (keep existing code)
+$online_users_query = "SELECT COUNT(*) as online_count FROM users WHERE status = 'online' AND role = 'User'";
+$online_result = mysqli_query($connection, $online_users_query);
+$online_count = mysqli_fetch_assoc($online_result)['online_count'];
+
+// Count offline users (keep existing code)
+$offline_users_query = "SELECT COUNT(*) as offline_count FROM users WHERE status = 'offline' AND role = 'User'";
+$offline_result = mysqli_query($connection, $offline_users_query);
+$offline_count = mysqli_fetch_assoc($offline_result)['offline_count'];
+
+// Calculate percentages based on total users in database
+$online_percentage = ($total_users_in_db > 0) ? round(($online_count / $total_users_in_db) * 100) : 0;
+$offline_percentage = ($total_users_in_db > 0) ? round(($offline_count / $total_users_in_db) * 100) : 0;
+
+// Count occupied slots (users currently online)
+$occupied_slots_query = "SELECT COUNT(*) as occupied_slots FROM users WHERE status = 'online' AND role = 'User'";
+$occupied_slots_result = mysqli_query($connection, $occupied_slots_query);
+$occupied_slots = mysqli_fetch_assoc($occupied_slots_result)['occupied_slots'];
+
+// Calculate vacant slots
+$max_slots = 5;
+$vacant_slots = $max_slots - $occupied_slots;
+$vacant_slots = max(0, $vacant_slots); // Ensure we don't show negative slots
+
+// Calculate vacancy percentage
+$vacancy_percentage = ($max_slots > 0) ? round(($vacant_slots / $max_slots) * 100) : 0;
 
 
 // Close the database connection
@@ -397,31 +426,31 @@ mysqli_close($connection);
                     <div class="col-md-3">
                         <div class="card text-white bg-dark">
                             <div class="card-body">
-                                <h4 class="card-title">11,871,522</h4>
-                                <p class="card-text">Total Online Today</p>
+                                <h4 class="card-title"><?php echo $total_users_in_db; ?></h4>
+                                <p class="card-text">Total Users</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="card text-white bg-dark">
                             <div class="card-body">
-                                <h4 class="card-title">47%</h4>
-                                <p class="card-text">Users Online</p>
+                                <h4 class="card-title"><?php echo $online_percentage; ?>%</h4>
+                                <p class="card-text">Users Online (<?php echo $online_count; ?>)</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="card text-white bg-dark">
                             <div class="card-body">
-                                <h4 class="card-title">51%</h4>
-                                <p class="card-text">Offline</p>
+                                <h4 class="card-title"><?php echo $offline_percentage; ?>%</h4>
+                                <p class="card-text">Users Offline (<?php echo $offline_count; ?>)</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="card text-white bg-dark">
                             <div class="card-body">
-                                <h4 class="card-title">177 sec</h4>
+                                <h4 class="card-title"><?php echo $vacant_slots; ?></h4>
                                 <p class="card-text">Vacant Slot Number</p>
                             </div>
                         </div>
@@ -433,7 +462,7 @@ mysqli_close($connection);
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-header">
-                                Visits
+                                User Distribution
                             </div>
                             <div class="card-body">
                                 <canvas id="visitsChart" class="chart"></canvas>
@@ -443,7 +472,7 @@ mysqli_close($connection);
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-header">
-                                Visits by Region
+                                Slot Availability
                             </div>
                             <div class="card-body">
                                 <canvas id="regionChart" class="chart"></canvas>
@@ -454,65 +483,87 @@ mysqli_close($connection);
             </div>
         </div>
     </main>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Chart for Visits
-        const ctxVisits = document.getElementById('visitsChart').getContext('2d');
-        const visitsChart = new Chart(ctxVisits, {
-            type: 'line',
-            data: {
-                labels: ['2023', '2024'],
-                datasets: [{
-                    label: 'Online',
-                    data: [2000, 10000],
-                    borderColor: 'blue',
-                    fill: false,
-                }, {
-                    label: 'Offline',
-                    data: [20000, 30000],
-                    borderColor: 'red',
-                    fill: false,
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        beginAtZero: true
-                    },
-                    y: {
-                        beginAtZero: true
+    // Chart for User Status
+    const ctxVisits = document.getElementById('visitsChart').getContext('2d');
+    const visitsChart = new Chart(ctxVisits, {
+        type: 'bar',  // Changed to bar graph
+        data: {
+            labels: ['Total Users', 'Online Users', 'Offline Users'],
+            datasets: [{
+                label: 'Number of Users',
+                data: [<?php echo $total_users_in_db; ?>, <?php echo $online_count; ?>, <?php echo $offline_count; ?>],
+                backgroundColor: [
+                    '#072797',  // Blue for total
+                    'orangered',  //  for online
+                    '#dc3545'   // Red for offline
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
                     }
                 }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'User Distribution'
+                },
+                legend: {
+                    display: false
+                }
             }
-        });
+        }
+    });
 
-        // Chart for Visits by Region
-        const ctxRegion = document.getElementById('regionChart').getContext('2d');
-        const regionChart = new Chart(ctxRegion, {
-            type: 'bar',
-            data: {
-                labels: ['2019', '2020', '2021', '2022', '2023'],
-                datasets: [{
-                    label: 'Users',
-                    data: [310000, 550000, 700000, 850000, 1200000],
-                    backgroundColor: 'orangered'
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        beginAtZero: true
-                    },
-                    y: {
-                        beginAtZero: true
+    // Chart for Slot Usage
+    const ctxRegion = document.getElementById('regionChart').getContext('2d');
+    const regionChart = new Chart(ctxRegion, {
+        type: 'bar',  // Changed to bar graph
+        data: {
+            labels: ['Maximum Slots', 'Occupied Slots', 'Vacant Slots'],
+            datasets: [{
+                label: 'Slots',
+                data: [<?php echo $max_slots; ?>, <?php echo $occupied_slots; ?>, <?php echo $vacant_slots; ?>],
+                backgroundColor: [
+                    '#072797',  // Blue for max
+                    '#ffc107',  // Yellow for occupied
+                    '#17a2b8'   // Light blue for vacant
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
                     }
                 }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Slot Availability'
+                },
+                legend: {
+                    display: false
+                }
             }
-        });
-    </script>
+        }
+    });
+</script>
 
 
     <script>
@@ -535,7 +586,7 @@ mysqli_close($connection);
         updateDateTime();
     </script>
 
-    
+
     <script src="./js/bootstrap.bundle.min.js"></script>
     <script src="./js/jquery-3.5.1.js"></script>
     <script src="./js/jquery.dataTables.min.js"></script>
