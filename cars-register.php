@@ -377,8 +377,6 @@ $userData = mysqli_fetch_assoc($result);
 
               <div class="col-md-4">
                 <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($_SESSION['user_id']); ?>">
-                <input type="hidden" name="status" value="online">
-
                 <div class="form-group mb-4">
                   <label for="label" class="form-label text-black">Label:</label>
                   <select class="form-select" id="label" name="label" required>
