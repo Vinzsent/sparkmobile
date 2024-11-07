@@ -38,7 +38,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['lastname'] = $row['lastname'];
             $_SESSION['email'] = $row['email'];
             $_SESSION['role'] = $row['role'];
-            $_SESSION['status'] = $status;
+            $_SESSION['status'] = $row['status'];
+            
             if ($row['role'] === 'User') {
                 header("Location: user-dashboard.php");
                 exit();

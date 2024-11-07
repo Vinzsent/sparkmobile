@@ -26,6 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $brand = $_POST["brand"];
     $model = $_POST["model"];
     $color = $_POST["color"];
+    $status = $_POST["status"]."online";
     $profile_path = ''; // Default empty path
 
     // Handle profile picture upload
