@@ -11,38 +11,28 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Fetch user information based on ID
-$userID = $_SESSION['user_id'];
-
-$vehicle_id = $_GET['vehicle_id']; // Retrieve vehicle_id from the URL
-$_SESSION['vehicle_id'] = $vehicle_id; // Store vehicle_id in the session
-$shop_id = $_GET['shop_id'];
-$servicename_id = $_GET['servicename_id'];
 $user_id = $_GET['user_id'];
-
 
 // Fetch user information from the database based on the user's ID
 // Replace this with your actual database query
-$query = "SELECT * FROM vehicles WHERE vehicle_id = '$vehicle_id'";
-// Execute the query and fetch the user data
+$query = "SELECT * FROM vehicles WHERE user_id = '$user_id'";
+// Execute the query and fetch the user text
 $result = mysqli_query($connection, $query);
 $vehicleData = mysqli_fetch_assoc($result);
 
 
-$query1 = "SELECT * FROM users WHERE user_id = $userID";
-// Execute the query and fetch the user data
-$result1 = mysqli_query($connection, $query1);
-$userData = mysqli_fetch_assoc($result1);
+$shop_query = "SELECT *FROM shops WHERE shop_id = '$shop_id'";
+$shop_result = mysqli_query($connection, $shop_query);
+$shopData = mysqli_fetch_assoc($shop_result);
 
-$service_query = "SELECT * FROM service_details WHERE user_id = $userID and vehicle_id = '$vehicle_id'";
-$result2 = mysqli_query($connection, $service_query);
-$serviceData = mysqli_fetch_assoc($result2);
+$slot_query = "SELECT *FROM queuing_slots WHERE vehicle_id = '$vehicle_id'";
+$slot_result = mysqli_query($connection, $slot_query);
+$slotData = mysqli_fetch_assoc($slot_result);
 
-$servicedone_query = "SELECT * FROM finish_jobs WHERE user_id = $userID and vehicle_id = '$vehicle_id'";
-$result3 = mysqli_query($connection, $servicedone_query);
-$servicedoneData = mysqli_fetch_assoc($result3);
 
-// Close the database connection
-mysqli_close($connection);
+
+
+// Close the database connectio
 ?>
 
 
@@ -60,7 +50,7 @@ mysqli_close($connection);
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
   <link rel="stylesheet" href="css/dataTables.bootstrap5.min.css" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <title>SPARK MOBILE</title>
+  <title>DIRT TECH</title>
   <link rel="icon" href="NEW SM LOGO.png" type="image/x-icon">
   <link rel="shortcut icon" href="NEW SM LOGO.png" type="image/x-icon">
 </head>
@@ -167,10 +157,6 @@ mysqli_close($connection);
     background-color: orangered;
   }
 
-  .v-4 {
-    background-color: #d9d9d9;
-  }
-
   .main {
     margin-left: 200px;
   }
@@ -186,11 +172,6 @@ mysqli_close($connection);
 
   .my-4:hover {
     background-color: #fff;
-  }
-
-  .my-6:hover {
-    background-color: #d9d9d9;
-    color: #000
   }
 
   .navbar {
@@ -233,32 +214,97 @@ mysqli_close($connection);
 
   .v-3 {
     font-weight: bold;
-    font-size: 20px;
+    font-size: xx-large;
   }
 
   .my-5 {
     margin-left: -20px;
   }
 
-  /* Custom style to resize the checkbox */
-  .checkbox-container {
-    display: flex;
-    /* Use flexbox for layout */
-    align-items: center;
-    /* Center items vertically */
-  }
-
-  .checkbox {
-    /* Optional: Customize checkbox size */
-    width: 1.5em;
-    height: 1.5em;
-    margin-right: 10px;
-    /* Adjust spacing between checkbox and label */
-  }
-
-
   .ex-1 {
     color: red;
+  }
+
+  .service-container {
+    padding: 20px;
+
+  }
+
+  .service-category {
+    margin-bottom: 20px;
+  }
+
+  .category-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+
+  }
+
+  .card {
+
+    border-radius: 8px;
+    padding: 20px;
+    width: 200px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border: 2px solid orangered;
+    /* Replace #007bff with any color you want for the outline */
+    border-radius: 5px;
+    /* Optional: adds rounded corners */
+  }
+
+  .card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    font-weight: bold;
+  }
+
+  .service-title {
+    font-size: 16px;
+    color: #333;
+  }
+
+  .service-details {
+    font-size: 12px;
+    color: #666;
+  }
+
+  .service-price {
+    font-size: 18px;
+    color: #007bff;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+
+  .service-features {
+    list-style: none;
+    padding: 0;
+    font-size: 12px;
+    color: #555;
+    margin: 10px 0;
+  }
+
+  .service-features li {
+    margin-bottom: 5px;
+  }
+
+  .btn {
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
   }
 </style>
 
@@ -329,13 +375,13 @@ mysqli_close($connection);
     id="sidebar"
 
 
-    class="offcanvas-body p-0">
+    <div class="offcanvas-body p-0">
     <nav class="">
       <ul class="navbar-nav">
 
 
         <div class=" welcome fw-bold px-3 mb-3">
-          <h5 class="text-center">Welcome back <?php echo $userData['firstname']; ?>!</h5>
+          <h5 class="text-center">Welcome back <?php echo isset($_SESSION['firstname']) ? $_SESSION['firstname'] : ''; ?>!</h5>
         </div>
         <div class="ms-3" id="dateTime"></div>
         </li>
@@ -456,7 +502,7 @@ mysqli_close($connection);
           </a>
         </li>
         <li>
-          <a href="index.php" class="nav-link px-3">
+          <a href="logout.php" class="nav-link px-3">
             <span class="me-2"><i class="fas fa-sign-out-alt"></i>
               </i></span>
             <span>LOG OUT</span>
@@ -468,154 +514,224 @@ mysqli_close($connection);
   </div>
   </div>
   <!-- main content -->
-  <?php
-  if (mysqli_num_rows($result2) > 0) {
-  ?>
-    <main>
+  <main>
     <div class="container-vinfo text-dark">
-        <h2 class="mb-5">Your vehicle is currently cleaning!</h2>
-        <input type="hidden" name="selected_id" id="selected_id" value="<?php echo $serviceData['selected_id']; ?>">
+      <h2 class="mb-2 offset-md-4">Select Services</h2>
+      <p class="col-md-4 offset-md-4">select carwash service for</p>
+      <?php
+      if ($result) {
+        // Check if there are any vehicles for the user
+        if (mysqli_num_rows($result) > 0) {
+          echo '<h2 class="mb-2"></h2>';
+          echo '<div class="form-group mt-4 col-md-4 offset-md-3">';
+          echo '<label for="platenumber" class="form-label">Plate Number</label>';
+          echo '<input type="text" class="form-control mb-3" id="platenumber" name="platenumber" value="' . $vehicleData['platenumber'] . '" disabled>';
 
-        <a href="csprocess3-4.php?user_id=<?php echo $userData['user_id']; ?>&vehicle_id=<?php echo $vehicleData['vehicle_id']; ?>&shop_id=<?php echo $shop_id; ?>">
-            <button type="button" class="btn btn-success btn-md mb-3">Add Services</button>
-        </a>
-        <a href="cspayment.php?vehicle_id=<?php echo $vehicle_id; ?>" id="proceedButton">
-            <button type="button" class="btn btn-primary mb-3">PROCEED</button>
-        </a>
 
-        
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Services</th>
-                        <th>Service Duration</th>
-                        <th>Cleaning Products</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    // Reset the result pointer to the beginning for all columns
-                    mysqli_data_seek($result2, 0);
-                    $hasData = false; // Flag to track if data is present
 
-                    while ($serviceData = mysqli_fetch_assoc($result2)) {
-                        echo "<tr>";
+          // Store the fetched data in an array
+          $vehiclesData = array();
+          while ($row = mysqli_fetch_assoc($result)) {
+            $vehiclesData[] = $row;
+            echo '<option value="' . $row['platenumber'] . '">' . $row['platenumber'] . '</option>';
+          }
 
-                        // Check if serviceData is valid before accessing its values
-                        if ($serviceData) {
-                            // Display Service
-                            echo "<td class='mt-3'>" . htmlspecialchars($serviceData['service']) . "</td>";
+          echo '</select>';
+          echo '</div>';
+          // Rest of your HTML code...
+        } else {
+          echo '<p>No vehicles found, Register your cars first in MY CARS section.</p>';
+        }
+      } else {
+        // Handle the case where the query fails
+        echo '<p>Error: ' . mysqli_error($connection) . '</p>';
+      }
+      ?>
 
-                            // Display Service Duration
-                            mysqli_data_seek($result3, 0); // Reset pointer for service duration
-                            $servicedoneData = mysqli_fetch_assoc($result3);
-                            echo "<td class='mt-3'>" . ($servicedoneData ? htmlspecialchars($servicedoneData['timer']) : 'NA') . "</td>";
 
-                            // Display Cleaning Products
-                            if (!empty($serviceData['product_name'])) {
-                                echo "<td class='mt-3'>" . htmlspecialchars($serviceData['product_name']) . "</td>";
-                            } else {
-                                echo "<td class='mt-3'>
-                                        <a href='user-dashboard-select-products.php?selected_id=" . $serviceData['selected_id'] . "&user_id=" . $userData['user_id'] . "&servicename_id=" . $servicename_id . "&shop_id=" . $shop_id . "&vehicle_id=" . $vehicle_id . "'>
-                                            <button type='button' class='btn btn-primary btn-sm'>Add cleaning products</button>
-                                        </a>
-                                    </td>";
-                            }
 
-                            // Display Status
-                            echo "<td class='mt-3'>" . htmlspecialchars($serviceData['status']) . "</td>";
+      <div class="my-5 container-vinfo text-dark">
 
-                            // Display Delete Button
-                            echo "<td class='mt-3'>
-                                <form action='delete_service.php' method='POST' onsubmit=\"return confirm('Are you sure you want to delete this service?');\">
-                                    <input type='hidden' name='selected_id' value='" . $serviceData['selected_id'] . "'>
-                                    <input type='hidden' name='user_id' value='" . $userData['user_id'] . "'>
-                                    <input type='hidden' name='servicename_id' value='" . $servicename_id . "'>
-                                    <input type='hidden' name='shop_id' value='" . $shop_id . "'>
-                                    <input type='hidden' name='vehicle_id' value='" . $vehicle_id . "'>
-                                    <button type='submit' class='btn btn-danger btn-sm'>Remove</button>
-                                </form>
-                            </td>";
 
-                        }
-                        echo "</tr>";
-                        $hasData = true; // Set flag to true if data is found
-                    }
-                    if (!$hasData) {
-                        echo "<tr><td colspan='5'>NA</td></tr>"; // Display NA if no data is found
-                    }
-                    ?>
-                </tbody>
-            </table>
-        
 
-        
-    </div>
 
-    <script>
-        // Disable the "PROCEED" button until the status is "Done"
-        document.addEventListener('DOMContentLoaded', function() {
-            var statusElements = document.querySelectorAll("tbody tr td:nth-child(4)"); // Select all status cells
-            var proceedButton = document.getElementById('proceedButton');
-            var allDone = true;
 
-            statusElements.forEach(function(statusCell) {
-                if (statusCell.textContent.trim() !== "Done") {
-                    allDone = false; // If any status is not "Done", set to false
-                }
-            });
 
-            if (!allDone) {
-                proceedButton.disabled = true;
-                proceedButton.addEventListener('click', function(event) {
-                    event.preventDefault(); // Prevent the default behavior of the button click
-                });
+        <button type="button" class="btn btn-primary ms-5" onclick="window.history.back()">Back</button>
+        <h2 class="mb-2 ms-5 text-center">Choose Services</h2>
+        <div class="container mx-auto mt-5">
+          <?php
+          // Fetch appearance data
+          $appearance_query = "SELECT * FROM carappearance WHERE shop_id = '$shop_id' AND user_id = '$user_id' AND vehicle_id = '$vehicle_id'";
+          $appearance_result = mysqli_query($connection, $appearance_query);
+
+          if ($appearance_result && mysqli_num_rows($appearance_result) > 0) {
+            $appearance_data = mysqli_fetch_assoc($appearance_result);
+
+            // Build the condition to show only services where appearance is '0'
+            $conditions = [];
+
+            if ($appearance_data['tires'] == '0') {
+              $conditions[] = "'Tires'";
             }
+            if ($appearance_data['windshield'] == '0') {
+              $conditions[] = "'Wind shield'";
+            }
+            if ($appearance_data['body'] == '0') {
+              $conditions[] = "'Body'";
+            }
+            if ($appearance_data['interior'] == '0') {
+              $conditions[] = "'Interior'";
+            }
+            if ($appearance_data['sidemirror'] == '0') {
+              $conditions[] = "'Side mirror'";
+            }
+
+            if (count($conditions) > 0) {
+              // Main query to fetch only the required service categories
+              $services_query = "SELECT * FROM service_names WHERE shop_id = '$shop_id' AND service_name IN (" . implode(',', $conditions) . ")";
+              $result1 = mysqli_query($connection, $services_query);
+
+              if ($result1) {
+                echo '<div class="service-container">';
+                while ($service = mysqli_fetch_assoc($result1)) {
+                  $current_category = $service['service_name'];
+
+                  // Display each service category title
+                  echo '<div class="service-category">';
+                  echo '<h3 class="category-title">' . $current_category . '</h3>';
+
+                  // Query to fetch services for the specific category from offered_services table
+                  $service_details_query = "SELECT * FROM offered_services WHERE shop_id = '$shop_id' AND service_name = '$current_category'";
+                  $service_details_result = mysqli_query($connection, $service_details_query);
+
+                  if ($service_details_result && mysqli_num_rows($service_details_result) > 0) {
+                    echo '<div class="card-container">';
+
+                    // Display service details for each card
+                    while ($detail = mysqli_fetch_assoc($service_details_result)) {
+                      // Create a separate form for each service card
+                      echo '<form action="csselectedservice.php" method="POST">';
+                      echo '<div class="card">';
+                      echo '<input type="hidden" name="slotNumber" value="' . $slotData['slotNumber'] . '">';
+                      echo '<input type="hidden" name="user_id" value="' . $user_id . '">';
+                      echo '<input type="hidden" name="vehicle_id" value="' . $vehicleData['vehicle_id'] . '">';
+                      echo '<input type="hidden" name="status" value="Ongoing">';
+                      echo '<input type="hidden" name="is_deleted" value="0">';
+                      echo '<input type="hidden" name="shop_id" value="' . $shop_id . '">';
+                      echo '<input type="hidden" name="servicename_id" value="' . $detail['servicename_id'] . '">';
+                      echo '<input type="hidden" name="service" value="' . $detail['services'] . '">';
+                      echo '<input type="hidden" name="price" value="' . $detail['price'] . '">';
+
+                      echo '<div class="card-header">';
+                      echo '<h5 class="service-title">' . $detail['services'] . '</h5>';
+                      echo '</div>';
+                      echo '<div class="card-body">';
+                      echo '<p class="service-details">15 minutes maximum cleaning process</p>';
+                      echo '<p class="service-price">₱' . $detail['price'] . '</p>';
+
+                      // Display service features if available
+                      if (!empty($detail['features'])) {
+                        echo '<ul class="service-features">';
+                        foreach (explode(',', $detail['features']) as $feature) {
+                          echo '<li>' . trim($feature) . '</li>';
+                        }
+                        echo '</ul>';
+                      }
+
+                      echo '<div class="text-center">';
+                      echo '<button type="submit" class="btn btn-primary">Buy Service</button>';
+                      echo '</div>'; // End of button div
+
+                      echo '</div>'; // End of card-body
+                      echo '</div>'; // End of card
+                      echo '</form>'; // End of individual service form
+                    }
+
+                    echo '</div>'; // End of card-container
+                  } else {
+                    echo '<p>No services available for ' . $current_category . '.</p>';
+                  }
+
+                  echo '</div>'; // End of service-category
+                }
+
+                echo '</div>'; // End of service-container
+              }
+            }
+            echo '</form>';
+          } else {
+            echo 'Error fetching services: ' . mysqli_error($connection);
+          }
+
+
+          ?>
+
+        </div>
+
+
+
+      </div>
+
+
+
+      <script>
+        // Convert the PHP array to a JavaScript array
+        var vehiclesData = <?php echo json_encode($vehiclesData); ?>;
+
+        // Function to update the displayed information based on the selected option
+        function updateDisplay() {
+          // Get the selected value from the dropdown
+          var selectedPlateNumber = document.getElementById("platenumber").value;
+
+          // Find the matching vehicle in the JavaScript array
+          var selectedVehicle = vehiclesData.find(function(vehicle) {
+            return vehicle.platenumber === selectedPlateNumber;
+          });
+
+          // Update the displayed information
+          document.getElementById("label").value = selectedVehicle.label;
+          document.getElementById("model").value = selectedVehicle.model;
+          document.getElementById("chassisnumber").value = selectedVehicle.chassisnumber;
+          document.getElementById("enginenumber").value = selectedVehicle.enginenumber;
+          document.getElementById("color").value = selectedVehicle.color;
+          // Update other fields similarly
+        }
+      </script>
+
+
+
+      <script>
+        document.getElementById('date').addEventListener('change', function() {
+          var selectedDate = new Date(this.value);
+          var slotNumber = selectedDate.getHours(); // Use any logic to determine the slot number
+          document.getElementById('slotnumber').value = slotNumber;
         });
-    </script>
-</main>
+      </script>
 
-  <?php
-  } else {
-    // No data found message
-    echo "<p>No data found.</p>";
-  }
+      <script>
+        function updateDateTime() {
+          // Get the current date and time
+          var currentDateTime = new Date();
 
-  // Close database connection
-  ?>
+          // Format the date and time
+          var date = currentDateTime.toDateString();
+          var time = currentDateTime.toLocaleTimeString();
 
+          // Display the formatted date and time
+          document.getElementById('dateTime').innerHTML = '<p>Date: ' + date + '</p><p>Time: ' + time + '</p>';
+        }
 
+        // Update the date and time every second
+        setInterval(updateDateTime, 1000);
 
-
-
-
-
-
-
-  <script>
-    function updateDateTime() {
-      // Get the current date and time
-      var currentDateTime = new Date();
-
-      // Format the date and time
-      var date = currentDateTime.toDateString();
-      var time = currentDateTime.toLocaleTimeString();
-
-      // Display the formatted date and time
-      document.getElementById('dateTime').innerHTML = '<p>Date: ' + date + '</p><p>Time: ' + time + '</p>';
-    }
-
-    // Update the date and time every second
-    setInterval(updateDateTime, 1000);
-
-    // Initial call to display date and time immediately
-    updateDateTime();
-  </script>
+        // Initial call to display date and time immediately
+        updateDateTime();
+      </script>
 
 
 
+  </main>
   </script>
   <script src="./js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>

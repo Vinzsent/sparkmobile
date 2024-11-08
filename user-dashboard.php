@@ -384,7 +384,7 @@ $shop_result = mysqli_query($connection, $shop_query);
                                 </a>
                             </li>
                             <li class="v-1">
-                                <a href="csservice_view.php?vehicle_id=<?php echo $vehicleData['vehicle_id']; ?>" class="nav-link px-3">
+                                <a href="user-service-summary.php" class="nav-link px-3">
                                     <span class="me-2">Booking Summary</span>
                                 </a>
 

@@ -13,19 +13,8 @@ if (!isset($_SESSION['user_id'])) {
 // Fetch user information based on ID
 $userID = $_SESSION['user_id'];
 
-$vehicle_id = $_GET['vehicle_id']; // Retrieve vehicle_id from the URL
-$_SESSION['vehicle_id'] = $vehicle_id; // Store vehicle_id in the session
-$shop_id = $_GET['shop_id'];
-$servicename_id = $_GET['servicename_id'];
-$user_id = $_GET['user_id'];
 
 
-// Fetch user information from the database based on the user's ID
-// Replace this with your actual database query
-$query = "SELECT * FROM vehicles WHERE vehicle_id = '$vehicle_id'";
-// Execute the query and fetch the user data
-$result = mysqli_query($connection, $query);
-$vehicleData = mysqli_fetch_assoc($result);
 
 
 $query1 = "SELECT * FROM users WHERE user_id = $userID";
@@ -33,11 +22,11 @@ $query1 = "SELECT * FROM users WHERE user_id = $userID";
 $result1 = mysqli_query($connection, $query1);
 $userData = mysqli_fetch_assoc($result1);
 
-$service_query = "SELECT * FROM service_details WHERE user_id = $userID and vehicle_id = '$vehicle_id'";
+$service_query = "SELECT service, shop_id, vehicle_id, selected_id, servicename_id, status, service FROM service_details WHERE user_id = '$userID'";
 $result2 = mysqli_query($connection, $service_query);
 $serviceData = mysqli_fetch_assoc($result2);
 
-$servicedone_query = "SELECT * FROM finish_jobs WHERE user_id = $userID and vehicle_id = '$vehicle_id'";
+$servicedone_query = "SELECT * FROM finish_jobs WHERE user_id = '$userID'";
 $result3 = mysqli_query($connection, $servicedone_query);
 $servicedoneData = mysqli_fetch_assoc($result3);
 
@@ -390,7 +379,7 @@ mysqli_close($connection);
                 <span class="me-2">Request Slot</span>
               </a>
             </li>
-            <li class="v-1 v-2">
+            <li class="v-1">
               <a href="csprocess3.php" class="nav-link px-3">
                 <span class="me-2">Select Service</span>
               </a>
@@ -400,7 +389,7 @@ mysqli_close($connection);
                 <span class="me-2">Register your car</span>
               </a>
             </li>
-            <li class="v-1">
+            <li class="v-1 v-2">
               <a href="#" class="nav-link px-3">
                 <span class="me-2">Booking Summary</span>
               </a>
@@ -476,10 +465,10 @@ mysqli_close($connection);
         <h2 class="mb-5">Your vehicle is currently cleaning!</h2>
         <input type="hidden" name="selected_id" id="selected_id" value="<?php echo $serviceData['selected_id']; ?>">
 
-        <a href="csprocess3-4.php?user_id=<?php echo $userData['user_id']; ?>&vehicle_id=<?php echo $vehicleData['vehicle_id']; ?>&shop_id=<?php echo $shop_id; ?>">
+        <a href="csprocess3-4.php?user_id=<?php echo $userData['user_id']; ?>&vehicle_id=<?php echo $serviceData['vehicle_id']; ?>&shop_id=<?php echo $serviceData['shop_id']; ?>&selected_id=<?php echo $serviceData['selected_id']; ?>&servicename_id=<?php echo $serviceData['servicename_id']; ?>">
             <button type="button" class="btn btn-success btn-md mb-3">Add Services</button>
         </a>
-        <a href="cspayment.php?vehicle_id=<?php echo $vehicle_id; ?>" id="proceedButton">
+        <a href="cspayment.php?vehicle_id=<?php echo $serviceData['vehicle_id']; ?>" id="proceedButton">
             <button type="button" class="btn btn-primary mb-3">PROCEED</button>
         </a>
 
@@ -518,7 +507,7 @@ mysqli_close($connection);
                                 echo "<td class='mt-3'>" . htmlspecialchars($serviceData['product_name']) . "</td>";
                             } else {
                                 echo "<td class='mt-3'>
-                                        <a href='user-dashboard-select-products.php?selected_id=" . $serviceData['selected_id'] . "&user_id=" . $userData['user_id'] . "&servicename_id=" . $servicename_id . "&shop_id=" . $shop_id . "&vehicle_id=" . $vehicle_id . "'>
+                                        <a href='user-dashboard-select-products.php?user_id=" . $userData['user_id'] . "&vehicle_id=" . $serviceData['vehicle_id'] . "&shop_id=" . $serviceData['shop_id'] . "&selected_id=" . $serviceData['selected_id'] . "&servicename_id=" . $serviceData['servicename_id'] . "'>
                                             <button type='button' class='btn btn-primary btn-sm'>Add cleaning products</button>
                                         </a>
                                     </td>";
@@ -529,12 +518,11 @@ mysqli_close($connection);
 
                             // Display Delete Button
                             echo "<td class='mt-3'>
-                                <form action='delete_service.php' method='POST' onsubmit=\"return confirm('Are you sure you want to delete this service?');\">
+                                <form action='user-delete_service.php' method='POST' onsubmit=\"return confirm('Are you sure you want to delete this service?');\">
                                     <input type='hidden' name='selected_id' value='" . $serviceData['selected_id'] . "'>
                                     <input type='hidden' name='user_id' value='" . $userData['user_id'] . "'>
-                                    <input type='hidden' name='servicename_id' value='" . $servicename_id . "'>
-                                    <input type='hidden' name='shop_id' value='" . $shop_id . "'>
-                                    <input type='hidden' name='vehicle_id' value='" . $vehicle_id . "'>
+                                    <input type='hidden' name='shop_id' value='" . $serviceData['shop_id'] . "'>
+                                    <input type='hidden' name='vehicle_id' value='" . $serviceData['vehicle_id'] . "'>
                                     <button type='submit' class='btn btn-danger btn-sm'>Remove</button>
                                 </form>
                             </td>";
