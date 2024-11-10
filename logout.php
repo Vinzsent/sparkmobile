@@ -1,10 +1,12 @@
 <?php
 session_start();
+include 'config.php';
 
 // Update user status to offline if user is logged in
 if (isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit();
     // Database connection
-    require_once 'config.php';
     
     $user_ID = $_SESSION['user_id'];
     $sql = "UPDATE users SET status = 'offline' WHERE user_id = ?";
