@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'config.php';
+require_once 'config.php';
 
 // Update user status to offline if user is logged in
 if (isset($_SESSION['user_id'])) {
