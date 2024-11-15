@@ -25,13 +25,20 @@ $total_users_query = "SELECT COUNT(*) as total_count FROM users WHERE role = 'Us
 $total_result = mysqli_query($connection, $total_users_query);
 $total_users_in_db = mysqli_fetch_assoc($total_result)['total_count'];
 
-// Count online users (keep existing code)
-$online_users_query = "SELECT COUNT(*) as online_count FROM users WHERE status = 'online' AND role = 'User'";
+// Update the online/offline status queries
+$online_users_query = "SELECT COUNT(*) as online_count 
+                      FROM users 
+                      WHERE status = 'online' 
+                      AND role = 'User'";  // Consider users inactive after 5 minutes
+
+$offline_users_query = "SELECT COUNT(*) as offline_count 
+                       FROM users 
+                       WHERE (status = 'offline'  < NOW() - INTERVAL 5 MINUTE)
+                       AND role = 'User'";
+
 $online_result = mysqli_query($connection, $online_users_query);
 $online_count = mysqli_fetch_assoc($online_result)['online_count'];
 
-// Count offline users (keep existing code)
-$offline_users_query = "SELECT COUNT(*) as offline_count FROM users WHERE status = 'offline' AND role = 'User'";
 $offline_result = mysqli_query($connection, $offline_users_query);
 $offline_count = mysqli_fetch_assoc($offline_result)['offline_count'];
 
@@ -52,6 +59,130 @@ $vacant_slots = max(0, $vacant_slots); // Ensure we don't show negative slots
 // Calculate vacancy percentage
 $vacancy_percentage = ($max_slots > 0) ? round(($vacant_slots / $max_slots) * 100) : 0;
 
+// Add this query near your other database queries
+$monthly_logins_query = "SELECT 
+    MONTH(login_time) as month,
+    COUNT(*) as login_count
+    FROM user_logs 
+    WHERE YEAR(login_time) = YEAR(CURRENT_DATE)
+    GROUP BY MONTH(login_time)
+    ORDER BY month";
+$monthly_result = mysqli_query($connection, $monthly_logins_query);
+
+// Initialize arrays to store months and counts
+$months = [];
+$login_counts = [];
+
+// Populate arrays with data for all months (including 0 for months with no logins)
+for ($i = 1; $i <= 12; $i++) {
+    $months[] = date('F', mktime(0, 0, 0, $i, 1));
+    $login_counts[$i] = 0;
+}
+
+// Fill in actual login counts
+while ($row = mysqli_fetch_assoc($monthly_result)) {
+    $login_counts[$row['month']] = $row['login_count'];
+}
+
+// Convert login_counts to a simple array
+$login_counts = array_values($login_counts);
+
+// Fetch recent user login activities with user details
+$user_activities_query = "SELECT 
+    u.firstname,
+    u.lastname,
+    u.email,
+    u.profile,
+    ul.login_time,
+    u.status
+FROM user_logs ul
+JOIN users u ON ul.user_id = u.user_id
+WHERE u.role = 'User'
+ORDER BY ul.login_time DESC
+LIMIT 10"; // Limit to most recent 10 activities
+
+$activities_result = mysqli_query($connection, $user_activities_query);
+$user_activities = [];
+while ($activity = mysqli_fetch_assoc($activities_result)) {
+    $user_activities[] = $activity;
+}
+
+// Add this near your other database queries
+$current_month = date('m');
+$current_year = date('Y');
+
+$service_count_query = "SELECT COUNT(*) as service_count 
+                       FROM offered_services 
+                       WHERE MONTH(last_updated) = '$current_month' 
+                       AND YEAR(last_updated) = '$current_year'";
+
+$service_count_result = mysqli_query($connection, $service_count_query);
+$service_count = mysqli_fetch_assoc($service_count_result)['service_count'];
+
+// Check if service count is less than minimum required (4)
+if ($service_count < 4) {
+    $notification_message = "This is a reminder to update your services. Minimum requirement is 4 services per month. Current count: $service_count";
+    
+    // Insert notification into database
+    $insert_notification = "INSERT INTO notifications 
+                          (user_id, type, title, message, action_url, is_read, created_at) 
+                          VALUES 
+                          (
+                              '$userID',
+                              'service_update',
+                              'Service Update Required',
+                              '$notification_message',
+                              'ower-shop-service.php',
+                              0,
+                              NOW()
+                          )
+                          ON DUPLICATE KEY UPDATE 
+                              message = VALUES(message),
+                              is_read = 0,
+                              created_at = NOW()";
+    
+    mysqli_query($connection, $insert_notification);
+}
+
+// Check for services that need updates (older than 1 month)
+$outdated_services_query = "SELECT 
+    s.services,
+    s.last_updated,
+    DATEDIFF(NOW(), s.last_updated) as days_since_update
+FROM offered_services s
+WHERE s.last_updated < DATE_SUB(NOW(), INTERVAL 1 MONTH)
+OR s.last_updated IS NULL";
+
+$outdated_result = mysqli_query($connection, $outdated_services_query);
+
+if (mysqli_num_rows($outdated_result) > 0) {
+    while ($service = mysqli_fetch_assoc($outdated_result)) {
+        $notification_message = "This is a reminder to update your services. Minimum requirement is 4 services per month. Current count: $service_count";
+        
+        // Use INSERT ... ON DUPLICATE KEY UPDATE
+        $insert_notification = "INSERT INTO notifications 
+            (user_id, type, title, message, action_url, is_read, created_at) 
+            VALUES 
+            (
+                $userID,
+                'service_update',
+                'Service Update Required',
+                '$notification_message',
+                'owner-shop-service.php',
+                0,
+                NOW()
+            )
+            ON DUPLICATE KEY UPDATE 
+                message = VALUES(message),
+                is_read = 0,
+                created_at = NOW()";
+        
+        // Execute the query with error handling
+        if (!mysqli_query($connection, $insert_notification)) {
+            error_log("Notification insertion failed: " . mysqli_error($connection));
+        }
+    }
+}
 
 // Close the database connection
 mysqli_close($connection);
@@ -85,7 +216,7 @@ mysqli_close($connection);
 
     :root {
         --offcanvas-width: 220px;
-        --topNavbarHeight: 56px;
+        --topNavbarHeight: 2px;
     }
 
     .sidebar-nav {
@@ -244,6 +375,246 @@ mysqli_close($connection);
     .chart {
         min-height: 300px;
     }
+
+    /* Add to your existing styles */
+    .table {
+        color: #333;
+    }
+    
+    .table thead th {
+        background-color: #f8f9fa;
+        border-bottom: 2px solid #dee2e6;
+    }
+    
+    .table tbody tr:hover {
+        background-color: #f5f5f5;
+    }
+    
+    .badge {
+        padding: 5px 10px;
+        border-radius: 20px;
+    }
+
+    /* Responsive Table Styles */
+    @media screen and (max-width: 767px) {
+        .table-responsive {
+            border: 0;
+            padding: 15px;
+        }
+
+        .table {
+            border: 0;
+        }
+
+        .table thead {
+            display: none;
+        }
+
+        .table tr {
+            margin-bottom: 1rem;
+            display: block;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            background: #fff;
+            padding: 15px;
+        }
+
+        .table td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            border: none;
+            text-align: left;
+        }
+
+        .table td:before {
+            content: attr(data-label);
+            font-weight: bold;
+            text-transform: uppercase;
+            padding-right: 10px;
+            flex: 1;
+            text-align: left;
+        }
+
+        .table td span, 
+        .table td a {
+            flex: 2;
+            text-align: right;
+        }
+
+        /* Profile image styling */
+        td:first-child {
+            justify-content: center;
+            padding: 15px 0;
+        }
+
+        td:first-child:before {
+            display: none;
+        }
+
+        .profile-img {
+            width: 80px !important;
+            height: 80px !important;
+            margin: 0;
+        }
+
+        /* Status badge styling */
+        td[data-label="STATUS"] {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .badge {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 80px;
+            padding: 8px 16px;
+            margin-left: auto;
+            border-radius: 20px;
+        }
+
+        /* For online status specifically */
+        .bg-success {
+            text-align: center;
+            width: 100px;
+        }
+
+        /* For offline status */
+        .bg-danger {
+            text-align: center;
+            width: 100px;
+        }
+
+        /* Fix the ACTIVITY alignment */
+        td[data-label="ACTIVITY"] {
+            word-break: break-all;
+        }
+
+        /* Add spacing between rows */
+        .table tbody tr + tr {
+            margin-top: 20px;
+        }
+
+        /* Improve typography */
+        .table td:before {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Fix LOGIN TIME alignment */
+        td[data-label="LOGIN TIME"] {
+            text-align: right;
+        }
+    }
+
+    /* Badge Styles */
+    .badge {
+        padding: 0.5em 1em;
+        font-size: 0.875em;
+        border-radius: 30px;
+    }
+
+    /* Navbar icons styling */
+    .navbar-nav .nav-item {
+        display: flex;
+        align-items: center;
+    }
+
+    .navbar-nav .nav-link {
+        padding: 0.5rem 1rem;
+        color: white;
+        transition: color 0.3s ease;
+    }
+
+    .navbar-nav .nav-link:hover {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Ensure icons are properly aligned */
+    .navbar-nav i {
+        font-size: 1.2rem;
+        vertical-align: middle;
+    }
+
+    /* Space between icons */
+    .navbar-nav .nav-item:not(:last-child) {
+        margin-right: 0.5rem;
+    }
+
+    /* Dropdown menu positioning */
+    .dropdown-menu {
+        margin-top: 0.5rem;
+        right: 0;
+        left: auto;
+    }
+
+    /* Adjust main content positioning */
+    main {
+        margin-top: 10px; /* Height of navbar */
+        padding: 16px 16px 0 16px;
+    }
+
+    /* Adjust dashboard content */
+    .dashboard-content {
+        padding-top: 0;
+        margin-top: 0;
+    }
+
+    /* Adjust container padding */
+    .container-fluid {
+        padding-top: 20px;
+    }
+
+    /* Adjust navbar */
+    .navbar {
+        height: 60px;
+        padding: 0 16px;
+    }
+
+    /* Adjust sidebar positioning */
+    .sidebar-nav {
+        margin-top: 58px; /* Should match navbar height */
+    }
+
+    /* Remove any extra margins from first row */
+    .row.mb-4:first-child {
+        margin-top: 0;
+    }
+
+    /* Add to your existing styles */
+    .notification-bell {
+        position: relative;
+    }
+
+    .notification-bell.has-notification::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 8px;
+        height: 8px;
+        background-color: red;
+        border-radius: 50%;
+    }
+
+    .toast-container {
+        z-index: 1100;
+    }
+
+    .toast {
+        background-color: white;
+        color: #333;
+    }
+
+    .toast-header {
+        color: #000;
+    }
 </style>
 
 <body>
@@ -260,23 +631,21 @@ mysqli_close($connection);
             <div class="collapse navbar-collapse" id="topNavBar">
                 <form class="d-flex ms-auto my-3 my-lg-0">
                 </form>
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                    <li class="">
-                        <a href="csnotification.php" class="nav-link px-3">
-                            <span class="me-2"><i class="fas fa-bell"></i></i></span>
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item">
+                        <a href="notification.php" class="nav-link px-3 notification-bell">
+                            <i class="fas fa-bell"></i>
                         </a>
                     </li>
-                    <a class="nav-link dropdown-toggle ms-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-person-fill"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li><a class="dropdown-item" href="#">Visual</a></li>
-                        <li>
-                            <a class="dropdown-item" href="logout.php">Log out</a>
-                        </li>
-                    </ul>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle ms-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-fill"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Visual</a></li>
+                            <li><a class="dropdown-item" href="logout.php">Log out</a></li>
+                        </ul>
                     </li>
                 </ul>
             </div>
@@ -426,7 +795,7 @@ mysqli_close($connection);
                     <div class="col-md-3">
                         <div class="card text-white bg-dark">
                             <div class="card-body">
-                                <h4 class="card-title"><?php echo $total_users_in_db; ?></h4>
+                                <h4 class="card-title total-users"><?php echo $total_users_in_db; ?></h4>
                                 <p class="card-text">Total Users</p>
                             </div>
                         </div>
@@ -434,23 +803,23 @@ mysqli_close($connection);
                     <div class="col-md-3">
                         <div class="card text-white bg-dark">
                             <div class="card-body">
-                                <h4 class="card-title"><?php echo $online_percentage; ?>%</h4>
-                                <p class="card-text">Users Online (<?php echo $online_count; ?>)</p>
+                                <h4 class="card-title online-percentage"><?php echo $online_percentage; ?>%</h4>
+                                <p class="card-text online-count">Users Online (<?php echo $online_count; ?>)</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="card text-white bg-dark">
                             <div class="card-body">
-                                <h4 class="card-title"><?php echo $offline_percentage; ?>%</h4>
-                                <p class="card-text">Users Offline (<?php echo $offline_count; ?>)</p>
+                                <h4 class="card-title offline-percentage"><?php echo $offline_percentage; ?>%</h4>
+                                <p class="card-text offline-count">Users Offline (<?php echo $offline_count; ?>)</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="card text-white bg-dark">
                             <div class="card-body">
-                                <h4 class="card-title"><?php echo $vacant_slots; ?></h4>
+                                <h4 class="card-title vacant-slots"><?php echo $vacant_slots; ?></h4>
                                 <p class="card-text">Vacant Slot Number</p>
                             </div>
                         </div>
@@ -480,27 +849,86 @@ mysqli_close($connection);
                         </div>
                     </div>
                 </div>
+
+                <!-- User Activities Table -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                Recent User Activities
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Profile</th>
+                                                <th scope="col">First Name</th>
+                                                <th scope="col">Last Name</th>
+                                                <th scope="col">Email</th>
+                                                <th scope="col">Login Time</th>
+                                                <th scope="col">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($user_activities as $activity): ?>
+                                                <tr>
+                                                    <td data-label="">
+                                                        <img src="<?php echo $activity['profile']; ?>" 
+                                                             alt="Profile Picture" 
+                                                             class="img-fluid rounded-circle profile-img">
+                                                    </td>
+                                                    <td data-label="FIRST NAME">
+                                                        <?php echo $activity['firstname']; ?>
+                                                    </td>
+                                                    <td data-label="LAST NAME">
+                                                        <?php echo $activity['lastname']; ?>
+                                                    </td>
+                                                    <td data-label="ACTIVITY">
+                                                        <?php echo $activity['email']; ?>
+                                                    </td>
+                                                    <td data-label="LOGIN TIME">
+                                                        <?php echo $activity['login_time']; ?>
+                                                    </td>
+                                                    <td data-label="STATUS">
+                                                        <span class="badge <?php echo ($activity['status'] === 'online') ? 'bg-success' : 'bg-danger'; ?>">
+                                                            <?php echo $activity['status']; ?>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-    // Chart for User Status
+    // First, declare the contexts
     const ctxVisits = document.getElementById('visitsChart').getContext('2d');
+    const ctxRegion = document.getElementById('regionChart').getContext('2d');
+
+    // User Status Chart (Line Chart)
     const visitsChart = new Chart(ctxVisits, {
-        type: 'bar',  // Changed to bar graph
+        type: 'line',
         data: {
-            labels: ['Total Users', 'Online Users', 'Offline Users'],
+            labels: <?php echo json_encode($months); ?>,
             datasets: [{
-                label: 'Number of Users',
-                data: [<?php echo $total_users_in_db; ?>, <?php echo $online_count; ?>, <?php echo $offline_count; ?>],
-                backgroundColor: [
-                    '#072797',  // Blue for total
-                    'orangered',  //  for online
-                    '#dc3545'   // Red for offline
-                ],
-                borderWidth: 1
+                label: 'User Logins',
+                data: <?php echo json_encode(array_values($login_counts)); ?>,
+                borderColor: '#072797',
+                backgroundColor: 'rgba(7, 39, 151, 0.1)',
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#072797',
+                pointRadius: 6,
+                borderWidth: 2
             }]
         },
         options: {
@@ -516,19 +944,18 @@ mysqli_close($connection);
             plugins: {
                 title: {
                     display: true,
-                    text: 'User Distribution'
+                    text: 'Monthly User Login Frequency'
                 },
                 legend: {
-                    display: false
+                    display: true
                 }
             }
         }
     });
 
-    // Chart for Slot Usage
-    const ctxRegion = document.getElementById('regionChart').getContext('2d');
+    // Slot Usage Chart (Bar Chart)
     const regionChart = new Chart(ctxRegion, {
-        type: 'bar',  // Changed to bar graph
+        type: 'bar',
         data: {
             labels: ['Maximum Slots', 'Occupied Slots', 'Vacant Slots'],
             datasets: [{
@@ -558,7 +985,7 @@ mysqli_close($connection);
                     text: 'Slot Availability'
                 },
                 legend: {
-                    display: false
+                    display: true
                 }
             }
         }
@@ -592,6 +1019,157 @@ mysqli_close($connection);
     <script src="./js/jquery.dataTables.min.js"></script>
     <script src="./js/dataTables.bootstrap5.min.js"></script>
     <script src="./js/script.js"></script>
+    <script>
+    // Function to update dashboard data
+    function updateDashboardData() {
+        $.ajax({
+            url: 'fetch_dashboard_data.php',
+            method: 'GET',
+            success: function(response) {
+                // Update stats
+                $('.total-users').text(response.total_users);
+                $('.online-percentage').text(response.online_percentage + '%');
+                $('.online-count').text('Users Online (' + response.online_users + ')');
+                $('.offline-percentage').text(response.offline_percentage + '%');
+                $('.offline-count').text('Users Offline (' + response.offline_users + ')');
+                $('.vacant-slots').text(response.vacant_slots);
+
+                // Update user activities table
+                let tableBody = '';
+                response.user_activities.forEach(function(activity) {
+                    tableBody += `
+                        <tr>
+                            <td data-label="">
+                                <img src="${activity.profile}" 
+                                     alt="Profile Picture" 
+                                     class="img-fluid rounded-circle profile-img">
+                            </td>
+                            <td data-label="FIRST NAME">${activity.firstname}</td>
+                            <td data-label="LAST NAME">${activity.lastname}</td>
+                            <td data-label="ACTIVITY">${activity.activity}</td>
+                            <td data-label="LOGIN TIME">${activity.login_time}</td>
+                            <td data-label="STATUS">
+                                <span class="badge ${activity.status === 'online' ? 'bg-success' : 'bg-danger'}">
+                                    ${activity.status}
+                                </span>
+                            </td>
+                        </tr>
+                    `;
+                });
+                $('.table tbody').html(tableBody);
+
+                // Update charts
+                updateCharts(response);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching dashboard data:', error);
+            }
+        });
+    }
+
+    // Function to update charts with new data
+    function updateCharts(data) {
+        // Update visitsChart if needed
+        if (window.visitsChart) {
+            // Update chart data here
+            visitsChart.update();
+        }
+
+        // Update regionChart if needed
+        if (window.regionChart) {
+            regionChart.data.datasets[0].data = [5, 5 - data.vacant_slots, data.vacant_slots];
+            regionChart.update();
+        }
+    }
+
+    // Update data every 5 seconds (5000 milliseconds)
+    setInterval(updateDashboardData, 5000);
+
+    // Initial update
+    updateDashboardData();
+</script>
+
+<script>
+// Function to update dashboard stats
+function updateDashboardStats() {
+    fetch('get_dashboard_stats.php')
+        .then(response => response.json())
+        .then(data => {
+            // Update stats
+            document.querySelector('.total-users').textContent = data.total_users;
+            document.querySelector('.online-percentage').textContent = data.online_percentage + '%';
+            document.querySelector('.online-count').textContent = `Users Online (${data.online_count})`;
+            document.querySelector('.offline-percentage').textContent = data.offline_percentage + '%';
+            document.querySelector('.offline-count').textContent = `Users Offline (${data.offline_count})`;
+            document.querySelector('.vacant-slots').textContent = data.vacant_slots;
+            
+            // Update charts
+            visitsChart.data.datasets[0].data = [data.total_users, data.online_count, data.offline_count];
+            visitsChart.update();
+            
+            regionChart.data.datasets[0].data = [data.max_slots, data.occupied_slots, data.vacant_slots];
+            regionChart.update();
+        });
+}
+
+// Update stats every 30 seconds
+setInterval(updateDashboardStats, 30000);
+</script>
+
+<script>
+function checkServiceUpdates() {
+    $.ajax({
+        url: 'check_service_updates.php',
+        method: 'GET',
+        success: function(response) {
+            if (response.hasNotification) {
+                // Update notification bell
+                $('.notification-bell').addClass('has-notification');
+                
+                // Show notifications
+                response.notifications.forEach(function(notification) {
+                    let message;
+                    if (notification.type === 'count_warning') {
+                        message = notification.message;
+                    } else {
+                        message = `Service '${notification.service}' needs to be updated. Last update was ${notification.days_since_update} days ago.`;
+                    }
+                    showNotificationToast(message);
+                });
+            }
+        }
+    });
+}
+
+function showNotificationToast(message) {
+    const toast = `
+        <div class="toast-container position-fixed top-0 end-0 p-3">
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header bg-warning">
+                    <strong class="me-auto">Service Update Required</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    ${message}
+                    <div class="mt-2 pt-2 border-top">
+                        <a href="ower-shop-service.php" class="btn btn-primary btn-sm">Update Services</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    $('body').append(toast);
+    $('.toast').toast({
+        delay: 10000 // Show for 10 seconds
+    }).toast('show');
+}
+
+// Check for service updates every 5 minutes
+setInterval(checkServiceUpdates, 300000);
+// Initial check
+checkServiceUpdates();
+</script>
 </body>
 
 </html>

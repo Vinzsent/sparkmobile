@@ -211,6 +211,110 @@ mysqli_close($connection);
     .owner-btn {
         margin-left: 51%
     }
+
+    /* Modern Card and Form Styling */
+    .card {
+        border: none;
+        box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.15);
+        margin-bottom: 1.5rem;
+    }
+
+    .card-header {
+        background: linear-gradient(45deg, #072797, #1a4dff);
+        padding: 1.25rem;
+        border-bottom: none;
+    }
+
+    .card-header h4 {
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    /* Form Controls */
+    .form-label {
+        font-weight: 600;
+        color: #344767;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+    }
+
+    .form-control {
+        border: 1px solid #e0e0e0;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .form-control:focus {
+        border-color: #072797;
+        box-shadow: 0 0 0 0.2rem rgba(7, 39, 151, 0.25);
+    }
+
+    .form-control-lg {
+        height: 3rem;
+    }
+
+    /* Button Styling */
+    .btn {
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .btn-primary {
+        background-color: #072797;
+        border-color: #072797;
+    }
+
+    .btn-primary:hover {
+        background-color: #0a31b3;
+        border-color: #0a31b3;
+        transform: translateY(-1px);
+    }
+
+    .btn-light {
+        background-color: #f8f9fa;
+        border-color: #e0e0e0;
+        color: #495057;
+    }
+
+    .btn-light:hover {
+        background-color: #e2e6ea;
+        border-color: #dae0e5;
+        color: #495057;
+    }
+
+    /* Helper Text */
+    .text-muted {
+        font-size: 0.875rem;
+    }
+
+    /* Icons */
+    .form-label i {
+        width: 20px;
+        text-align: center;
+    }
+
+    /* Animation */
+    .form-control, .btn {
+        transition: all 0.2s ease-in-out;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .card-body {
+            padding: 1rem;
+        }
+        
+        .btn-lg {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+        }
+        
+        .form-control-lg {
+            height: 2.5rem;
+        }
+    }
 </style>
 
 <body>
@@ -405,28 +509,58 @@ mysqli_close($connection);
     </div>
     <!-- main content -->
 
-    <main>
-        <div class="col-md-9 mx-auto text-dark">
-            <!-- Column 2 -->
-            <h2 class="text-center">
-                <strong><i></i> ADD SERVICE NAME</strong>
-            </h2>
+    <main class="mt-5 pt-3">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow-lg">
+                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <a href="owner-shop-service-list.php?shop_id=<?php echo $shop_id;?>" 
+                                   class="btn btn-light btn-sm me-3">
+                                    <i class="fas fa-arrow-left"></i>
+                                </a>
+                                <h4 class="mb-0">
+                                    <i class="fas fa-plus-circle me-2"></i>Add Service Name
+                                </h4>
+                            </div>
+                        </div>
+                        
+                        <div class="card-body p-4">
+                            <form class="details-form" action="csservice_addservicename1.php" method="POST">
+                                <input type="hidden" name="shop_id" id="shop_id" value="<?php echo $shop_id;?>">
+                                
+                                <div class="mb-4">
+                                    <label for="service_name" class="form-label">
+                                        <i class="fas fa-tools text-primary me-2"></i>Service Name
+                                    </label>
+                                    <input type="text" 
+                                           id="service_name" 
+                                           name="service_name" 
+                                           class="form-control form-control-lg" 
+                                           placeholder="Enter service name"
+                                           required>
+                                    <small class="text-muted mt-2">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        This will be the main category for your services
+                                    </small>
+                                </div>
 
-            <div class="row"></div>
-
-            <form class="details-form" action="csservice_addservicename1.php" method="POST">
-                <div class="mb-3">
-                    <input type="hidden" name="shop_id" id="shop_id" value="<?php echo $shop_id;?>">
-                    <label for="service_name" class="form-label">Service Name</label>
-                    <input type="text" id="service_name" name="service_name" class="form-control" value="" required>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                                    <a href="owner-shop-service-list.php?shop_id=<?php echo $shop_id;?>" 
+                                       class="btn btn-light btn-lg me-2">
+                                        <i class="fas fa-times me-2"></i>Cancel
+                                    </a>
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-save me-2"></i>Save Changes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="text-center">
-                    <input type="submit" value="Save Changes" class="btn btn-primary">
-                </div>
-            </form>
+            </div>
         </div>
-
     </main>
 
 

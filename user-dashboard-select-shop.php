@@ -477,79 +477,115 @@ $shopData = mysqli_fetch_assoc($shop_result);
     <!-- main content -->
     <main>
         <div class="container text-dark">
-            <div class="game-card">
-                <div class="game-details">
-                    <a href="user-dashboard.php"><button class="btn btn-primary mb-4">Back</button></a>
-                    <div class="game-name"><?php echo $shopData['shop_name']; ?></div>
-                    <div class="ratings">
-                        <i class="bi-star-fill"></i>
-                        <i class="bi-star-fill"></i>
-                        <i class="bi-star-fill"></i>
-                        <i class="bi-star-fill"></i>
-                        <i class="bi-star-fill"></i>
-                        <span class="rating-value">5.0</span>
-                    </div>
-                    <div class="description">
-                        <?php echo $shopData['description']; ?>
-                    </div>
-                    <a href="user-select-car.php?shop_id=<?php echo $shopData['shop_id'];?>"><button type="button" class="btn btn-primary">Choose <?php echo $shopData['shop_name'];?></button></a>
+            <!-- Shop Details Section -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="game-card">
+                        <div class="game-details">
+                            <!-- Back Button -->
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <a href="user-dashboard.php" class="btn btn-primary">
+                                    <i class="fas fa-arrow-left me-2"></i>Back
+                                </a>
+                                <span class="badge bg-success">Open Now</span>
+                            </div>
 
-                </div>
+                            <!-- Shop Info -->
+                            <div class="game-name"><?php echo $shopData['shop_name']; ?></div>
+                            
+                            <!-- Ratings -->
+                            <div class="ratings">
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                        <i class="bi-star-fill"></i>
+                                        <i class="bi-star-fill"></i>
+                                        <i class="bi-star-fill"></i>
+                                        <i class="bi-star-fill"></i>
+                                        <i class="bi-star-fill"></i>
+                                    </div>
+                                    <span class="rating-value ms-2">5.0</span>
+                                    <span class="text-muted ms-2">(50+ reviews)</span>
+                                </div>
+                            </div>
 
-                <img src="<?php echo $shopData['profile']; ?>" alt="profile" class="game-logo">
-            </div>
-            <hr>
+                            <!-- Location -->
+                            <div class="d-flex align-items-center my-3">
+                                <i class="fas fa-map-marker-alt me-2 text-primary"></i>
+                                <span class="text-muted"><?php echo $shopData['barangay']; ?></span>
+                            </div>
 
-        </div>
-        <div class="container py-5 text-dark">
-            <h2 class="text-center mb-5">What Our Users Say</h2>
-            <div class="row">
-                <!-- Testimonial 1 -->
-                <div class="col-md-4">
-                    <div class="testimonial-card text-center">
-                        <img src="toji.jpg" alt="User Image" class="testimonial-img mb-3">
-                        <h5>Toji</h5>
-                        <div class="rating mb-2">
-                            &#9733;&#9733;&#9733;&#9733;&#9734;
+                            <!-- Description -->
+                            <div class="description mb-4">
+                                <?php echo $shopData['description']; ?>
+                            </div>
+
+                            <!-- Action Button -->
+                            <a href="user-select-car.php?shop_id=<?php echo $shopData['shop_id'];?>" 
+                               class="btn btn-primary d-block d-md-inline-block">
+                                <i class="fas fa-car me-2"></i>
+                                Choose <?php echo $shopData['shop_name'];?>
+                            </a>
                         </div>
-                        <p>
-                            "This app has completely changed the way I handle my vehicle maintenance. It's fast, easy, and reliable!"
-                        </p>
-                    </div>
-                </div>
 
-                <!-- Testimonial 2 -->
-                <div class="col-md-4">
-                    <div class="testimonial-card text-center">
-                        <img src="person1.jpg" alt="User Image" class="testimonial-img mb-3">
-                        <h5>JanJan Smith</h5>
-                        <div class="rating mb-2">
-                            &#9733;&#9733;&#9733;&#9733;&#9733;
-                        </div>
-                        <p>
-                            "Amazing experience! The app provides excellent customer service and helps me find solutions quickly."
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Testimonial 3 -->
-                <div class="col-md-4">
-                    <div class="testimonial-card text-center">
-                        <img src="person2.0.webp" alt="User Image" class="testimonial-img mb-3">
-                        <h5>Michael02</h5>
-                        <div class="rating mb-2">
-                            &#9733;&#9733;&#9733;&#9733;&#9733;
-                        </div>
-                        <p>
-                            "Absolutely love it! It's user-friendly and has all the features I need to keep my car in perfect condition."
-                        </p>
+                        <!-- Shop Image -->
+                        <img src="<?php echo $shopData['profile']; ?>" 
+                             alt="<?php echo $shopData['shop_name']; ?>" 
+                             class="game-logo d-none d-md-block">
                     </div>
                 </div>
             </div>
+
+            <hr class="my-5">
+
+            <!-- Testimonials Section -->
+            <div class="py-4">
+                <h2 class="text-center mb-4">What Our Users Say</h2>
+                
+                <div class="row g-4">
+                    <!-- Testimonial 1 -->
+                    <div class="col-12 col-md-4">
+                        <div class="testimonial-card text-center h-100">
+                            <img src="toji.jpg" alt="User Image" class="testimonial-img mb-3">
+                            <h5>Toji</h5>
+                            <div class="rating mb-2">
+                                &#9733;&#9733;&#9733;&#9733;&#9734;
+                            </div>
+                            <p class="mb-0">
+                                "This app has completely changed the way I handle my vehicle maintenance. It's fast, easy, and reliable!"
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 2 -->
+                    <div class="col-12 col-md-4">
+                        <div class="testimonial-card text-center h-100">
+                            <img src="person1.jpg" alt="User Image" class="testimonial-img mb-3">
+                            <h5>JanJan Smith</h5>
+                            <div class="rating mb-2">
+                                &#9733;&#9733;&#9733;&#9733;&#9733;
+                            </div>
+                            <p class="mb-0">
+                                "Amazing experience! The app provides excellent customer service and helps me find solutions quickly."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 3 -->
+                    <div class="col-12 col-md-4">
+                        <div class="testimonial-card text-center h-100">
+                            <img src="person2.0.webp" alt="User Image" class="testimonial-img mb-3">
+                            <h5>Michael02</h5>
+                            <div class="rating mb-2">
+                                &#9733;&#9733;&#9733;&#9733;&#9733;
+                            </div>
+                            <p class="mb-0">
+                                "Absolutely love it! It's user-friendly and has all the features I need to keep my car in perfect condition."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-
-
     </main>
 
 

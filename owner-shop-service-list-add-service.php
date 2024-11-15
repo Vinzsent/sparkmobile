@@ -216,6 +216,106 @@ mysqli_close($connection);
   .price-paragraph {
     font-size: 12px;
   }
+
+  /* Modern Form Styling */
+  .card {
+    border: none;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.15);
+    margin-bottom: 1.5rem;
+  }
+
+  .card-header {
+    background: linear-gradient(45deg, #072797, #1a4dff);
+    padding: 1.25rem;
+    border-bottom: none;
+  }
+
+  .form-label {
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    color: #495057;
+  }
+
+  .form-control {
+    border: 1px solid #e0e0e0;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .form-control:focus {
+    border-color: #072797;
+    box-shadow: 0 0 0 0.2rem rgba(7, 39, 151, 0.25);
+  }
+
+  .form-control-lg {
+    height: 3rem;
+  }
+
+  .form-control[readonly] {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+  }
+
+  .input-group-text {
+    background-color: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    color: #495057;
+  }
+
+  .btn {
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .btn-primary {
+    background-color: #072797;
+    border-color: #072797;
+  }
+
+  .btn-primary:hover {
+    background-color: #0a31b3;
+    border-color: #0a31b3;
+    transform: translateY(-1px);
+  }
+
+  .btn-light {
+    background-color: #f8f9fa;
+    border-color: #e0e0e0;
+    color: #495057;
+  }
+
+  .btn-light:hover {
+    background-color: #e2e6ea;
+    border-color: #dae0e5;
+    color: #495057;
+  }
+
+  .text-muted {
+    font-size: 0.875rem;
+  }
+
+  /* Animation for form elements */
+  .form-control, .btn {
+    transition: all 0.2s ease-in-out;
+  }
+
+  .form-control:hover {
+    border-color: #072797;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .card-body {
+      padding: 1.5rem;
+    }
+    
+    .btn-lg {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+    }
+  }
 </style>
 
 <body>
@@ -409,38 +509,69 @@ mysqli_close($connection);
   </div>
   </div>
   <!-- main content -->
-  <main>
-    <div class="col-md-9 text-dark ms-5">
-      <!-- column 2 -->
-      <h2><strong><i></i> ADD SERVICES</strong></h2>
-      <hr>
+  <main class="mt-5 pt-3">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white d-flex align-items-center">
+                        <i class="fas fa-plus-circle me-2"></i>
+                        <h4 class="mb-0">Add Services</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <form class="details-form" action="csservice_adminedit1.php" method="POST">
+                            <input type="hidden" name="shop_id" id="shop_id" value="<?php echo $shop_id; ?>">
+                            <input type="hidden" id="servicename_id" name="id" value="<?php echo $serviceData['servicename_id']; ?>">
 
-      <div class="row"></div>
+                            <div class="row">
+                                <div class="col-md-12 mb-4">
+                                    <label for="service_name" class="form-label fw-bold">
+                                        <i class="fas fa-tag text-primary me-2"></i>Service Name
+                                    </label>
+                                    <input type="text" id="service_name" name="service_name" 
+                                           class="form-control form-control-lg bg-light" 
+                                           value="<?php echo $serviceData['service_name']; ?>" readonly>
+                                </div>
 
-      <form class="details-form" action="csservice_adminedit1.php" method="POST">
-        <input type="hidden" name="shop_id" id="shop_id" value="<?php echo $shop_id; ?>">
-        <input type="hidden" id="servicename_id" name="id" value="<?php echo $serviceData['servicename_id']; ?>">
+                                <div class="col-md-12 mb-4">
+                                    <label for="services" class="form-label fw-bold">
+                                        <i class="fas fa-tools text-primary me-2"></i>Services
+                                    </label>
+                                    <input type="text" id="services" name="services" 
+                                           class="form-control form-control-lg" 
+                                           placeholder="Enter service details">
+                                </div>
 
-        <div class="mb-3">
-          <label for="service_name" class="form-label">Service Name:</label>
-          <input type="text" id="service_name" name="service_name" class="form-control" value="<?php echo $serviceData['service_name']; ?>" readonly>
+                                <div class="col-md-12 mb-4">
+                                    <label for="price" class="form-label fw-bold">
+                                        <i class="fas fa-peso-sign text-primary me-2"></i>Price
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">₱</span>
+                                        <input type="text" id="price" name="price" 
+                                               class="form-control form-control-lg" 
+                                               placeholder="0.00">
+                                    </div>
+                                    <small class="text-muted mt-1">Please include decimals (e.g., 100.00)</small>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                                <a href="owner-shop-service-list.php?shop_id=<?php echo $shop_id; ?>" 
+                                   class="btn btn-light btn-lg me-2">
+                                    <i class="fas fa-times me-2"></i>Cancel
+                                </a>
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-save me-2"></i>Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div class="mb-3">
-          <label for="services" class="form-label">Services:</label>
-          <input type="text" id="services" name="services" class="form-control" value="">
-        </div>
-
-        <div class="mb-3">
-          <label for="price" class="form-label">Price(₱):</label>
-          <input type="text" id="price" name="price" class="form-control" value="">
-          <p class="price-paragraph">Please include decimals e.g (100.00)</p>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-      </form>
     </div>
-  </main>
+</main>
 
 
 

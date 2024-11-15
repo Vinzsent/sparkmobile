@@ -26,7 +26,7 @@ $servicename_id = $_GET['servicename_id'];
 
 // Fetch user information from the database based on the user's ID
 // Replace this with your actual database query
-$query = "SELECT s.*, sn.service_name, s.shop_id
+$query = "SELECT s.*, sn.service_name, s.shop_id, s.last_updated
           FROM offered_services s
           JOIN service_names sn ON s.servicename_id = sn.servicename_id
           WHERE s.servicename_id = '$servicename_id'";
@@ -219,6 +219,112 @@ mysqli_close($connection);
 
   .owner-btn {
     margin-left: 51%
+  }
+
+  /* Modern Card and Table Styling */
+  .card {
+    border: none;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.15);
+    margin-bottom: 1.5rem;
+  }
+
+  .card-header {
+    background: linear-gradient(45deg, #072797, #1a4dff);
+    padding: 1rem 1.35rem;
+    border-bottom: none;
+  }
+
+  .card-header h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  /* Table Styling */
+  .table {
+    margin-bottom: 0;
+  }
+
+  .table thead th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+  }
+
+  .table tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #e9ecef;
+    color: #495057;
+  }
+
+  /* Button Styling */
+  .btn-primary {
+    background-color: #072797;
+    border-color: #072797;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .btn-primary:hover {
+    background-color: #0a31b3;
+    border-color: #0a31b3;
+    transform: translateY(-1px);
+  }
+
+  .btn-light {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: transparent;
+  }
+
+  .btn-light:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+    border-color: transparent;
+  }
+
+  /* Service Row Styling */
+  .fw-500 {
+    font-weight: 500;
+  }
+
+  .service-icon {
+    width: 24px;
+    text-align: center;
+  }
+
+  /* Animation */
+  tbody tr {
+    transition: all 0.2s ease-in-out;
+  }
+
+  tbody tr:hover {
+    background-color: rgba(7, 39, 151, 0.05);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .card-body {
+      padding: 1rem;
+    }
+    
+    .table thead th {
+      font-size: 0.8rem;
+    }
+    
+    .btn-sm {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.875rem;
+    }
+  }
+
+  /* Price Column */
+  .table td:nth-child(2) {
+    font-family: 'Roboto Mono', monospace;
+    color: #072797;
   }
 </style>
 
@@ -413,48 +519,79 @@ mysqli_close($connection);
   </div>
   </div>
   <!-- main content -->
-  <main class="container mt-4">
-    <div class="col-md-9 mx-auto">
-      <!-- column 2 -->
-      <a href="owner-shop-service-list.php?shop_id=<?php echo $servicenameData['shop_id'];?>"><button type="button" class="btn btn-primary">Back</button></a>
-      <h2 class="text-center text-dark">
-        <strong><?php echo isset($servicenameData['service_name']) ? $servicenameData['service_name'] : ''; ?></strong>
-      </h2>
-      <hr>
-
-      <!-- Service Table -->
-      <div class="table-responsive">
-        <table class="table table-bordered border-secondary">
-          <thead class="v-2 text-light">
-            <tr>
-              <th scope="col">Services</th>
-              <th scope="col">Price</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
-            if ($result) {
-              foreach ($result as $row) {
-                echo '<tr>';
-                echo '<td>' . (isset($row['services']) ? $row['services'] : 'service') . '</td>';
-                echo '<td>' . '₱' . (isset($row['price']) ?  $row['price']  : 'price') . '</td>';
-                echo '<td>';
-                echo '<div class="text-center">';
-                echo '<a href="owner-shop-service-list-edit.php?service_id=' . $row['service_id'] . '&shop_id=' . $row['shop_id'] . '" class="btn btn-primary btn-sm">Edit Service</a>';
-                echo '</div>';
-                echo '</td>';
-                echo '</tr>';
-              }
-            } else {
-              echo '<tr><td colspan="3" class="text-center">Error: ' . mysqli_error($connection) . '</td></tr>';
-            }
-            ?>
-          </tbody>
-        </table>
-      </div>
+  <main class="mt-5 pt-3">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <a href="owner-shop-service-list.php?shop_id=<?php echo $servicenameData['shop_id'];?>" 
+                               class="btn btn-light btn-sm me-3 text-white">
+                                <i class="fas fa-arrow-left me-1 text-white"></i> Back
+                            </a>
+                            <h4 class="mb-0">
+                                <i class="fas fa-tools me-2"></i>
+                                <?php echo isset($servicenameData['service_name']) ? $servicenameData['service_name'] : ''; ?>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr class="bg-light">
+                                        <th scope="col" class="text-dark">
+                                            <i class="fas fa-cog me-2 text-primary"></i>Services
+                                        </th>
+                                        <th scope="col" class="text-dark">
+                                            <i class="fas fa-peso-sign me-2 text-primary"></i>Price
+                                        </th>
+                                        <th scope="col" class="text-dark">
+                                            <i class="fas fa-clock me-2 text-primary"></i>Last Updated
+                                        </th>
+                                        <th scope="col" class="text-center text-dark">
+                                            <i class="fas fa-tasks me-2 text-primary"></i>Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    if ($result) {
+                                        foreach ($result as $row) {
+                                            // Format the last_updated date
+                                            $last_updated = isset($row['last_updated']) ? date('M d, Y g:i A', strtotime($row['last_updated'])) : 'Not available';
+                                            
+                                            echo '<tr class="align-middle">';
+                                            echo '<td>
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="service-icon me-2"><i class="fas fa-check-circle text-success"></i></span>
+                                                        <span class="fw-500 text-dark">' . (isset($row['services']) ? $row['services'] : 'service') . '</span>
+                                                    </div>
+                                                  </td>';
+                                            echo '<td class="fw-bold text-dark">₱' . number_format((isset($row['price']) ? $row['price'] : 0), 2) . '</td>';
+                                            echo '<td class="text-dark"><i class="far fa-clock me-1 text-muted"></i>' . $last_updated . '</td>';
+                                            echo '<td class="text-center">';
+                                            echo '<a href="owner-shop-service-list-edit.php?service_id=' . $row['service_id'] . '&shop_id=' . $row['shop_id'] . '" 
+                                                    class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-edit me-1"></i> Edit Service
+                                                  </a>';
+                                            echo '</td>';
+                                            echo '</tr>';
+                                        }
+                                    } else {
+                                        echo '<tr><td colspan="4" class="text-center text-muted">No services found</td></tr>';
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </main>
+</main>
 
 
 

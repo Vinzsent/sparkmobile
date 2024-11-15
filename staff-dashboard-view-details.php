@@ -193,10 +193,32 @@ $selectedData = mysqli_fetch_assoc($result);
   }
 
   .img-account-profile {
-    width: 400px;
-    /* Adjust the size as needed */
-    height: 200px;
-    object-fit: cover;
+    width: 500px;
+    height: 300px;
+    object-fit: contain;
+    border-radius: 12px;
+    border: 1px solid rgba(7, 39, 151, 0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    margin: 1rem auto 2rem;
+    background-color: #fff;
+    padding: 15px;
+    transition: all 0.3s ease;
+    display: block;
+  }
+
+  .img-account-profile:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+  }
+
+  @media (max-width: 768px) {
+    .img-account-profile {
+        width: 100%;
+        max-width: 450px;
+        height: 10;
+        aspect-ratio: 16/9;
+        padding: 10px;
+    }
   }
 
   .game-card {
@@ -217,6 +239,173 @@ $selectedData = mysqli_fetch_assoc($result);
 
   .ratings .star {
     color: gold;
+  }
+
+  /* Main Content Styling */
+  main {
+    background: #f8f9fa;
+    padding-top: 2rem;
+    min-height: 100vh;
+  }
+
+  /* Card Styling */
+  .card {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    margin-bottom: 30px;
+  }
+
+  .card-header {
+    background: linear-gradient(135deg, #072797, #0a2d99) !important;
+    padding: 1.5rem;
+    border-bottom: none;
+  }
+
+  .card-header h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .card-body {
+    padding: 2rem;
+  }
+
+  /* Profile Image */
+  .img-account-profile {
+    width: 500px;
+    height: 300px;
+    object-fit: contain;
+    border-radius: 12px;
+    border: 1px solid rgba(7, 39, 151, 0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    margin: 1rem auto 2rem;
+    background-color: #fff;
+    padding: 15px;
+    transition: all 0.3s ease;
+    display: block;
+  }
+
+  /* Customer Name */
+  h4.text-black {
+    color: #072797;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Form Elements */
+  .form-label {
+    color: #072797;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .form-control {
+    border: 1px solid rgba(7, 39, 151, 0.1);
+    border-radius: 12px;
+    padding: 0.75rem;
+    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+    color: #444;
+  }
+
+  .form-control:focus {
+    border-color: #072797;
+    box-shadow: 0 0 0 0.2rem rgba(7, 39, 151, 0.1);
+  }
+
+  .form-control[readonly] {
+    background-color: #f8f9fa;
+    border: 1px solid rgba(7, 39, 151, 0.1);
+  }
+
+  /* Service and Price Sections */
+  .row.mb-3 {
+    margin-bottom: 1.5rem !important;
+  }
+
+  textarea.form-control {
+    min-height: 100px;
+    resize: none;
+  }
+
+  /* Total Price Field */
+  #total_price_1 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #FF5722;
+    background: rgba(255, 87, 34, 0.05);
+    border: 2px solid rgba(255, 87, 34, 0.1);
+  }
+
+  /* Button Styling */
+  .btn {
+    padding: 12px 24px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 12px;
+    margin: 5px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #FF5722, #ff7043);
+    border: none;
+    box-shadow: 0 4px 15px rgba(255, 87, 34, 0.3);
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #ff7043, #FF5722);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 87, 34, 0.4);
+  }
+
+  .btn-danger {
+    background: linear-gradient(135deg, #dc3545, #ef5350);
+    border: none;
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+  }
+
+  .btn-danger:hover {
+    background: linear-gradient(135deg, #ef5350, #dc3545);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+  }
+
+  /* Section Dividers */
+  hr {
+    border-color: rgba(7, 39, 151, 0.1);
+    margin: 2rem 0;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .card-body {
+      padding: 1.5rem;
+    }
+    
+    .img-account-profile {
+      width: 120px;
+      height: 120px;
+    }
+    
+    .btn {
+      width: 100%;
+      margin: 5px 0;
+    }
+  }
+
+  /* Animation for Loading */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card {
+    animation: fadeIn 0.5s ease-out;
   }
 </style>
 

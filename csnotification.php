@@ -152,6 +152,60 @@ button {
     }
   }
 
+.notification-card {
+    transition: all 0.2s ease-in-out;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.notification-card:hover {
+    transform: translateX(5px);
+    background-color: #f8f9fa;
+}
+
+.notification-icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #fff;
+    padding: 8px;
+}
+
+.notification-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.click-request {
+    color: #072797;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.click-request:hover {
+    color: orangered;
+}
+
+.badge {
+    font-size: 0.7rem;
+    padding: 0.35em 0.65em;
+}
+
+.notification-group .notification-card + .notification-card {
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .notification-icon {
+        width: 40px;
+        height: 40px;
+    }
+}
 
   </style>
 
@@ -363,40 +417,76 @@ button {
     </div>
     <!-- main content -->
     <main>
-      <h2 class="v-2 ms-3">RECENT</h2>
-      <div class=" container mt-5">
-        <div class=" v-1 alert alert-info" role="alert">
-          <div class="d-flex align-items-center">
-            <i><img src="Good Quality.png" class="icon-v1"alt=""></i>
-              <div>
-                <h4 class="alert-heading text-dark">New Notification</h4>
-                <p class="text-dark">Your payment has been recieved!</p>
-                <a href="csinvoice.php"class="click-request"><p>Click here to view invoice</p></a>
-                <small class="text-muted">2 mins ago</small>
-              </div>
-          </div>
+        <div class="container mt-5 px-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="v-2">
+                    <i class="fas fa-bell me-2"></i>Notifications
+                </h2>
+                <button class="btn btn-outline-secondary btn-sm" onclick="markAllAsRead()">
+                    <i class="fas fa-check-double"></i> Mark all as read
+                </button>
+            </div>
+
+            <!-- Today's Notifications -->
+            <h6 class="text-muted mb-3">Today</h6>
+            <div class="notification-group mb-4">
+                <div class="v-1 alert alert-info notification-card" role="alert">
+                    <div class="d-flex align-items-center">
+                        <div class="notification-icon me-3">
+                            <img src="Good Quality.png" class="icon-v1" alt="Payment Icon">
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h5 class="alert-heading text-dark mb-1">Payment Received</h5>
+                                <span class="badge bg-primary">New</span>
+                            </div>
+                            <p class="text-dark mb-1">Your payment has been received!</p>
+                            <a href="csinvoice.php" class="click-request d-inline-flex align-items-center">
+                                <span>View invoice</span>
+                                <i class="fas fa-chevron-right ms-1 small"></i>
+                            </a>
+                            <div class="text-muted mt-2">
+                                <small><i class="far fa-clock me-1"></i>2 mins ago</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Earlier Notifications -->
+            <h6 class="text-muted mb-3">Earlier</h6>
+            <div class="notification-group">
+                <div class="v-1 alert alert-info notification-card" role="alert">
+                    <div class="d-flex align-items-center">
+                        <div class="notification-icon me-3">
+                            <img src="Number1.png" class="icon-v1" alt="Achievement Icon">
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5 class="alert-heading text-dark mb-1">First Booking Achievement!</h5>
+                            <p class="text-dark mb-1">Congratulations on your first booking! Thank you for trusting us!</p>
+                            <div class="text-muted mt-2">
+                                <small><i class="far fa-clock me-1"></i>2 hours ago</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="v-1 alert alert-info notification-card" role="alert">
+                    <div class="d-flex align-items-center">
+                        <div class="notification-icon me-3">
+                            <img src="Verified Account.png" class="icon-v1" alt="Welcome Icon">
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5 class="alert-heading text-dark mb-1">Welcome to Spark Mobile!</h5>
+                            <p class="text-dark mb-1">Make your first booking today.</p>
+                            <div class="text-muted mt-2">
+                                <small><i class="far fa-clock me-1"></i>12 hours ago</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class=" v-1 alert alert-info" role="alert">
-          <div class="d-flex align-items-center">
-            <i><img src="Number1.png" class="icon-v1"alt=""></i>
-              <div>
-                <h4 class="alert-heading text-dark">Notification</h4>
-                <p class="text-dark">Congratulations on you first booking! Thank you for trusting us!</p>
-                <small class="text-muted">2 mins ago</small>
-              </div>
-          </div>
-        </div>
-        <div class=" v-1 alert alert-info" role="alert">
-          <div class="d-flex align-items-center">
-            <i><img src="Verified Account.png" class="icon-v1"alt=""></i>
-              <div>
-                <h4 class="alert-heading text-dark">Notification</h4>
-                <p class="text-dark">Welcome!. Make you first booking today.</p>
-                <small class="text-muted">12 mins ago</small>
-              </div>
-          </div>
-        </div>
-      </div>
     </main>
     
     <section class="modal-footer"></section>
@@ -412,5 +502,12 @@ button {
     <script src="./js/jquery.dataTables.min.js"></script>
     <script src="./js/dataTables.bootstrap5.min.js"></script>
     <script src="./js/script.js"></script>
+    <script>
+    function markAllAsRead() {
+        document.querySelectorAll('.badge').forEach(badge => {
+            badge.style.display = 'none';
+        });
+    }
+    </script>
   </body>
 </html>

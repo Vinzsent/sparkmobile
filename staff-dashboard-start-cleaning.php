@@ -221,6 +221,193 @@ $selectedData = mysqli_fetch_assoc($selected_result);
   .ratings .star {
     color: gold;
   }
+
+  /* Main Content Styling */
+  main {
+    background: #f8f9fa;
+    padding: 2rem 0;
+    min-height: 100vh;
+  }
+
+  /* Card Styling */
+  .card {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    margin-bottom: 30px;
+    background: #fff;
+  }
+
+  .card-header {
+    background: linear-gradient(135deg, #072797, #0a2d99) !important;
+    padding: 1.5rem;
+    border-bottom: none;
+  }
+
+  .card-header h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .card-body {
+    padding: 2rem;
+  }
+
+  /* Vehicle Image Styling */
+  .img-account-profile {
+    width: 500px;
+    height: 300px;
+    object-fit: contain;
+    border-radius: 12px;
+    border: 1px solid rgba(7, 39, 151, 0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    margin: 1rem auto 2rem;
+    background-color: #fff;
+    padding: 15px;
+    transition: all 0.3s ease;
+    display: block;
+  }
+
+  /* Form Elements */
+  .form-label {
+    color: #072797;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .form-control {
+    border: 1px solid rgba(7, 39, 151, 0.1);
+    border-radius: 12px;
+    padding: 0.75rem;
+    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+    color: #444;
+    margin-bottom: 1rem;
+  }
+
+  .form-control:focus {
+    border-color: #072797;
+    box-shadow: 0 0 0 0.2rem rgba(7, 39, 151, 0.1);
+  }
+
+  /* Timer Section Styling */
+  .form-group.mb-3.text-dark {
+    background: rgba(7, 39, 151, 0.03);
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin-top: 2rem;
+  }
+
+  #startTime, #endTime {
+    font-family: 'Courier New', monospace;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+    background: #fff;
+    color: #072797;
+    border: 2px solid rgba(7, 39, 151, 0.1);
+  }
+
+  /* Toggle Button Styling */
+  #toggleBtn {
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    margin: 1rem 0;
+    width: 200px;
+  }
+
+  #toggleBtn.btn-primary {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    border: none;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+  }
+
+  #toggleBtn.btn-danger {
+    background: linear-gradient(135deg, #dc3545, #ef5350);
+    border: none;
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+  }
+
+  #toggleBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Price Display */
+  #total_price_1 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #FF5722;
+    background: rgba(255, 87, 34, 0.05);
+    border: 2px solid rgba(255, 87, 34, 0.1);
+    text-align: center;
+  }
+
+  /* Service Details Box */
+  .detail-box {
+    background: rgba(7, 39, 151, 0.03);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+  }
+
+  .detail-title {
+    color: #072797;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Animation Effects */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card {
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .img-account-profile {
+      width: 100%;
+      max-width: 450px;
+      height: auto;
+      aspect-ratio: 16/9;
+    }
+    
+    .card-body {
+      padding: 1.5rem;
+    }
+    
+    #toggleBtn {
+      width: 100%;
+    }
+    
+    .form-group.mb-3.text-dark {
+      padding: 1rem;
+    }
+  }
+
+  /* Customer Name Styling */
+  h4.text-black {
+    color: #072797;
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin: 1.5rem 0;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(7, 39, 151, 0.1);
+  }
 </style>
 
 <body>
@@ -344,6 +531,7 @@ $selectedData = mysqli_fetch_assoc($selected_result);
                   <input type="hidden" name="user_id" value="<?php echo $selectedData['user_id']; ?>">
                   <input type="hidden" name="status" id="status" value="<?php echo $selectedData['status']; ?>">
                   <input type="hidden" name="is_deleted" id="is_deleted" value="0">
+                  <input type="hidden" name="staff_id" id="staff_id" value="<?php echo $staffData['staff_id']; ?>">
                   <input type="hidden" name="slotNumber" id="slotNumber" value="<?php echo $selectedData['slotNumber']; ?>">
 
                   <?php
@@ -425,24 +613,31 @@ $selectedData = mysqli_fetch_assoc($selected_result);
 
                     <?php } ?>
 
-                  <!-- Total Price -->
-                  <div class="row mb-3">
-                    <div class="col-md-12">
-                      <strong><label for="total_price_<?php echo $slotNumber; ?>" class="form-label">Total Price:</label></strong>
-                      <input type="text" class="form-control" name="total_price" id="total_price_<?php echo $slotNumber; ?>" value="₱ <?php echo number_format($total_price, 2); ?>" readonly>
+                    <!-- Total Price -->
+                    <div class="row mb-3">
+                      <div class="col-md-12">
+                        <strong><label for="total_price_<?php echo $slotNumber; ?>" class="form-label">Total Price:</label></strong>
+                        <input type="text" class="form-control" name="total_price" id="total_price_<?php echo $slotNumber; ?>" value="₱ <?php echo number_format($total_price, 2); ?>" readonly>
+                      </div>
                     </div>
-                  </div>
 
-                  <!-- Timer -->
-                  <div class="form-group mb-3 text-dark">
-                    <label for="timer">Timer:</label>
-                    <span id="timer" class="timer-display text-dark">00:00:00</span>
-                    <input type="hidden" id="timer_input" name="timer" value="00:00:00">
-                  </div>
+                    <!-- Timer -->
+                    <div class="form-group mb-3 text-dark">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label>Start Time:</label>
+                          <input type="text" id="startTime" name="start_time" class="form-control" readonly>
+                        </div>
+                        <div class="col-md-6">
+                          <label>End Time:</label>
+                          <input type="text" id="endTime" name="end_time" class="form-control" readonly>
+                        </div>
+                      </div>
+                    </div>
 
-                  <!-- Buttons -->
-                  <button id="startBtn" type="button" class="btn btn-primary btn-md mb-3">Start</button>
-                  <button id="finishBtn" type="submit" class="btn btn-danger btn-md mb-3">Finish</button>
+                    <!-- Single toggle button -->
+                    <button id="toggleBtn" type="button" class="btn btn-primary btn-md mb-3">Start</button>
+                    <input type="hidden" id="isFinished" name="is_finished" value="0">
                 </form>
               </div>
             </div> <!-- End of Card -->
@@ -458,44 +653,48 @@ $selectedData = mysqli_fetch_assoc($selected_result);
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script>
     $(document).ready(function() {
-      var timerInterval;
-      var startTime;
-      var elapsedTime = 0;
-      var running = false;
-
-      // Function to start the timer
-      function startTimer() {
-        startTime = Date.now() - elapsedTime;
-        timerInterval = setInterval(updateTimer, 1000);
-        running = true;
+      var isStarted = false;
+      var startTimeValue = '';
+      
+      // Function to get current time in MySQL datetime format
+      function getCurrentDateTime() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
       }
 
-      // Function to update the timer display
-      function updateTimer() {
-        var currentTime = Date.now();
-        elapsedTime = currentTime - startTime;
-        var formattedTime = new Date(elapsedTime).toISOString().substr(11, 8);
-        $('#timer').text(formattedTime);
-        $('#timer_input').val(formattedTime); // Update the hidden input field with the timer value
-      }
-
-      // Function to stop the timer
-      function stopTimer() {
-        clearInterval(timerInterval);
-        running = false;
-      }
-
-      // Event listener for start button click
-      $('#startBtn').click(function() {
-        if (!running) {
-          startTimer();
-        }
-      });
-
-      // Event listener for finish button click
-      $('#finishBtn').click(function() {
-        if (running) {
-          stopTimer();
+      $('#toggleBtn').click(function() {
+        if (!isStarted) {
+          // Start button clicked
+          isStarted = true;
+          $(this).text('Stop');
+          $(this).removeClass('btn-primary').addClass('btn-danger');
+          
+          // Record start time
+          startTimeValue = getCurrentDateTime();
+          $('#startTime').val(startTimeValue);
+          $('#endTime').val('');
+          
+        } else {
+          // Stop button clicked
+          if (confirm('Are you sure you want to finish this service?')) {
+            isStarted = false;
+            $(this).prop('disabled', true);
+            
+            // Record end time
+            const endTimeValue = getCurrentDateTime();
+            $('#endTime').val(endTimeValue);
+            $('#isFinished').val('1');
+            
+            // Submit the form
+            $(this).closest('form').submit();
+          }
         }
       });
     });

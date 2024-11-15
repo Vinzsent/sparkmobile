@@ -456,7 +456,7 @@ mysqli_close($connection);
           </a>
         </li>
         <li>
-          <a href="index.php" class="nav-link px-3">
+          <a href="logout.php" class="nav-link px-3">
             <span class="me-2"><i class="fas fa-sign-out-alt"></i>
               </i></span>
             <span>LOG OUT</span>

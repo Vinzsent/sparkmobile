@@ -211,6 +211,99 @@ mysqli_close($connection);
   .owner-btn {
     margin-left: 51%
   }
+
+  /* Modern Card Styling */
+  .card {
+    border: none;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.15);
+    margin-bottom: 1.5rem;
+  }
+
+  .card-header {
+    padding: 1rem 1.35rem;
+    margin-bottom: 0;
+    background-color: rgba(33, 40, 50, 0.03);
+    border-bottom: 1px solid rgba(33, 40, 50, 0.125);
+  }
+
+  .card-header i {
+    font-size: 1.1rem;
+  }
+
+  /* Table Styling */
+  .table {
+    margin-bottom: 0;
+  }
+
+  .table thead th {
+    background-color: #072797;
+    color: #fff;
+    font-weight: 500;
+    border: none;
+  }
+
+  .table td {
+    vertical-align: middle;
+    padding: 1rem;
+    border-color: #e9ecef;
+  }
+
+  /* Button Styling */
+  .btn-group .btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    border-radius: 0.2rem;
+    transition: all 0.15s ease-in-out;
+  }
+
+  .btn-group .btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .btn-outline-primary {
+    color: #072797;
+    border-color: #072797;
+  }
+
+  .btn-outline-primary:hover {
+    background-color: #072797;
+    color: #fff;
+  }
+
+  .btn-outline-success {
+    color: #198754;
+    border-color: #198754;
+  }
+
+  .btn-outline-success:hover {
+    background-color: #198754;
+    color: #fff;
+  }
+
+  /* Add animation for table rows */
+  tbody tr {
+    transition: all 0.2s ease-in-out;
+  }
+
+  tbody tr:hover {
+    background-color: rgba(7, 39, 151, 0.05);
+  }
+
+  /* Service icon styling */
+  .fas.fa-tools {
+    font-size: 1.2rem;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .btn-group {
+      flex-direction: column;
+    }
+    
+    .btn-group .btn {
+      margin: 0.25rem 0;
+    }
+  }
 </style>
 
 <body>
@@ -404,41 +497,65 @@ mysqli_close($connection);
   </div>
   </div>
   <!-- main content -->
-  <main>
-    <div class="col-md-9 text-dark ms-5">
-      <!-- column 2 -->
-      <h2><strong><i></i>SERVICES</strong></h2>
-
-      <div class="table-responsive">
-        <table class="table table-bordered border-gray">
-          <thead class="v-2 text-light">
-            <tr>
-              <th scope="col">Service Name</th>
-              <th scope="col-md-4">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
-            if ($shop_result) {
-              foreach ($shop_result as $row) {
-                echo '<tr>';
-                echo '<td>' . (isset($row['service_name']) ? $row['service_name'] : 'service_name') . '</td>';
-                echo '<td>';
-                echo '<div class="d-flex justify-content-center">';
-                echo '<a href="owner-shop-service-list-add-service.php?id=' . (isset($row['servicename_id']) ? $row['servicename_id'] : '') . '&shop_id=' . (isset($row['shop_id']) ? $row['shop_id'] : '') . '" class="btn btn-primary btn-sm me-2">Add Services</a>';
-                echo '<a href="owner-shop-service-list-view.php?servicename_id=' . (isset($row['servicename_id']) ? $row['servicename_id'] : '') . '&shop_id=' . (isset($row['shop_id']) ? $row['shop_id'] : '') . '" class="btn btn-success btn-sm">View Service</a>';
-                echo '</div>';
-                echo '</td>';
-                echo '</tr>';
-              }
-            } else {
-              echo '<tr><td colspan="2">Error: ' . mysqli_error($connection) . '</td></tr>';
-            }
-            ?>
-          </tbody>
-        </table>
-      </div>
-      <a href="owner-shop-service-list-add-service-name.php?shop_id=<?php echo $shop_id;?>" class="btn btn-primary">Add Service Name</a>
+  <main class="mt-5 pt-3">
+    <div class="container-fluid">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0"><i class="fas fa-cogs me-2"></i>Shop Services</h4>
+                        <a href="owner-shop-service-list-add-service-name.php?shop_id=<?php echo $shop_id;?>" 
+                           class="btn btn-light btn-sm">
+                            <i class="fas fa-plus me-2"></i>Add New Service
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="servicesTable">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Service Name</th>
+                                        <th scope="col" class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    if ($shop_result) {
+                                        foreach ($shop_result as $row) {
+                                            echo '<tr>';
+                                            echo '<td class="align-middle">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="fas fa-tools text-primary me-3"></i>
+                                                        <div>
+                                                            <h6 class="mb-0">' . (isset($row['service_name']) ? $row['service_name'] : 'service_name') . '</h6>
+                                                        </div>
+                                                    </div>
+                                                  </td>';
+                                            echo '<td class="text-center">';
+                                            echo '<div class="btn-group" role="group">';
+                                            echo '<a href="owner-shop-service-list-add-service.php?id=' . (isset($row['servicename_id']) ? $row['servicename_id'] : '') . '&shop_id=' . (isset($row['shop_id']) ? $row['shop_id'] : '') . '" 
+                                                    class="btn btn-outline-primary btn-sm">
+                                                    <i class="fas fa-plus-circle me-1"></i> Add Services
+                                                  </a>';
+                                            echo '<a href="owner-shop-service-list-view.php?servicename_id=' . (isset($row['servicename_id']) ? $row['servicename_id'] : '') . '&shop_id=' . (isset($row['shop_id']) ? $row['shop_id'] : '') . '" 
+                                                    class="btn btn-outline-success btn-sm ms-2">
+                                                    <i class="fas fa-eye me-1"></i> View
+                                                  </a>';
+                                            echo '</div>';
+                                            echo '</td>';
+                                            echo '</tr>';
+                                        }
+                                    } else {
+                                        echo '<tr><td colspan="2" class="text-center text-muted">No services found</td></tr>';
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
   </main>
 

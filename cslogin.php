@@ -40,6 +40,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['role'] = $row['role'];
             $_SESSION['status'] = $row['status'];
             
+            $user_id = $row['user_id'];
+            $log_query = "INSERT INTO user_logs (user_id, login_time) VALUES (?, NOW())";
+            $log_stmt = $connection->prepare($log_query);
+            $log_stmt->bind_param("i", $user_id);
+            $log_stmt->execute();
+            $log_stmt->close();
+
             if ($row['role'] === 'User') {
                 header("Location: user-dashboard.php");
                 exit();

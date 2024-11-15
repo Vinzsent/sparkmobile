@@ -308,126 +308,265 @@ mysqli_close($connection);
     <!-- main content -->
 
     <main>
-    <div class="container py-4 text-dark">
-        <h2 class="text-center"><strong>SERVICES</strong></h2>
-        <p class="text-center">Click the button to proceed cleaning</p>
-        <div class="row mt-4">
-            <?php
-            if ($staff_result) {
-                $groupedServices = [];
+        <div class="container py-5 text-dark">
+            <!-- Service Header Section -->
+            <div class="header-section mb-5">
+                <h2 class="text-center position-relative">
+                    <span class="service-title"><strong>SERVICES</strong></span>
+                </h2>
+                <p class="text-center text-muted">Click the button to proceed with cleaning</p>
+                <div class="header-underline"></div>
+            </div>
 
-                foreach ($staff_result as $row) {
-                    $slotNumber = isset($row['slotNumber']) ? $row['slotNumber'] : 'N/A';
+            <!-- Service Cards Container -->
+            <div class="row mt-4 g-4">
+                <?php if ($staff_result) {
+                    $groupedServices = [];
 
-                    if (!isset($groupedServices[$slotNumber])) {
-                        $groupedServices[$slotNumber] = [
-                            'services' => [],
-                            'prices' => [],
-                            'products' => [],
-                            'product_prices' => [],
-                            'selected_id' => $row['selected_id'],
-                            'servicename_id' => $row['servicename_id'],
-                            'user_id' => $row['user_id'],
-                        ];
+                    foreach ($staff_result as $row) {
+                        $slotNumber = isset($row['slotNumber']) ? $row['slotNumber'] : 'N/A';
+
+                        if (!isset($groupedServices[$slotNumber])) {
+                            $groupedServices[$slotNumber] = [
+                                'services' => [],
+                                'prices' => [],
+                                'products' => [],
+                                'product_prices' => [],
+                                'selected_id' => $row['selected_id'],
+                                'servicename_id' => $row['servicename_id'],
+                                'user_id' => $row['user_id'],
+                            ];
+                        }
+
+                        $groupedServices[$slotNumber]['service'][] = isset($row['service']) ? $row['service'] : 'N/A';
+                        $groupedServices[$slotNumber]['prices'][] = isset($row['price']) ? $row['price'] : 'N/A';
+                        $groupedServices[$slotNumber]['products'][] = isset($row['product_name']) ? $row['product_name'] : 'N/A';
+                        $groupedServices[$slotNumber]['product_prices'][] = isset($row['product_price']) ? $row['product_price'] : 'N/A';
                     }
 
-                    $groupedServices[$slotNumber]['service'][] = isset($row['service']) ? $row['service'] : 'N/A';
-                    $groupedServices[$slotNumber]['prices'][] = isset($row['price']) ? $row['price'] : 'N/A';
-                    $groupedServices[$slotNumber]['products'][] = isset($row['product_name']) ? $row['product_name'] : 'N/A';
-                    $groupedServices[$slotNumber]['product_prices'][] = isset($row['product_price']) ? $row['product_price'] : 'N/A';
-                }
+                    $isFirstSlotRendered = false;
 
-                $isFirstSlotRendered = false;
-
-                foreach ($groupedServices as $slotNumber => $slotData) {
-                    ?>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card border-gray shadow-sm">
-                            <div class="card-body">
-                                <h5 class="card-title text-center">
-                                    Slot Number: <?php echo $slotNumber; ?>
-                                </h5>
-
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <p class="card-text">
-                                            <strong>Services:</strong><br>
-                                            <?php
-                                            foreach ($slotData['service'] as $service) {
-                                                echo $service . '<br>';
-                                            }
-                                            ?>
-                                        </p>
+                    foreach ($groupedServices as $slotNumber => $slotData) { ?>
+                        <div class="col-lg-6 mb-4">
+                            <div class="service-card">
+                                <div class="card-body p-4">
+                                    <!-- Slot Number Badge -->
+                                    <div class="slot-badge mb-4">
+                                        <span class="slot-number">Slot <?php echo $slotNumber; ?></span>
                                     </div>
-                                    <div class="col-md-6">
-                                        <p class="card-text">
-                                            <strong>Prices:</strong><br>
-                                            <?php
-                                            foreach ($slotData['prices'] as $price) {
-                                                echo '&#x20B1; ' . $price . '.00<br>';
-                                            }
-                                            ?>
-                                        </p>
+
+                                    <!-- Service Details -->
+                                    <div class="service-details">
+                                        <div class="row g-4">
+                                            <div class="col-md-6">
+                                                <div class="detail-box">
+                                                    <h6 class="detail-title">
+                                                        <i class="fas fa-tools me-2"></i>Services
+                                                    </h6>
+                                                    <div class="detail-content">
+                                                        <?php foreach ($slotData['service'] as $service) {
+                                                            echo "<div class='service-item'>$service</div>";
+                                                        } ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="detail-box">
+                                                    <h6 class="detail-title">
+                                                        <i class="fas fa-tag me-2"></i>Prices
+                                                    </h6>
+                                                    <div class="detail-content">
+                                                        <?php foreach ($slotData['prices'] as $price) {
+                                                            echo "<div class='price-item'>₱ $price</div>";
+                                                        } ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <?php if (array_filter($slotData['products'], fn($p) => $p !== 'N/A')) { ?>
+                                            <div class="row g-4 mt-3">
+                                                <div class="col-md-6">
+                                                    <div class="detail-box">
+                                                        <h6 class="detail-title">
+                                                            <i class="fas fa-box me-2"></i>Products
+                                                        </h6>
+                                                        <div class="detail-content">
+                                                            <?php foreach ($slotData['products'] as $product_name) {
+                                                                if ($product_name !== 'N/A') {
+                                                                    echo "<div class='product-item'>$product_name</div>";
+                                                                }
+                                                            } ?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="detail-box">
+                                                        <h6 class="detail-title">
+                                                            <i class="fas fa-tag me-2"></i>Product Prices
+                                                        </h6>
+                                                        <div class="detail-content">
+                                                            <?php foreach ($slotData['product_prices'] as $product_price) {
+                                                                if ($product_price !== 'N/A') {
+                                                                    echo "<div class='price-item'>₱ $product_price.00</div>";
+                                                                }
+                                                            } ?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+
+                                        <!-- Action Button -->
+                                        <div class="action-button mt-4">
+                                            <?php if (!$isFirstSlotRendered) { ?>
+                                                <a href="staff-dashboard-view-details.php?selected_id=<?php echo $slotData['selected_id']; ?>&servicename_id=<?php echo $slotData['servicename_id']; ?>&user_id=<?php echo $slotData['user_id']; ?>&shop_id=<?php echo $staffData['shop_id']; ?>"
+                                                   class="btn btn-primary w-100">
+                                                    <i class="fas fa-eye me-2"></i>View Details
+                                                </a>
+                                                <?php $isFirstSlotRendered = true; ?>
+                                            <?php } else { ?>
+                                                <button class="btn btn-secondary w-100" disabled>
+                                                    <i class="fas fa-lock me-2"></i>View Details
+                                                </button>
+                                            <?php } ?>
+                                        </div>
                                     </div>
                                 </div>
-
-                                <!-- Check if there are actual product names or prices that are not 'N/A' -->
-                                <?php if (array_filter($slotData['products'], fn($p) => $p !== 'N/A') || array_filter($slotData['product_prices'], fn($p) => $p !== 'N/A')) { ?>
-                                    <div class="row">
-                                        <div class="col-md-6 mt-3 mb-3">
-                                            <p class="card-text">
-                                                <strong>Products:</strong><br>
-                                                <?php
-                                                foreach ($slotData['products'] as $product_name) {
-                                                    if ($product_name !== 'N/A') {
-                                                        echo $product_name . '<br>';
-                                                    }
-                                                }
-                                                ?>
-                                            </p>
-                                        </div>
-                                        <div class="col-md-6 mt-3 mb-3">
-                                            <p class="card-text">
-                                                <strong>Product Prices:</strong><br>
-                                                <?php
-                                                foreach ($slotData['product_prices'] as $product_price) {
-                                                    if ($product_price !== 'N/A') {
-                                                        echo '&#x20B1; ' . $product_price . '.00<br>';
-                                                    }
-                                                }
-                                                ?>
-                                            </p>
-                                        </div>
-                                    </div>
-                                <?php } ?>
-
-                                <!-- Conditional Button Rendering -->
-                                <?php if (!$isFirstSlotRendered) { ?>
-                                    <a href="staff-dashboard-view-details.php?selected_id=<?php echo $slotData['selected_id']; ?>&servicename_id=<?php echo $slotData['servicename_id']; ?>&user_id=<?php echo $slotData['user_id']; ?>&shop_id=<?php echo $staffData['shop_id']; ?>"
-                                       class="btn btn-primary w-100">
-                                        View Details
-                                    </a>
-                                    <?php $isFirstSlotRendered = true; ?>
-                                <?php } else { ?>
-                                    <button class="btn btn-secondary w-100" disabled>
-                                        View Details
-                                    </button>
-                                <?php } ?>
                             </div>
                         </div>
-                    </div>
-                    <?php
-                }
-            } else {
-                echo '<div class="col-12"><p class="text-danger">Error: ' . mysqli_error($connection) . '</p></div>';
-            }
-            ?>
+                    <?php }
+                } ?>
+            </div>
         </div>
-    </div>
-</main>
+    </main>
 
+    <style>
+        /* Main Content Styling */
+        main {
+            background-color: #f8f9fa;
+            padding-top: 2rem;
+            min-height: 100vh;
+        }
 
+        /* Service Header Styling */
+        .service-title {
+            font-size: 2.5rem;
+            color: #072797;
+            position: relative;
+            display: inline-block;
+        }
 
+        .service-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: #FF5722;
+            border-radius: 2px;
+        }
+
+        /* Service Card Styling */
+        .service-card {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(7, 39, 151, 0.1);
+            overflow: hidden;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Slot Badge Styling */
+        .slot-badge {
+            background: linear-gradient(135deg, #072797, #0a2d99);
+            padding: 10px 20px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .slot-number {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* Detail Box Styling */
+        .detail-box {
+            background: rgba(7, 39, 151, 0.03);
+            padding: 15px;
+            border-radius: 12px;
+            height: 100%;
+        }
+
+        .detail-title {
+            color: #072797;
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .detail-content {
+            color: #444;
+        }
+
+        /* Item Styling */
+        .service-item, .product-item, .price-item {
+            padding: 8px 0;
+            border-bottom: 1px dashed rgba(7, 39, 151, 0.1);
+        }
+
+        .price-item {
+            color: #FF5722;
+            font-weight: 600;
+        }
+
+        /* Button Styling */
+        .action-button .btn {
+            padding: 12px 24px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #FF5722, #ff7043);
+            border: none;
+            box-shadow: 0 4px 15px rgba(255, 87, 34, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #ff7043, #FF5722);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #e9ecef;
+            color: #6c757d;
+            border: none;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .service-title {
+                font-size: 2rem;
+            }
+            
+            .detail-box {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
 
     <script>
         function updateDateTime() {
@@ -448,11 +587,6 @@ mysqli_close($connection);
         // Initial call to display date and time immediately
         updateDateTime();
     </script>
-
-
-
-
-
 
     <script src="./js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
