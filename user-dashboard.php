@@ -524,6 +524,12 @@ $shop_result = mysqli_query($connection, $shop_query);
                         <h3 class="text-primary mb-4">
                             Search Results for "<?php echo htmlspecialchars($_GET['query']); ?>"
                         </h3>
+                        <?php 
+                        // Update the query to search by shop_name, barangay, and city
+                        $searchQuery = mysqli_real_escape_string($connection, $_GET['query']);
+                        $query = "SELECT * FROM shops WHERE shop_name LIKE '%$searchQuery%' OR barangay LIKE '%$searchQuery%' OR city LIKE '%$searchQuery%'";
+                        $result = mysqli_query($connection, $query); // Execute the updated query
+                        ?>
                         <?php if ($result->num_rows > 0): ?>
                             <div class="list-group">
                                 <?php while ($row = $result->fetch_assoc()): ?>
@@ -536,7 +542,7 @@ $shop_result = mysqli_query($connection, $shop_query);
                                             </div>
                                             <div class="ms-3">
                                                 <h5 class="mb-1"><?php echo htmlspecialchars($row["shop_name"]); ?></h5>
-                                                <p class="mb-0 text-muted"><i class="fas fa-map-marker-alt me-2"></i><?php echo htmlspecialchars($row["barangay"]); ?></p>
+                                                <p class="mb-0 text-muted"> <i class="fas fa-map-marker-alt"> </i><?php echo htmlspecialchars($row["barangay"]); ?></p>
                                             </div>
                                         </div>
                                     </a>
@@ -545,7 +551,7 @@ $shop_result = mysqli_query($connection, $shop_query);
                         <?php else: ?>
                             <div class="text-center py-5">
                                 <i class="fas fa-search fa-3x text-muted mb-3"></i>
-                                <p class="lead">No results found. Try different keywords.</p>
+                                <p class="lead text-muted">No results found. Try different keywords.</p>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -588,7 +594,7 @@ $shop_result = mysqli_query($connection, $shop_query);
                                             </div>
                                         </div>
                                         <p class="text-muted mb-4">
-                                            <i class="fas fa-map-marker-alt me-2"></i>
+                                            <i class="fas fa-map-marker-alt"></i>
                                             <?php echo htmlspecialchars($shopData['barangay']); ?>
                                         </p>
                                         <a href="user-dashboard-select-shop.php?shop_id=<?php echo $shopData['shop_id']; ?>" 

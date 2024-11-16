@@ -495,7 +495,7 @@ mysqli_close($connection);
                       <input type="text" class="form-control" id="province" name="province"  placeholder="Edit your Province" value="<?php echo isset($userData['province']) ? htmlspecialchars($userData['province']) : ''; ?>">
                     </div>
                   </div>
-                </>
+                </form>
           </div>
         </div>
       </div>
