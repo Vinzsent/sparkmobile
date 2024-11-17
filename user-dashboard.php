@@ -508,7 +508,7 @@ $shop_result = mysqli_query($connection, $shop_query);
                                 placeholder="Search for car wash shops..." 
                                 style="border-radius: 30px 0 0 30px;">
                             <button class="btn btn-primary px-4" type="submit" 
-                                style="border-radius: 0 30px 30px 0;">
+                                style="background-color: #072797; border-radius: 0 30px 30px 0;">
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
@@ -562,7 +562,7 @@ $shop_result = mysqli_query($connection, $shop_query);
             <!-- Shops Section -->
             <div class="container">
                 <div class="text-center mb-5">
-                    <h2 class="display-5 fw-bold text-primary">Shops Near You</h2>
+                    <h2 class="display-5 fw-bold" style="color: #072797;">Shops Near You</h2>
                     <p class="text-muted">Discover the best car wash services in your area</p>
                 </div>
 
@@ -576,7 +576,7 @@ $shop_result = mysqli_query($connection, $shop_query);
                                              class="card-img-top" alt="<?php echo htmlspecialchars($shopData['shop_name']); ?>"
                                              style="height: 200px; object-fit: cover;">
                                         <div class="position-absolute top-0 end-0 p-2">
-                                            <span class="badge bg-primary">
+                                            <span class="badge" style="background-color: #072797;">
                                                 <i class="fas fa-clock me-1"></i> Open
                                             </span>
                                         </div>
@@ -598,7 +598,7 @@ $shop_result = mysqli_query($connection, $shop_query);
                                             <?php echo htmlspecialchars($shopData['barangay']); ?>
                                         </p>
                                         <a href="user-dashboard-select-shop.php?shop_id=<?php echo $shopData['shop_id']; ?>" 
-                                           class="btn btn-primary btn-lg w-100">
+                                           class="btn btn-primary btn-lg w-100" style="background-color: #072797;">
                                             View Details
                                         </a>
                                     </div>

@@ -530,6 +530,7 @@ $selectedData = mysqli_fetch_assoc($result);
                   <input type="hidden" name="user_id" value="<?php echo $selectedData['user_id']; ?>">
                   <input type="hidden" name="status" id="status" value="<?php echo $selectedData['status']; ?>">
                   <input type="hidden" name="slotNumber" id="slotNumber" value="<?php echo $selectedData['slotNumber']; ?>">
+                  <input type="hidden" name="staff_id" id="staff_id" value="<?php echo $userID; ?>">
 
                   <?php
                   // Fetch all services and prices grouped by slotNumber for the current user

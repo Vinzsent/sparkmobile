@@ -260,6 +260,106 @@ mysqli_close($connection);
   .ex-1 {
     color: red;
   }
+
+  .service-view-container {
+    padding: 30px;
+    margin-top: 60px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  }
+
+  .service-view-container h2 {
+    color: #072797;
+    font-weight: 600;
+    margin-bottom: 30px;
+    position: relative;
+    padding-bottom: 10px;
+  }
+
+  .service-view-container h2:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: orangered;
+  }
+
+  .service-table {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0,0,0,0.05);
+  }
+
+  .service-table thead {
+    background: #072797;
+  }
+
+  .service-table th {
+    color: white;
+    font-weight: 500;
+    padding: 15px;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .service-table td {
+    padding: 15px;
+    color: #333;
+    vertical-align: middle;
+  }
+
+  .service-table tbody tr {
+    transition: background-color 0.3s ease;
+    border-bottom: 1px solid #eee;
+  }
+
+  .service-table tbody tr:hover {
+    background-color: #f8f9fa;
+  }
+
+  .status-cell {
+    font-weight: 500;
+  }
+
+  .status-done {
+    color: #28a745;
+  }
+
+  .status-pending {
+    color: #ffc107;
+  }
+
+  .proceed-button {
+    background: #072797;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 5px;
+    border: none;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    display: inline-block;
+  }
+
+  .proceed-button:hover:not(:disabled) {
+    background: orangered;
+    transform: translateY(-2px);
+  }
+
+  .proceed-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+
+  .no-data-message {
+    text-align: center;
+    padding: 30px;
+    color: #666;
+    font-size: 1.1rem;
+  }
 </style>
 
 <body>
@@ -334,216 +434,200 @@ mysqli_close($connection);
       <ul class="navbar-nav">
 
 
-        <div class=" welcome fw-bold px-3 mb-3">
-          <h5 class="text-center">Welcome back <?php echo $userData['firstname']; ?>!</h5>
-        </div>
-        <div class="ms-3" id="dateTime"></div>
-        </li>
-        <li>
-        <li class="">
-          <a href="user-dashboard.php" class="nav-link px-3">
-            <span class="me-2"><i class="fas fa-home"></i></i></span>
-            <span class="start">DASHBOARD</span>
-          </a>
-        </li>
-        <li class="">
-          <a href="csdashboard.php" class="nav-link px-3">
-            <span class="me-2"><i class="fas fa-user"></i></i></span>
-            <span class="start">PROFILE</span>
-          </a>
-        </li>
+      <div class="offcanvas offcanvas-start sidebar-nav" tabindex="-1" id="sidebar" <div class="offcanvas-body p-0">
+        <nav class="">
+            <ul class="navbar-nav">
 
-        <li>
-          <a href="cscars1.php" class="nav-link px-3">
-            <span class="me-2"><i class="fas fa-car"></i></i></span>
-            <span>MY CARS</span>
-          </a>
-        </li>
-        <li class="v-1">
-          <a
-            class="nav-link px-3 sidebar-link"
-            data-bs-toggle="collapse"
-            href="#layouts">
-            <span class="me-2"><i class="fas fa-calendar"></i></i></span>
-            <span>BOOKINGS</span>
-            <span class="ms-auto">
-              <span class="right-icon">
-                <i class="bi bi-chevron-down"></i>
-              </span>
-            </span>
-          </a>
-        </li>
-        <div class="collapse" id="layouts">
-          <ul class="navbar-nav ps-3">
-            <li class="v-1">
-              <a href="setappoinment.php" class="nav-link px-3">
-                <span class="me-2">Set Appointment</span>
-              </a>
-            </li>
-            <li class="v-1">
-              <a href="checkingcar.php" class="nav-link px-3">
-                <span class="me-2">Checking car condition</span>
-              </a>
-            </li>
-            <li class="v-1">
-              <a href="#" class="nav-link px-3">
-                <span class="me-2">Request Slot</span>
-              </a>
-            </li>
-            <li class="v-1 v-2">
-              <a href="csprocess3.php" class="nav-link px-3">
-                <span class="me-2">Select Service</span>
-              </a>
-            </li>
-            <li class="v-1">
-              <a href="#" class="nav-link px-3">
-                <span class="me-2">Register your car</span>
-              </a>
-            </li>
-            <li class="v-1">
-              <a href="#" class="nav-link px-3">
-                <span class="me-2">Booking Summary</span>
-              </a>
-            </li>
-            <li class="v-1">
-              <a href="#" class="nav-link px-3">
-                <span class="me-2">Booking History</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-        </li>
-        <li>
-          <a
-            class="nav-link px-3 sidebar-link"
-            data-bs-toggle="collapse"
-            href="#layouts2">
-            <span class="me-2"><i class="fas fa-money-bill"></i>
-              </i></i></span>
-            <span>PAYMENTS</span>
-            <span class="ms-auto">
-              <span class="right-icon">
-                <i class="bi bi-chevron-down"></i>
-              </span>
-            </span>
-          </a>
-          <div class="collapse" id="layouts2">
-            <ul class="navbar-nav ps-3">
-              <li class="v-1">
-                <a href="#" class="nav-link px-3">
-                  <span class="me-2">Payment options</span>
-                </a>
-              </li>
-              <li class="v-1">
-                <a href="#" class="nav-link px-3">
-                  <span class="me-2">Car wash invoice</span>
-                </a>
-              </li>
-              <li class="v-1">
-                <a href="#" class="nav-link px-3">
-                  <span class="me-2">Payment History</span>
-                </a>
-              </li>
+
+                <div class=" welcome fw-bold px-3 mb-3">
+                    <h5 class="text-center">Welcome back <?php echo $userData['firstname']; ?>!</h5>
+                </div>
+                <div class="ms-3" id="dateTime"></div>
+                </li>
+                <li>
+                <li class="">
+                    <a href="user-dashboard.php" class="nav-link px-3">
+                        <span class="me-2"><i class="fas fa-home"></i></i></span>
+                        <span class="start">DASHBOARD</span>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="user-profile.php" class="nav-link px-3">
+                        <span class="me-2"><i class="fas fa-user"></i></i></span>
+                        <span class="start">PROFILE</span>
+                    </a>
+                </li>
+                <li>
+
+                <li class="">
+                    <a href="cars-profile.php" class="nav-link px-3">
+                        <span class="me-2"><i class="fas fa-car"></i></i></span>
+                        <span>MY CARS</span>
+                    </a>
+                </li>
+                <li class="v-1">
+                  <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#layouts">
+                        <span class="me-2"><i class="fas fa-calendar"></i></i></span>
+                        <span>BOOKINGS</span>
+                        <span class="ms-auto">
+                            <span class="right-icon">
+                                <i class="bi bi-chevron-down"></i>
+                            </span>
+                        </span>
+                    </a>
+                    <div class="collapse" id="layouts">
+                        <ul class="navbar-nav ps-3">
+                            <li class="v-1">
+                                <a href="user-appoinment.php" class="nav-link px-3">
+                                    <span class="me-2">Appointments</span>
+                                </a>
+                            </li>
+                            <li class="v-1">
+                                <a href="checkingcar.php" class="nav-link px-3">
+                                    <span class="me-2">Checking car condition</span>
+                                </a>
+                            </li>
+                            <li class="v-1">
+                                <a href="csrequest_slot.php" class="nav-link px-3">
+                                    <span class="me-2">Request Slot</span>
+                                </a>
+                            </li>
+                            <li class="v-1">
+                                <a href="csprocess3.php" class="nav-link px-3">
+                                    <span class="me-2">Select Service</span>
+                                </a>
+                            </li>
+                            <li class="v-1">
+                                <a href="#" class="nav-link px-3">
+                                    <span class="me-2">Register your car</span>
+                                </a>
+                            </li>
+                            <li class="v-1">
+                                <a href="user-service-summary.php" class="nav-link px-3">
+                                    <span class="me-2">Booking Summary</span>
+                                </a>
+
+                            </li>
+                            <li class="v-1">
+                                <a href="#" class="nav-link px-3">
+                                    <span class="me-2">Booking History</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="">
+                    <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#layouts2">
+                        <span class="me-2"><i class="fas fa-money-bill"></i>
+                            </i></i></span>
+                        <span>PAYMENTS</span>
+                        <span class="ms-auto">
+                            <span class="right-icon">
+                                <i class="bi bi-chevron-down"></i>
+                            </span>
+                        </span>
+                    </a>
+                    <div class="collapse" id="layouts2">
+                        <ul class="navbar-nav ps-3">
+                            <li>
+                                <a href="#" class="nav-link px-3">
+                                    <span class="me-2">Payment options</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="nav-link px-3">
+                                    <span class="me-2">Car wash invoice</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="nav-link px-3">
+                                    <span class="me-2">Payment History</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <a href="#" class="nav-link px-3">
+                        <span class="me-2"><i class="fas fa-medal"></i>
+                            </i></span>
+                        <span>REWARDS</span>
+                    </a>
+                </li>
+                <li class="nav-link px-3" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                    <span class="me-2"><i class="fas fa-sign-out-alt"></i>
+                        </i></span>
+                    <span>LOG OUT</span>
+                </li>
+
             </ul>
-          </div>
-        </li>
-        <li>
-        <li>
-          <a href="csreward.html" class="nav-link px-3">
-            <span class="me-2"><i class="fas fa-medal"></i>
-              </i></span>
-            <span>REWARDS</span>
-          </a>
-        </li>
-        <li>
-          <a href="index.php" class="nav-link px-3">
-            <span class="me-2"><i class="fas fa-sign-out-alt"></i>
-              </i></span>
-            <span>LOG OUT</span>
-          </a>
-        </li>
-
-      </ul>
-    </nav>
-  </div>
+        </nav>
+    </div>
   </div>
   <!-- main content -->
   <?php
   if (mysqli_num_rows($result2) > 0) {
   ?>
     <main>
-      <div class="container-vinfo text-dark">
-        <h2 class="mb-5">Your vehicle is ready!</h2>
+      <div class="service-view-container">
+        <h2><i class="fas fa-check-circle me-2"></i>Service Status</h2>
+        
         <input type="hidden" name="selected_id" id="selected_id" value="<?php echo $serviceData['selected_id']; ?>">
         <input type="hidden" name="user_id" id="user_id" value="<?php echo $user_id; ?>">
+        
         <form action="cspayment.php" method="get">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>Services</th>
-                <th>Service Duration</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-              // Reset the result pointer to the beginning for all columns
-              mysqli_data_seek($result2, 0);
-              $hasData = false; // Flag to track if data is present
+            <div class="service-table">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Services</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        mysqli_data_seek($result2, 0);
+                        $hasData = false;
 
-              while ($serviceData = mysqli_fetch_assoc($result2)) {
-                echo "<tr>";
+                        while ($serviceData = mysqli_fetch_assoc($result2)) {
+                            if ($serviceData) {
+                                echo "<tr>";
+                                echo "<td>" . htmlspecialchars($serviceData['service']) . "</td>";
+                                
+                                mysqli_data_seek($result3, 0);
+                                $servicedoneData = mysqli_fetch_assoc($result3);
+                                echo "<td>" . ($servicedoneData ? htmlspecialchars($servicedoneData['start_time']) : 'NA') . "</td>";
 
-                // Check if serviceData is valid before accessing its values
-                if ($serviceData) {
-                  // Display Service
-                  echo "<td class='mt-3'>" . htmlspecialchars($serviceData['service']) . "</td>";
+                                mysqli_data_seek($result3, 0);
+                                $servicedoneData = mysqli_fetch_assoc($result3);
+                                echo "<td>" . ($servicedoneData ? htmlspecialchars($servicedoneData['end_time']) : 'NA') . "</td>";
+                                
+                                $statusClass = strtolower($serviceData['status']) === 'done' ? 'status-done' : 'status-pending';
+                                echo "<td class='status-cell " . $statusClass . "'>" . htmlspecialchars($serviceData['status']) . "</td>";
+                                echo "</tr>";
+                                $hasData = true;
+                            }
+                        }
+                        
+                        if (!$hasData) {
+                            echo '<tr><td colspan="3" class="text-center">No services found</td></tr>';
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
 
-                  // Display Service Duration
-                  mysqli_data_seek($result3, 0); // Reset pointer for service duration
-                  $servicedoneData = mysqli_fetch_assoc($result3);
-                  echo "<td class='mt-3'>" . ($servicedoneData ? htmlspecialchars($servicedoneData['timer']) : 'NA') . "</td>";
-                  // Display Status
-                  echo "<td class='mt-3'>" . htmlspecialchars($serviceData['status']) . "</td>";
-                }
-                echo "</tr>";
-                $hasData = true; // Set flag to true if data is found
-              }
-              if (!$hasData) {
-                echo "<tr><td colspan='5'>NA</td></tr>"; // Display NA if no data is found
-              }
-              ?>
-            </tbody>
-          </table>
-
-
-          <a href="cspayment.php?vehicle_id=<?php echo $vehicle_id; ?>&user_id=<?php echo $user_id; ?>&shop_id=<?php echo $shop_id; ?>&servicename_id=<?php echo $servicename_id; ?>" id="proceedButton">
-            <button type="button" class="btn btn-primary">PROCEED</button>
-          </a>
+            <div class="text-center mt-4">
+                <a href="cspayment.php?vehicle_id=<?php echo $vehicle_id; ?>&user_id=<?php echo $user_id; ?>&shop_id=<?php echo $shop_id; ?>&servicename_id=<?php echo $servicename_id; ?>" 
+                   id="proceedButton" 
+                   class="proceed-button" style="text-decoration: none;">
+                    <i class="fas fa-arrow-right "> </i> Proceed to Payment
+                </a>
+            </div>
         </form>
-      </div>
-
-      <script>
-        // Disable the "PROCEED" button until the status is "Done"
-        document.addEventListener('DOMContentLoaded', function() {
-          var statusElements = document.querySelectorAll("tbody tr td:nth-child(4)"); // Select all status cells
-          var proceedButton = document.getElementById('proceedButton');
-          var allDone = true;
-
-          statusElements.forEach(function(statusCell) {
-            if (statusCell.textContent.trim() !== "Done") {
-              allDone = false; // If any status is not "Done", set to false
-            }
-          });
-
-          if (!allDone) {
-            proceedButton.disabled = true;
-            proceedButton.addEventListener('click', function(event) {
-              event.preventDefault(); // Prevent the default behavior of the button click
-            });
-          }
-        });
-      </script>
+    </div>
     </main>
 
   <?php

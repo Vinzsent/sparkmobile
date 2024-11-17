@@ -226,6 +226,94 @@ $shopData = mysqli_fetch_assoc($shop_result);
     .hr {
         position: center;
     }
+
+    .application-form {
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        margin-top: 30px;
+    }
+
+    .form-title {
+        color: #072797;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .form-subtitle {
+        color: #666;
+        font-size: 0.95rem;
+        margin-bottom: 30px;
+    }
+
+    .section-title {
+        color: #072797;
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #072797;
+        box-shadow: 0 0 0 0.2rem rgba(7, 39, 151, 0.25);
+    }
+
+    .form-control[readonly] {
+        background-color: #f8f9fa;
+        border-color: #e0e0e0;
+    }
+
+    .form-label {
+        color: #666;
+        font-size: 0.85rem;
+        margin-top: 5px;
+    }
+
+    .asterisk {
+        color: orangered;
+        font-weight: bold;
+    }
+
+    select.form-control {
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 1em;
+    }
+
+    .submit-btn {
+        background-color: #072797;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-weight: 500;
+        padding: 12px 40px;
+        margin-top: 30px;
+        transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover {
+        background-color: orangered;
+        transform: translateY(-2px);
+    }
+
+    .form-section {
+        margin-bottom: 30px;
+    }
+
+    hr {
+        border-top: 2px solid #e0e0e0;
+        margin: 30px 0;
+    }
 </style>
 
 
@@ -420,71 +508,75 @@ $shopData = mysqli_fetch_assoc($shop_result);
     </div>
     <!-- main content -->
     <main class="container">
-        <div class="mb-3 text-dark">
-            <h2 class="text-center">Application Form</h2>
-            <p class="text-center mb-3">Fill out the neccessary information below.</p>
+        <div class="application-form">
+            <h2 class="form-title text-center">Application Form</h2>
+            <p class="form-subtitle text-center">Fill out the necessary information below.</p>
             <hr>
 
             <form action="user-apply-staff-backend.php" method="POST" enctype="multipart/form-data">
                 <div class="row justify-content-center">
-                    <!-- First Name and Last Name side by side -->
-                    <div class="col-md-8 text-dark">
-                        <h5>Name <span class="asterisk">*</span></h5>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <input type="hidden" id="user_id" name="user_id" value="<?php echo $userID;?>">
-                                <input type="hidden" id="shop_id" name="shop_id" value="<?php echo $shop_id;?>">
-                                <input type="text" id="firstname" name="firstname" class="form-control" value="<?php echo $userData['firstname'];?>" readonly>
-                                <label for="firstname">First Name</label>
-                            </div>
-                            <div class="col-md-6">
-                                <input type="text" id="lastname" name="lastname" class="form-control" value="<?php echo $userData['lastname'];?>" readonly>
-                                <label for="lastname">Last Name</label>
-                            </div>
-                        </div>
-                    </div>  
-                </div>
-                <div class="row justify-content-center">
-                    <div class="col-md-8 text-dark mt-5">
-                        <div class="row">
-                            <!-- Email Section -->
-                            <div class="col-md-6">
-                                <h5>E-mail <span class="asterisk">*</span></h5>
-                                <input type="email" id="email" name="email" class="form-control" value="<?php echo $userData['email'];?>" readonly> 
-                                <label for="email">example@gmail.com</label>
-                            </div>
-                            <!-- Phone Number Section -->
-                            <div class="col-md-6">
-                                <h5>Phone Number <span class="asterisk">*</span></h5>
-                                <input type="contact" id="contact" name="contact" class="form-control" value="<?php echo $userData['contact'];?>" readonly>
-                                <label for="contact"></label>
+                    <div class="col-md-8">
+                        <div class="form-section">
+                            <h5 class="section-title">Personal Information <span class="asterisk">*</span></h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <input type="hidden" id="user_id" name="user_id" value="<?php echo $userID;?>">
+                                    <input type="hidden" id="shop_id" name="shop_id" value="<?php echo $shop_id;?>">
+                                    <input type="text" id="firstname" name="firstname" class="form-control" value="<?php echo $userData['firstname'];?>" readonly>
+                                    <label class="form-label">First Name</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" id="lastname" name="lastname" class="form-control" value="<?php echo $userData['lastname'];?>" readonly>
+                                    <label class="form-label">Last Name</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row justify-content-center">
-                    <!-- Applied Position Section -->
-                    <div class="col-md-4 text-dark mt-5">
-                        <h5>Applied Position <span class="asterisk">*</span></h5>
-                        <select class="form-control" id="position" name="position">
-                            <option value="Choose">Choose...</option>
-                            <option value="Car Wash Staff">Car Wash Staff</option>
-                            <option value="Manager">Manager</option>
-                            <option value="Cashier">Cashier</option>
-                        </select>
-                    </div>
-                    <!-- Phone Number Section -->
-                    <div class="col-md-4 text-dark mt-5">
-                        <h5>Preferred Interview Date<span class="asterisk">*</span></h5>
-                        <input type="date" id="interviewdate" name="interviewdate" class="form-control">
-                        <label for="interviewdate"></label>
-                    </div>
 
-                    
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="form-section">
+                            <h5 class="section-title">Contact Information <span class="asterisk">*</span></h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <input type="email" id="email" name="email" class="form-control" value="<?php echo $userData['email'];?>" readonly>
+                                    <label class="form-label">Email Address</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="contact" id="contact" name="contact" class="form-control" value="<?php echo $userData['contact'];?>" readonly>
+                                    <label class="form-label">Phone Number</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="row justify-contecnt-center">
-                    <center><button type="submit" class="btn btn-primary">Next</button></center>
+
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="form-section">
+                            <h5 class="section-title">Application Details <span class="asterisk">*</span></h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <select class="form-control" id="position" name="position" required>
+                                        <option value="">Select Position...</option>
+                                        <option value="Car Wash Staff">Car Wash Staff</option>
+                                        <option value="Manager">Manager</option>
+                                        <option value="Cashier">Cashier</option>
+                                    </select>
+                                    <label class="form-label">Applied Position</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="date" id="interviewdate" name="interviewdate" class="form-control" required>
+                                    <label class="form-label">Preferred Interview Date</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="submit-btn">Submit Application</button>
                 </div>
             </form>
         </div>

@@ -196,6 +196,106 @@ mysqli_close($connection);
     .label{
         font-size: 12px;
     }
+
+    .add-product-container {
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        margin: 30px 0 30px 100px; /* Adjusted left margin */
+        width: calc(100% - 120px);
+    }
+
+    .section-title {
+        color: #072797;
+        font-weight: 600;
+        font-size: 1.8rem;
+        margin-bottom: 30px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #072797;
+    }
+
+    .form-label {
+        color: #072797;
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 12px 15px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #072797;
+        box-shadow: 0 0 0 0.2rem rgba(7, 39, 151, 0.25);
+    }
+
+    .form-control::placeholder {
+        color: #adb5bd;
+        font-size: 0.9rem;
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    .btn-primary {
+        background-color: #072797;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 30px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-cancel {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 30px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover, .btn-cancel:hover {
+        background-color: orangered;
+        transform: translateY(-2px);
+    }
+
+    .asterisk {
+        color: orangered;
+        margin-left: 3px;
+    }
+
+    .label {
+        color: #666;
+        font-size: 0.85rem;
+        margin-top: 5px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+        .add-product-container {
+            margin: 20px;
+            width: auto;
+            padding: 20px;
+        }
+
+        .button-group {
+            flex-direction: column;
+        }
+
+        .btn-primary, .btn-cancel {
+            width: 100%;
+        }
+    }
 </style>
 
 <body>
@@ -363,55 +463,64 @@ mysqli_close($connection);
     </div>
     </div>
     <!-- main content -->
-    <main class="text-dark">
-        <div class="container mt-5">
-            <h2 class="mb-4">Add Product</h2>
+    <main>
+        <div class="add-product-container">
+            <h2 class="section-title">Add New Product</h2>
+            
             <form action="owner-dashboard-inventory-cleaning-products-add-backend.php" method="POST" enctype="multipart/form-data">
                 <div class="row">
                     <!-- Left Column -->
                     <div class="col-md-6">
-                        <div class="mb-3">
-                            <input type="hidden" name="shop_id" id="shop_id" value="<?php echo $shop_id;?>">
-                            <label for="productName" class="form-label">Name<span class="asterisk">*</span></label>
+                        <input type="hidden" name="shop_id" id="shop_id" value="<?php echo $shop_id;?>">
+                        
+                        <div class="mb-4">
+                            <label for="productName" class="form-label">Product Name<span class="asterisk">*</span></label>
                             <input type="text" class="form-control" name="product_name" id="product_name" placeholder="Enter product name">
                         </div>
-                        <div class="mb-3">
-                            <label for="productDescription" class="form-label">Description (optional)</label>
+
+                        <div class="mb-4">
+                            <label for="productDescription" class="form-label">Description</label>
                             <textarea class="form-control" name="description" id="description" rows="3" placeholder="Enter product description"></textarea>
                         </div>
-                        <div class="mb-3">
+
+                        <div class="mb-4">
                             <label for="productCategory" class="form-label">Category<span class="asterisk">*</span></label>
                             <input type="text" class="form-control" name="category" id="category" placeholder="Enter product category">
                         </div>
-                        <div class="mb-3">
+
+                        <div class="mb-4">
                             <label for="productPrice" class="form-label">Price<span class="asterisk">*</span></label>
-                            <input type="number" class="form-control" name="price" id="price" placeholder="Enter product price">
-                            <label for="" class="label">Please include decimals (100.00)</label>
+                            <input type="number" class="form-control" name="price" id="price" placeholder="Enter price (e.g., 100.00)">
+                            <small class="label">Please include decimals (100.00)</small>
                         </div>
-                        
                     </div>
 
                     <!-- Right Column -->
                     <div class="col-md-6">
-                        <div class="mb-3">
+                        <div class="mb-4">
                             <label for="itemCode" class="form-label">Item Code<span class="asterisk">*</span></label>
                             <input type="number" class="form-control" name="item_code" id="item_code" placeholder="Enter item code">
                         </div>
-                        <div class="mb-3">
+
+                        <div class="mb-4">
                             <label for="stockSize" class="form-label">Stock Size<span class="asterisk">*</span></label>
-                            <input type="number" class="form-control" name="stock_size" id="stock_size" placeholder="Enter stock size">
+                            <input type="number" class="form-control" name="stock_size" id="stock_size" placeholder="Enter stock quantity">
                         </div>
-                        
-                        <div class="mb-3">
+
+                        <div class="mb-4">
                             <label for="productPhotos" class="form-label">Product Photo<span class="asterisk">*</span></label>
-                            <input type="file" class="form-control" name="profile" id="profile">
+                            <input type="file" class="form-control" name="profile" id="profile" accept="image/*">
                         </div>
                     </div>
                 </div>
 
-                <!-- Submit Button -->
-                <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary px-5 py-2">Save product</button>
+                <div class="button-group">
+                    <a href="owner-dashboard-inventory-cleaning-products.php?shop_id=<?php echo $shop_id; ?>" class="btn btn-cancel">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i> Save Product
+                    </button>
                 </div>
             </form>
         </div>

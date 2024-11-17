@@ -175,6 +175,123 @@ $userData = mysqli_fetch_assoc($result);
   .add-btn {
     margin-left: 54%;
   }
+
+  .profile-container {
+    padding: 40px;
+    margin: 80px auto 20px auto;
+    max-width: 1200px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+  }
+
+  .section-header h2 {
+    color: #072797;
+    font-weight: 600;
+    margin: 0;
+    font-size: 1.75rem;
+  }
+
+  .profile-btn, .save-btn {
+    background: #072797;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 5px;
+    border: none;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .profile-btn:hover, .save-btn:hover {
+    background: orangered;
+    color: white;
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+
+  .profile-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+
+  .profile-card .card-header {
+    background: #072797;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 1.2rem;
+  }
+
+  .img-account-profile {
+    width: 100%;
+    max-width: 300px;
+    height: 200px;
+    object-fit: contain;
+    border-radius: 10px;
+    margin: 20px auto;
+    border: 5px solid #f8f9fa;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group label {
+    color: #072797;
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .form-control, .form-select {
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+  }
+
+  .form-control:focus, .form-select:focus {
+    border-color: #072797;
+    box-shadow: 0 0 0 0.2rem rgba(7, 39, 151, 0.25);
+  }
+
+  .upload-section {
+    padding: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .profile-container {
+        padding: 20px;
+        margin-top: 70px;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .profile-btn, .save-btn {
+        width: 100%;
+        justify-content: center;
+    }
+  }
 </style>
 
 <body>
@@ -345,119 +462,121 @@ $userData = mysqli_fetch_assoc($result);
   </div>
   <!-- main content -->
   <main>
-    <div class="personal-details">
-      <div class="container-fluid py-3">
-        <div class="row">
-          <div class="container mt-3">
-            <div class="d-flex align-items-center">
-              <h2 class="mb-0 text-dark">Add Vehicle</h2>
-              <a href="cars-profile.php" class="add-btn btn btn-primary ml-auto"><i class=" me-3 fas fa-arrow-left"></i>My Garage</a>
-            </div>
-          </div>
-          <!-- Account page navigation-->
-          <hr class="mt-0 mb-4">
-          <form action="cscar_create.php" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+    <div class="profile-container">
+        <div class="section-header">
+            <h2 style="color: orangered;"><i class="fas fa-car-alt"></i> Add New Vehicle</h2>
+            <a href="cars-profile.php" class="profile-btn">
+                <i class="fas fa-arrow-left"></i>Back to Garage
+            </a>
+        </div>
+
+        <form action="cscar_create.php" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
             <div class="row">
-              <div class="col-xl-4 mb-4 mb-xl-4">
-                <div class="card">
-                  <center>
-                    <div class="card-header text-white v-1"><?php echo isset($_SESSION['firstname']) ? htmlspecialchars($_SESSION['firstname']) : ''; ?>'s Vehicle</div>
-                  </center>
-                  <div class="card-body text-center">
-                    <img class="img-account-profile mb-2" id="preview" src="placeholder.jpg" alt="Vehicle Preview">
-                    <div class="small font-italic text-dark mb-2">JPG or PNG no larger than 5 MB</div>
-                    <div class="input-group">
-                      <input type="file" class="form-control" id="profile" name="profile" accept="image/jpeg,image/png,image/gif" required
-                        onchange="previewImage(this);">
-                      <div class="invalid-feedback">Please select a valid image file.</div>
+                <!-- Vehicle Image Card -->
+                <div class="col-xl-4 mb-4">
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <?php echo isset($_SESSION['firstname']) ? htmlspecialchars($_SESSION['firstname']) : ''; ?>'s Vehicle
+                        </div>
+                        <div class="card-body text-center">
+                            <img class="img-account-profile mb-3" id="preview" src="placeholder.jpg" alt="Vehicle Preview">
+                            <div class="upload-section">
+                                <small class="text-muted mb-3 d-block">JPG or PNG no larger than 5 MB</small>
+                                <input type="file" class="form-control mb-3" id="profile" name="profile" accept="image/jpeg,image/png,image/gif" required onchange="previewImage(this);">
+                                <div class="invalid-feedback">Please select a valid image file.</div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($_SESSION['user_id']); ?>">
-                <div class="form-group mb-4">
-                  <label for="label" class="form-label text-black">Label:</label>
-                  <select class="form-select" id="label" name="label" required>
-                    <option value="">Choose</option>
-                    <option value="Personal">Personal</option>
-                    <option value="Work">Work</option>
-                    <option value="Rent">Rent</option>
-                  </select>
-                  <div class="invalid-feedback">Please select a label.</div>
                 </div>
 
-                <div class="form-group mb-4">
-                  <label for="platenumber">Plate Number:</label>
-                  <input type="text" class="form-control" id="platenumber" name="platenumber"
-                    pattern="[A-Za-z0-9\s-]+" required>
-                  <div class="invalid-feedback">Please enter a valid plate number.</div>
-                </div>
+                <!-- Vehicle Details -->
+                <div class="col-xl-8">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($_SESSION['user_id']); ?>">
+                            
+                            <div class="form-group">
+                                <label for="label"><i class="fas fa-tag"></i>Label</label>
+                                <select class="form-select" id="label" name="label" required>
+                                    <option value="">Choose</option>
+                                    <option value="Personal">Personal</option>
+                                    <option value="Work">Work</option>
+                                    <option value="Rent">Rent</option>
+                                </select>
+                                <div class="invalid-feedback">Please select a label.</div>
+                            </div>
 
-                <div class="form-group mb-4">
-                  <label for="chassisnumber">Chassis Number:</label>
-                  <input type="text" class="form-control" id="chassisnumber" name="chassisnumber"
-                    pattern="[A-Za-z0-9-]+" required>
-                  <div class="invalid-feedback">Please enter a valid chassis number.</div>
-                </div>
-              </div>
+                            <div class="form-group">
+                                <label for="platenumber"><i class="fas fa-id-card"></i>Plate Number</label>
+                                <input type="text" class="form-control" id="platenumber" name="platenumber" pattern="[A-Za-z0-9\s-]+" required>
+                                <div class="invalid-feedback">Please enter a valid plate number.</div>
+                            </div>
 
-              <div class="col-md-4">
-                <div class="form-group mb-4">
-                  <label for="enginenumber">Engine Number:</label>
-                  <input type="text" class="form-control" id="enginenumber" name="enginenumber"
-                    pattern="[A-Za-z0-9-]+" required>
-                  <div class="invalid-feedback">Please enter a valid engine number.</div>
-                </div>
+                            <div class="form-group">
+                                <label for="chassisnumber"><i class="fas fa-fingerprint"></i>Chassis Number</label>
+                                <input type="text" class="form-control" id="chassisnumber" name="chassisnumber" pattern="[A-Za-z0-9-]+" required>
+                                <div class="invalid-feedback">Please enter a valid chassis number.</div>
+                            </div>
+                        </div>
 
-                <div class="form-group mb-4">
-                  <label for="brand">Brand:</label>
-                  <select class="form-select" id="brand" name="brand" onchange="updateModels()" required>
-                    <option value="">Choose</option>
-                    <option value="Toyota">Toyota</option>
-                    <option value="Suzuki">Suzuki</option>
-                    <option value="Honda">Honda</option>
-                    <option value="Mitsubishi">Mitsubishi</option>
-                    <option value="Ford">Ford</option>
-                    <option value="Nissan">Nissan</option>
-                    <option value="Hyundai">Hyundai</option>
-                    <option value="Isuzu">Isuzu</option>
-                    <option value="Chevrolet">Chevrolet</option>
-                    <option value="Mazda">Mazda</option>
-                  </select>
-                  <div class="invalid-feedback">Please select a brand.</div>
-                </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="enginenumber"><i class="fas fa-cog"></i>Engine Number</label>
+                                <input type="text" class="form-control" id="enginenumber" name="enginenumber" pattern="[A-Za-z0-9-]+" required>
+                                <div class="invalid-feedback">Please enter a valid engine number.</div>
+                            </div>
 
-                <div class="form-group mb-4">
-                  <label for="model">Model:</label>
-                  <select class="form-select" id="model" name="model" required>
-                    <option value="">Choose</option>
-                  </select>
-                  <div class="invalid-feedback">Please select a model.</div>
-                </div>
+                            <div class="form-group">
+                                <label for="brand"><i class="fas fa-building"></i>Brand</label>
+                                <select class="form-select" id="brand" name="brand" onchange="updateModels()" required>
+                                    <option value="">Choose</option>
+                                    <option value="Toyota">Toyota</option>
+                                    <option value="Suzuki">Suzuki</option>
+                                    <option value="Honda">Honda</option>
+                                    <option value="Mitsubishi">Mitsubishi</option>
+                                    <option value="Ford">Ford</option>
+                                    <option value="Nissan">Nissan</option>
+                                    <option value="Hyundai">Hyundai</option>
+                                    <option value="Isuzu">Isuzu</option>
+                                    <option value="Chevrolet">Chevrolet</option>
+                                    <option value="Mazda">Mazda</option>
+                                </select>
+                                <div class="invalid-feedback">Please select a brand.</div>
+                            </div>
 
-                <div class="form-group mb-4">
-                  <label for="color">Color:</label>
-                  <select class="form-select" id="color" name="color" required>
-                    <option value="">Choose</option>
-                    <option value="Red">Red</option>
-                    <option value="Black">Black</option>
-                    <option value="Blue">Blue</option>
-                    <option value="Gray">Gray</option>
-                    <option value="White">White</option>
-                  </select>
-                  <div class="invalid-feedback">Please select a color.</div>
-                </div>
+                            <div class="form-group">
+                                <label for="model"><i class="fas fa-car-side"></i>Model</label>
+                                <select class="form-select" id="model" name="model" required>
+                                    <option value="">Choose</option>
+                                </select>
+                                <div class="invalid-feedback">Please select a model.</div>
+                            </div>
 
-                <button type="submit" class="btn btn-primary btn-md">
-                  <i class="me-3 fas fa-check"></i>Save changes
-                </button>
-              </div>
+                            <div class="form-group">
+                                <label for="color"><i class="fas fa-palette"></i>Color</label>
+                                <select class="form-select" id="color" name="color" required>
+                                    <option value="">Choose</option>
+                                    <option value="Red">Red</option>
+                                    <option value="Black">Black</option>
+                                    <option value="Blue">Blue</option>
+                                    <option value="Gray">Gray</option>
+                                    <option value="White">White</option>
+                                </select>
+                                <div class="invalid-feedback">Please select a color.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-end mt-4">
+                        <button type="submit" class="save-btn">
+                            <i class="fas fa-save me-2"></i>Save Vehicle
+                        </button>
+                    </div>
+                </div>
             </div>
-          </form>
-
-  </main>
+        </form>
+    </div>
+</main>
   <!-- Add this JavaScript for form validation and image preview -->
   <script>
     // Form validation

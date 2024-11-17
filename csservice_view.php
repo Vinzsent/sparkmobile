@@ -4,6 +4,14 @@ session_start();
 // Include database connection file
 include('config.php');  // You'll need to replace this with your actual database connection code
 
+// At the top of your file, after database connection
+if (!$connection) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+// Set charset to ensure proper character encoding
+mysqli_set_charset($connection, "utf8mb4");
+
 // Redirect to the login page if the user is not logged in
 if (!isset($_SESSION['user_id'])) {
   header("Location: index.php");
@@ -13,19 +21,8 @@ if (!isset($_SESSION['user_id'])) {
 // Fetch user information based on ID
 $userID = $_SESSION['user_id'];
 
-$vehicle_id = $_GET['vehicle_id']; // Retrieve vehicle_id from the URL
-$_SESSION['vehicle_id'] = $vehicle_id; // Store vehicle_id in the session
-$shop_id = $_GET['shop_id'];
-$servicename_id = $_GET['servicename_id'];
-$user_id = $_GET['user_id'];
 
 
-// Fetch user information from the database based on the user's ID
-// Replace this with your actual database query
-$query = "SELECT * FROM vehicles WHERE vehicle_id = '$vehicle_id'";
-// Execute the query and fetch the user data
-$result = mysqli_query($connection, $query);
-$vehicleData = mysqli_fetch_assoc($result);
 
 
 $query1 = "SELECT * FROM users WHERE user_id = $userID";
@@ -33,13 +30,26 @@ $query1 = "SELECT * FROM users WHERE user_id = $userID";
 $result1 = mysqli_query($connection, $query1);
 $userData = mysqli_fetch_assoc($result1);
 
-$service_query = "SELECT * FROM service_details WHERE user_id = $userID and vehicle_id = '$vehicle_id'";
+$service_query = "SELECT sd.*, u.firstname, u.lastname, i.product_name 
+                 FROM service_details sd
+                 LEFT JOIN users u ON sd.user_id = u.user_id
+                 LEFT JOIN inventory_records i ON sd.inventory_id = i.inventory_id
+                 WHERE sd.user_id = '$userID'";
 $result2 = mysqli_query($connection, $service_query);
-$serviceData = mysqli_fetch_assoc($result2);
 
-$servicedone_query = "SELECT * FROM finish_jobs WHERE user_id = $userID and vehicle_id = '$vehicle_id'";
+// Check if query was successful
+if (!$result2) {
+    die("Query failed: " . mysqli_error($connection));
+}
+
+$servicedone_query = "SELECT * FROM finish_jobs WHERE user_id = '$userID'";
 $result3 = mysqli_query($connection, $servicedone_query);
 $servicedoneData = mysqli_fetch_assoc($result3);
+
+
+$service_query = "SELECT vehicle_id, shop_id, selected_id, servicename_id FROM service_details WHERE user_id = '$userID'";
+$result4 = mysqli_query($connection, $service_query);
+$serviceData = mysqli_fetch_assoc($result4);
 
 // Close the database connection
 mysqli_close($connection);
@@ -63,205 +73,370 @@ mysqli_close($connection);
   <title>SPARK MOBILE</title>
   <link rel="icon" href="NEW SM LOGO.png" type="image/x-icon">
   <link rel="shortcut icon" href="NEW SM LOGO.png" type="image/x-icon">
-</head>
-<style>
-  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
 
-  body,
-  button {
-    font-family: "Poopins", sans-serif;
-    margin-top: 20px;
-    background-color: #fff;
-    color: #fff;
-  }
-
-  :root {
-    --offcanvas-width: 200px;
-    --topNavbarHeight: 56px;
-  }
-
-  .sidebar-nav {
-    width: var(--offcanvas-width);
-    background-color: orangered;
-  }
-
-  .sidebar-link {
-    display: flex;
-    align-items: center;
-  }
-
-  .sidebar-link .right-icon {
-    display: inline-flex;
-  }
-
-  .sidebar-link[aria-expanded="true"] .right-icon {
-    transform: rotate(180deg);
-  }
-
-  @media (min-width: 992px) {
-    body {
-      overflow: auto !important;
+    body,
+    button {
+      font-family: "Poopins", sans-serif;
+      margin-top: 20px;
+      background-color: #fff;
+      color: #fff;
     }
 
-    main {
-      margin-left: var(--offcanvas-width);
-    }
-
-    /* this is to remove the backdrop */
-    .offcanvas-backdrop::before {
-      display: none;
+    :root {
+      --offcanvas-width: 200px;
+      --topNavbarHeight: 56px;
     }
 
     .sidebar-nav {
-      -webkit-transform: none;
-      transform: none;
-      visibility: visible !important;
-      height: calc(100% - var(--topNavbarHeight));
-      top: var(--topNavbarHeight);
+      width: var(--offcanvas-width);
+      background-color: orangered;
     }
-  }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+    }
+
+    .sidebar-link .right-icon {
+      display: inline-flex;
+    }
+
+    .sidebar-link[aria-expanded="true"] .right-icon {
+      transform: rotate(180deg);
+    }
+
+    @media (min-width: 992px) {
+      body {
+        overflow: auto !important;
+      }
+
+      main {
+        margin-left: var(--offcanvas-width);
+      }
+
+      /* this is to remove the backdrop */
+      .offcanvas-backdrop::before {
+        display: none;
+      }
+
+      .sidebar-nav {
+        -webkit-transform: none;
+        transform: none;
+        visibility: visible !important;
+        height: calc(100% - var(--topNavbarHeight));
+        top: var(--topNavbarHeight);
+      }
+    }
 
 
-  .welcome {
-    font-size: 15px;
-    text-align: center;
-    margin-top: 20px;
-    margin-right: 15px;
-  }
+    .welcome {
+      font-size: 15px;
+      text-align: center;
+      margin-top: 20px;
+      margin-right: 15px;
+    }
 
-  .me-2 {
-    color: #fff;
-    font-weight: normal;
-    font-size: 13px;
+    .me-2 {
+      color: #fff;
+      font-weight: normal;
+      font-size: 13px;
 
-  }
+    }
 
-  .me-2:hover {
-    background: orangered;
-  }
+    .me-2:hover {
+      background: orangered;
+    }
 
-  span {
-    color: #fff;
-    font-weight: bold;
-    font-size: 20px;
-  }
+    span {
+      color: #fff;
+      font-weight: bold;
+      font-size: 20px;
+    }
 
-  img {
-    width: 30px;
-    border-radius: 50px;
-    display: block;
-    margin: auto;
+    img {
+      width: 30px;
+      border-radius: 50px;
+      display: block;
+      margin: auto;
 
-  }
+    }
 
-  li :hover {
-    background: #072797;
-  }
+    li :hover {
+      background: #072797;
+    }
 
-  .v-1 {
-    background-color: #072797;
-    color: #fff;
-  }
+    .v-1 {
+      background-color: #072797;
+      color: #fff;
+    }
 
-  .v-2 {
-    background-color: orangered;
-  }
+    .v-2 {
+      background-color: orangered;
+    }
 
-  .v-4 {
-    background-color: #d9d9d9;
-  }
+    .v-4 {
+      background-color: #d9d9d9;
+    }
 
-  .main {
-    margin-left: 200px;
-  }
+    .main {
+      margin-left: 200px;
+    }
 
-  .form-group {
-    color: black;
-  }
+    .form-group {
+      color: black;
+    }
 
-  .dropdown-item:hover {
-    background-color: orangered;
-    color: #fff;
-  }
+    .dropdown-item:hover {
+      background-color: orangered;
+      color: #fff;
+    }
 
-  .my-4:hover {
-    background-color: #fff;
-  }
+    .my-4:hover {
+      background-color: #fff;
+    }
 
-  .my-6:hover {
-    background-color: #d9d9d9;
-    color: #000
-  }
+    .my-6:hover {
+      background-color: #d9d9d9;
+      color: #000
+    }
 
-  .navbar {
-    background-color: #072797;
-  }
+    .navbar {
+      background-color: #072797;
+    }
 
-  .btn:hover {
-    background-color: #072797;
-  }
+    .btn:hover {
+      background-color: #072797;
+    }
 
-  .nav-links ul li:hover a {
-    color: white;
-  }
+    .nav-links ul li:hover a {
+      color: white;
+    }
 
-  .section {
-    margin-left: 200px;
-  }
+    .section {
+      margin-left: 200px;
+    }
 
-  .text-box {
-    padding: 6px 6px 6px 230px;
-    background: orangered;
-    border-radius: 10px;
-    width: 50%;
-    height: auto;
-    position: absolute;
-    top: 20%;
-    left: 30%;
-  }
+    .text-box {
+      padding: 6px 6px 6px 230px;
+      background: orangered;
+      border-radius: 10px;
+      width: 50%;
+      height: auto;
+      position: absolute;
+      top: 20%;
+      left: 30%;
+    }
 
-  .text-box .btn {
-    background-color: #072797;
-    text-decoration: none;
-    width: 58%;
+    .text-box .btn {
+      background-color: #072797;
+      text-decoration: none;
+      width: 58%;
 
-  }
+    }
 
-  .container-vinfo {
-    margin-left: 20px
-  }
+    .container-vinfo {
+      margin-left: 20px
+    }
 
-  .v-3 {
-    font-weight: bold;
-    font-size: 20px;
-  }
+    .v-3 {
+      font-weight: bold;
+      font-size: 20px;
+    }
 
-  .my-5 {
-    margin-left: -20px;
-  }
+    .my-5 {
+      margin-left: -20px;
+    }
 
-  /* Custom style to resize the checkbox */
-  .checkbox-container {
-    display: flex;
-    /* Use flexbox for layout */
-    align-items: center;
-    /* Center items vertically */
-  }
+    /* Custom style to resize the checkbox */
+    .checkbox-container {
+      display: flex;
+      /* Use flexbox for layout */
+      align-items: center;
+      /* Center items vertically */
+    }
 
-  .checkbox {
-    /* Optional: Customize checkbox size */
-    width: 1.5em;
-    height: 1.5em;
-    margin-right: 10px;
-    /* Adjust spacing between checkbox and label */
-  }
+    .checkbox {
+      /* Optional: Customize checkbox size */
+      width: 1.5em;
+      height: 1.5em;
+      margin-right: 10px;
+      /* Adjust spacing between checkbox and label */
+    }
 
 
-  .ex-1 {
-    color: red;
-  }
-</style>
+    .ex-1 {
+      color: red;
+    }
 
+    /* Main Content Styling */
+    main {
+      padding: 2rem;
+      background-color: #f8f9fa;
+      min-height: calc(100vh - 60px);
+    }
+
+    .content-wrapper {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .page-title {
+      color: #072797;
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    /* Table Styling */
+    .table-container {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .table {
+      margin-bottom: 0;
+    }
+
+    .table thead {
+      background: linear-gradient(135deg, #072797, #0a3acf);
+    }
+
+    .table thead th {
+      color: white;
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      padding: 1rem;
+      border: none;
+    }
+
+    .table tbody tr {
+      transition: all 0.3s ease;
+    }
+
+    .table tbody tr:hover {
+      background-color: #f8f9fa;
+      transform: translateY(-2px);
+    }
+
+    .table td {
+      padding: 1rem;
+      vertical-align: middle;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    /* Status Badge */
+    .status-badge {
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .status-pending {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+
+    .status-done {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .btn-custom {
+      padding: 0.6rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-custom:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-add {
+      background: linear-gradient(135deg, #28a745, #20c997);
+      border: none;
+      color: white;
+    }
+
+    .btn-proceed {
+      background: linear-gradient(135deg, #072797, #0a3acf);
+      border: none;
+      color: white;
+    }
+
+    /* Service Item Styling */
+    .service-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .service-icon {
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      background: #e8f0fe;
+      color: #072797;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #6c757d;
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      main {
+        padding: 1rem;
+      }
+
+      .content-wrapper {
+        padding: 1rem;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+      }
+
+      .btn-custom {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
 <body>
   <!-- top navigation bar -->
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
@@ -390,7 +565,7 @@ mysqli_close($connection);
                 <span class="me-2">Request Slot</span>
               </a>
             </li>
-            <li class="v-1 v-2">
+            <li class="v-1">
               <a href="csprocess3.php" class="nav-link px-3">
                 <span class="me-2">Select Service</span>
               </a>
@@ -400,7 +575,7 @@ mysqli_close($connection);
                 <span class="me-2">Register your car</span>
               </a>
             </li>
-            <li class="v-1">
+            <li class="v-1 v-2">
               <a href="#" class="nav-link px-3">
                 <span class="me-2">Booking Summary</span>
               </a>
@@ -472,109 +647,112 @@ mysqli_close($connection);
   if (mysqli_num_rows($result2) > 0) {
   ?>
     <main>
-    <div class="container-vinfo text-dark">
-        <h2 class="mb-5">Your vehicle is currently cleaning!</h2>
-        <input type="hidden" name="selected_id" id="selected_id" value="<?php echo $serviceData['selected_id']; ?>">
+    <div class="content-wrapper">
+        <h1 class="page-title">
+            <i class="fas fa-car me-2"></i>
+            Vehicle Service Status
+        </h1>
 
-        <a href="csprocess3-4.php?user_id=<?php echo $userData['user_id']; ?>&vehicle_id=<?php echo $vehicleData['vehicle_id']; ?>&shop_id=<?php echo $shop_id; ?>">
-            <button type="button" class="btn btn-success btn-md mb-3">Add Services</button>
-        </a>
-        <a href="cspayment.php?vehicle_id=<?php echo $vehicle_id; ?>" id="proceedButton">
-            <button type="button" class="btn btn-primary mb-3">PROCEED</button>
-        </a>
+        <div class="action-buttons">
+            <a href="csprocess3-4.php?user_id=<?php echo $userData['user_id']; ?>&vehicle_id=<?php echo $serviceData['vehicle_id']; ?>&shop_id=<?php echo $serviceData['shop_id']; ?>&selected_id=<?php echo $serviceData['selected_id']; ?>&servicename_id=<?php echo $serviceData['servicename_id']; ?>" 
+               class="btn btn-custom btn-add">
+                <i class="fas fa-plus-circle"></i>
+                Add Services
+            </a>
+            <a href="cspayment.php?vehicle_id=<?php echo $serviceData['vehicle_id']; ?>" 
+               id="proceedButton" 
+               class="btn btn-custom btn-proceed">
+                <i class="fas fa-arrow-right"></i>
+                Proceed to Payment
+            </a>
+        </div>
 
-        
-            <table class="table table-bordered">
+        <div class="table-container">
+            <table class="table">
                 <thead>
                     <tr>
-                        <th>Services</th>
-                        <th>Service Duration</th>
-                        <th>Cleaning Products</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        <th>SERVICES</th>
+                        <th>DURATION</th>
+                        <th>PRODUCTS</th>
+                        <th>STATUS</th>
+                        <th>ACTIONS</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    // Reset the result pointer to the beginning for all columns
-                    mysqli_data_seek($result2, 0);
-                    $hasData = false; // Flag to track if data is present
-
-                    while ($serviceData = mysqli_fetch_assoc($result2)) {
-                        echo "<tr>";
-
-                        // Check if serviceData is valid before accessing its values
-                        if ($serviceData) {
-                            // Display Service
-                            echo "<td class='mt-3'>" . htmlspecialchars($serviceData['service']) . "</td>";
-
-                            // Display Service Duration
-                            mysqli_data_seek($result3, 0); // Reset pointer for service duration
-                            $servicedoneData = mysqli_fetch_assoc($result3);
-                            echo "<td class='mt-3'>" . ($servicedoneData ? htmlspecialchars($servicedoneData['timer']) : 'NA') . "</td>";
-
-                            // Display Cleaning Products
-                            if (!empty($serviceData['product_name'])) {
-                                echo "<td class='mt-3'>" . htmlspecialchars($serviceData['product_name']) . "</td>";
-                            } else {
-                                echo "<td class='mt-3'>
-                                        <a href='user-dashboard-select-products.php?selected_id=" . $serviceData['selected_id'] . "&user_id=" . $userData['user_id'] . "&servicename_id=" . $servicename_id . "&shop_id=" . $shop_id . "&vehicle_id=" . $vehicle_id . "'>
-                                            <button type='button' class='btn btn-primary btn-sm'>Add cleaning products</button>
-                                        </a>
-                                    </td>";
-                            }
-
-                            // Display Status
-                            echo "<td class='mt-3'>" . htmlspecialchars($serviceData['status']) . "</td>";
-
-                            // Display Delete Button
-                            echo "<td class='mt-3'>
-                                <form action='delete_service.php' method='POST' onsubmit=\"return confirm('Are you sure you want to delete this service?');\">
-                                    <input type='hidden' name='selected_id' value='" . $serviceData['selected_id'] . "'>
-                                    <input type='hidden' name='user_id' value='" . $userData['user_id'] . "'>
-                                    <input type='hidden' name='servicename_id' value='" . $servicename_id . "'>
-                                    <input type='hidden' name='shop_id' value='" . $shop_id . "'>
-                                    <input type='hidden' name='vehicle_id' value='" . $vehicle_id . "'>
-                                    <button type='submit' class='btn btn-danger btn-sm'>Remove</button>
-                                </form>
-                            </td>";
-
-                        }
-                        echo "</tr>";
-                        $hasData = true; // Set flag to true if data is found
-                    }
-                    if (!$hasData) {
-                        echo "<tr><td colspan='5'>NA</td></tr>"; // Display NA if no data is found
-                    }
+                    <?php 
+                    // Debug line to check if data exists
+                    echo "Number of rows: " . mysqli_num_rows($result2);
+                    
+                    if ($result2 && mysqli_num_rows($result2) > 0): 
+                        while ($serviceData = mysqli_fetch_assoc($result2)): 
                     ?>
+                        <tr>
+                            <td>
+                                <div class="service-item">
+                                    <i class="fas fa-tools me-2"></i>
+                                    <?php echo htmlspecialchars($serviceData['service'] ?? 'N/A'); ?>
+                                </div>
+                            </td>
+                            <td>
+                                <?php 
+                                if (isset($servicedoneData['timer'])) {
+                                    echo htmlspecialchars($servicedoneData['timer']);
+                                } else {
+                                    echo 'N/A';
+                                }
+                                ?>
+                            </td>
+                            <td>
+                                <?php if (!empty($serviceData['product_name'])): ?>
+                                    <div class="service-item">
+                                        <i class="fas fa-spray-can me-2"></i>
+                                        <?php echo htmlspecialchars($serviceData['product_name']); ?>
+                                    </div>
+                                <?php else: ?>
+                                    <a href="user-dashboard-select-products.php?user_id=<?php echo $userID; ?>&vehicle_id=<?php echo $serviceData['vehicle_id']; ?>&shop_id=<?php echo $serviceData['shop_id']; ?>&selected_id=<?php echo $serviceData['selected_id']; ?>&servicename_id=<?php echo $serviceData['servicename_id']; ?>" 
+                                       class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-plus-circle me-1"></i>
+                                        Add Products
+                                    </a>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <span class="status-badge <?php echo ($serviceData['status'] ?? '') === 'Done' ? 'status-done' : 'status-pending'; ?>">
+                                    <i class="fas <?php echo ($serviceData['status'] ?? '') === 'Done' ? 'fa-check-circle' : 'fa-clock'; ?> me-1"></i>
+                                    <?php echo htmlspecialchars($serviceData['status'] ?? 'Pending'); ?>
+                                </span>
+                            </td>
+                            <td>
+                                <form action="user-delete_service.php" method="POST" class="d-inline"
+                                      onsubmit="return confirm('Are you sure you want to delete this service?');">
+                                    <input type="hidden" name="selected_id" value="<?php echo $serviceData['selected_id']; ?>">
+                                    <input type="hidden" name="user_id" value="<?php echo $userID; ?>">
+                                    <input type="hidden" name="shop_id" value="<?php echo $serviceData['shop_id']; ?>">
+                                    <input type="hidden" name="vehicle_id" value="<?php echo $serviceData['vehicle_id']; ?>">
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash-alt me-1"></i>
+                                        Remove
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php 
+                        endwhile; 
+                    else: 
+                    ?>
+                        <tr>
+                            <td colspan="5">
+                                <div class="empty-state">
+                                    <i class="fas fa-inbox mb-3"></i>
+                                    <p>No services found. Please add a service.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
                 </tbody>
             </table>
-        
-
-        
+        </div>
     </div>
-
-    <script>
-        // Disable the "PROCEED" button until the status is "Done"
-        document.addEventListener('DOMContentLoaded', function() {
-            var statusElements = document.querySelectorAll("tbody tr td:nth-child(4)"); // Select all status cells
-            var proceedButton = document.getElementById('proceedButton');
-            var allDone = true;
-
-            statusElements.forEach(function(statusCell) {
-                if (statusCell.textContent.trim() !== "Done") {
-                    allDone = false; // If any status is not "Done", set to false
-                }
-            });
-
-            if (!allDone) {
-                proceedButton.disabled = true;
-                proceedButton.addEventListener('click', function(event) {
-                    event.preventDefault(); // Prevent the default behavior of the button click
-                });
-            }
-        });
-    </script>
 </main>
 
   <?php

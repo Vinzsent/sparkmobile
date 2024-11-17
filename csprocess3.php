@@ -312,6 +312,188 @@ $slotData = mysqli_fetch_assoc($slot_result);
     border-radius: 5px;
     text-decoration: none;
   }
+
+  /* Main Container Styles */
+  .container-vinfo {
+    background: #fff;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    margin: 25px;
+  }
+
+  /* Headings */
+  .container-vinfo h2 {
+    color: #072797;
+    font-weight: 600;
+    margin-bottom: 30px;
+    position: relative;
+  }
+
+  .container-vinfo h2:after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(to right, #072797, orangered);
+    border-radius: 3px;
+  }
+
+  /* Countdown Timer */
+  #countdown {
+    background: #f8f9fa;
+    padding: 15px 25px;
+    border-radius: 10px;
+    color: orangered;
+    font-size: 1.2rem;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+  }
+
+  /* Service Categories */
+  .service-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 20px;
+  }
+
+  .service-category {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+  }
+
+  .category-title {
+    color: #072797;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+  }
+
+  /* Service Cards */
+  .card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    border: none;
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  }
+
+  .card-header {
+    background: #072797;
+    color: white;
+    padding: 15px;
+    border: none;
+  }
+
+  .service-title {
+    font-size: 12px;
+    margin: 0;
+  }
+
+  .service-price {
+    color: orangered;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 15px 0;
+  }
+
+  .service-details {
+    color: #666;
+    font-size: 0.9rem;
+  }
+
+  .service-features {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+  }
+
+  .service-features li {
+    padding: 5px 0;
+    color: #555;
+    position: relative;
+    padding-left: 20px;
+  }
+
+  .service-features li:before {
+    content: '✓';
+    color: #072797;
+    position: absolute;
+    left: 0;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    background: #072797;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    background: orangered;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+
+  /* Form Controls */
+  .form-control {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px;
+    transition: all 0.3s ease;
+  }
+
+  .form-control:disabled {
+    background-color: #f8f9fa;
+    border-color: #e0e0e0;
+    color: #495057;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .container-vinfo {
+        padding: 15px;
+        margin: 15px;
+    }
+    
+    .service-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .card-container {
+        grid-template-columns: 1fr;
+    }
+    
+    #countdown {
+        font-size: 1rem;
+        padding: 10px;
+    }
+  }
 </style>
 
 <body>
@@ -371,7 +553,7 @@ $slotData = mysqli_fetch_assoc($slot_result);
     </div>
   </nav>
   <li class="my-4">
-    <hr class="dropdown-divider bg-primary" />
+    
   </li>
   <!-- top navigation bar -->
   <!-- offcanvas -->
@@ -528,7 +710,7 @@ $slotData = mysqli_fetch_assoc($slot_result);
       if ($result) {
         // Check if there are any vehicles for the user
         if (mysqli_num_rows($result) > 0) {
-          echo '<h2 class="mb-2"></h2>';
+          echo '<h1 class="mb-2"></h1>';
           echo '<div class="form-group mt-4 col-md-4 offset-md-3">';
           echo '<label for="platenumber" class="form-label">Plate Number</label>';
           echo '<input type="text" class="form-control mb-3" id="platenumber" name="platenumber" value="' . $vehicleData['platenumber'] . '" disabled>';
@@ -557,7 +739,7 @@ $slotData = mysqli_fetch_assoc($slot_result);
 
 
       <div class="my-5 container-vinfo text-dark">
-        <h2 class="ms-5 mb-5" id="countdown">Your slot number will expire in 00:10</h2>
+        <h1 class="ms-5 mb-5" id="countdown">Your slot number will expire in 00:10</h1>
         <form action="csprocess3_deleteslot.php" method="post">
           <input type="hidden" name="vehicle_id" id="vehicle_id" value="<?php echo $vehicleData['vehicle_id']; ?>">
           <input type="hidden" name="user_id" id="user_id" value="<?php echo $vehicleData['user_id']; ?>">
@@ -568,69 +750,73 @@ $slotData = mysqli_fetch_assoc($slot_result);
         <script>
           function startCountdown(duration, display) {
             var timer = duration;
-            setInterval(function() {
-              var seconds = timer % 60;
+            var countdownInterval = setInterval(function() {
+                var seconds = timer % 60;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+                display.textContent = "Your slot number will expire in 00:" + seconds;
 
-              seconds = seconds < 10 ? "0" + seconds : seconds;
-
-              display.textContent = "Your slot number will expire in 00:" + seconds;
-
-              if (--timer < 0) {
-                timer = 0; // Ensure timer does not go below 0
-                display.style.display = "none"; // Hide countdown display
-                document.getElementById('expiredMessage').style.display = "block"; // Show expired message
-              }
+                if (--timer < 0) {
+                    clearInterval(countdownInterval); // Stop the countdown
+                    handleExpiredSlot();
+                }
             }, 1000);
+          }
 
-            // Call alertWithButton() when the timer reaches zero
-            setTimeout(alertWithButton, duration * 1000);
+          function handleExpiredSlot() {
+            var user_id = document.getElementById("user_id").value;
+            var vehicle_id = document.getElementById("vehicle_id").value;
+            var shop_id = document.getElementById("shop_id").value;
+
+            // First delete the slot
+            deleteSlot(user_id, vehicle_id, shop_id, function(success) {
+                if (success) {
+                    // Show alert after successful deletion
+                    alert("Your slot number has expired. Please request another slot number.");
+                    // Redirect to request slot page
+                    window.location.href = 'csrequest_slot.php?user_id=' + user_id + 
+                                         '&vehicle_id=' + vehicle_id + 
+                                         '&shop_id=' + shop_id;
+                } else {
+                    console.error("Failed to delete slot");
+                    // Still redirect even if deletion fails to prevent user from using expired slot
+                    alert("Session expired. Please request a new slot.");
+                    window.location.href = 'csrequest_slot.php?user_id=' + user_id + 
+                                         '&vehicle_id=' + vehicle_id + 
+                                         '&shop_id=' + shop_id;
+                }
+            });
+          }
+
+          function deleteSlot(user_id, vehicle_id, shop_id, callback) {
+            // Create form data
+            var formData = new FormData();
+            formData.append('user_id', user_id);
+            formData.append('vehicle_id', vehicle_id);
+            formData.append('shop_id', shop_id);
+
+            // Use Fetch API for more reliable AJAX
+            fetch('csprocess3_deleteslot.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log("Server response:", data);
+                callback(data.includes("success")); // Check if response contains "success"
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                callback(false);
+            });
           }
 
           window.onload = function() {
-            var tenSeconds = 10; // 10 seconds
+            var tenSeconds = 10;
             var display = document.querySelector('#countdown');
-            startCountdown(tenSeconds, display);
-          };
-
-          function alertWithButton() {
-            // Create a custom dialog
-            var confirmation = confirm("Your slot number has expired. Please request another slot number.");
-            var user_id = document.getElementById("user_id").value;
-            var vehicle_id = document.getElementById("vehicle_id").value;
-            var shop_id = document.getElementById("shop_id").value;
-            if (confirmation) {
-              // Call function to delete slot number if the user confirms expiration
-              deleteSlot();
-              // Redirect the user to csrequest_slot.php
-              window.location.href = 'csrequest_slot.php?user_id=' + user_id + '&vehicle_id=' + vehicle_id + '&shop_id=' + shop_id;
-            } else {
-              // Handle cancellation if needed
+            if (display) {
+                startCountdown(tenSeconds, display);
             }
-          }
-
-          function deleteSlot() {
-            var vehicle_id = document.getElementById("vehicle_id").value;
-            var user_id = document.getElementById("user_id").value;
-            var shop_id = document.getElementById("shop_id").value;
-
-            // You can use AJAX to send a request to the PHP script to delete the slot number
-            // Example AJAX code:
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "csprocess3_deleteslot.php", true);
-            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhr.onreadystatechange = function() {
-              if (xhr.readyState == 4 && xhr.status == 200) {
-                // Check if deletion was successful
-                if (xhr.responseText.trim() == "Slot number deleted successfully") {
-                  // Redirect the user after successful deletion
-                } else {
-                  // Handle deletion failure if needed
-                  console.log("Slot deletion failed");
-                }
-              }
-            };
-            xhr.send("vehicle_id=" + vehicle_id + "&user_id=" + user_id + "&shop_id=" + shop_id);
-          }
+          };
         </script>
 
 
@@ -704,7 +890,7 @@ $slotData = mysqli_fetch_assoc($slot_result);
                       echo '<input type="hidden" name="price" value="' . $detail['price'] . '">';
 
                       echo '<div class="card-header">';
-                      echo '<h5 class="service-title">' . $detail['services'] . '</h5>';
+                      echo '<h1 class="service-title text-white">' . $detail['services'] . '</h1>';
                       echo '</div>';
                       echo '<div class="card-body">';
                       echo '<p class="service-details">15 minutes maximum cleaning process</p>';

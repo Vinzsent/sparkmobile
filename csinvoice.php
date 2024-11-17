@@ -250,6 +250,139 @@ mysqli_close($connection);
       /* Hide the print button */
     }
   }
+
+  .invoice-container {
+    padding: 40px;
+    margin-top: 60px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .invoice-header {
+    margin-bottom: 40px;
+  }
+
+  .invoice-header h2 {
+    color: #072797;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 10px;
+  }
+
+  .invoice-header h2:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: #072797;
+  }
+
+  .invoice-details {
+    margin-bottom: 30px;
+  }
+
+  .invoice-to {
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #072797;
+  }
+
+  .invoice-to h5 {
+    color: #072797;
+    margin-bottom: 15px;
+  }
+
+  .invoice-to p {
+    margin-bottom: 5px;
+    color: #555;
+  }
+
+  .invoice-info {
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid orangered;
+  }
+
+  .invoice-info h5 {
+    color: #072797;
+    margin-bottom: 8px;
+  }
+
+  .table {
+    margin-bottom: 30px;
+  }
+
+  .table thead {
+    background: #072797;
+  }
+
+  .table thead th {
+    color: white;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    padding: 15px;
+  }
+
+  .table tbody td {
+    padding: 12px;
+    vertical-align: middle;
+  }
+
+  .thick-border td {
+    border-top: 2px solid #072797;
+    background: #f8f9fa;
+    font-weight: 600;
+  }
+
+  .print-button {
+    background: #072797;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 5px;
+    border: none;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+  }
+
+  .print-button:hover {
+    background: orangered;
+    transform: translateY(-2px);
+  }
+
+  /* Print styles */
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+
+    #invoice,
+    #invoice * {
+      visibility: visible;
+    }
+
+    #invoice {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+    }
+
+    #print-button {
+      display: none;
+    }
+
+    .navbar,
+    .sidebar-nav {
+      display: none;
+    }
+  }
 </style>
 
 </style>
@@ -306,7 +439,7 @@ mysqli_close($connection);
         <div class="ms-3" id="dateTime"></div>
         </li>
         <li>
-        <li class="">
+        <li class="v-1">
           <a href="user-dashboard.php" class="nav-link px-3">
             <span class="me-2"><i class="fas fa-home"></i></i></span>
             <span class="start">DASHBOARD</span>
@@ -363,7 +496,7 @@ mysqli_close($connection);
                 </a>
               </li>
               <li class="v-1">
-                <a href="csservice_view.php?vehicle_id=<?php echo $vehicleData['vehicle_id']; ?>" class="nav-link px-3">
+                <a href="user-service-summary.php" class="nav-link px-3">
                   <span class="me-2">Booking Summary</span>
                 </a>
 
@@ -376,7 +509,7 @@ mysqli_close($connection);
             </ul>
           </div>
         </li>
-        <li class="v-1">
+        <li>
           <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#layouts2">
             <span class="me-2"><i class="fas fa-money-bill"></i>
               </i></i></span>
@@ -394,8 +527,8 @@ mysqli_close($connection);
                   <span class="me-2">Payment options</span>
                 </a>
               </li>
-              <li class="v-2">
-                <a href="csinvoice.php" class="nav-link px-3">
+              <li>
+                <a href="#" class="nav-link px-3">
                   <span class="me-2">Car wash invoice</span>
                 </a>
               </li>
@@ -414,11 +547,13 @@ mysqli_close($connection);
             <span>REWARDS</span>
           </a>
         </li>
-        <li class="nav-link px-3" data-bs-toggle="modal" data-bs-target="#logoutModal">
-          <span class="me-2"><i class="fas fa-sign-out-alt"></i>
-            </i></span>
-          <span>LOG OUT</span>
-        </li>
+        <a href="logout.php" class="text-decoration-none">
+          <li class="nav-link px-3" data-bs-toggle="modal" data-bs-target="#logoutModal">
+            <span class="me-2"><i class="fas fa-sign-out-alt"></i>
+              </i></span>
+            <span>LOG OUT</span>
+          </li>
+        </a>
 
       </ul>
     </nav>
@@ -438,22 +573,31 @@ mysqli_close($connection);
     // Calculate subtota
     ?>
 
-    <div class="container" id="invoice">
-      <div class="row">
-        <h2 class="mb-4 text-dark text-center">INVOICE</h2>
-        <div class="col-md-6 text-dark mb-5">
-          <h5>Invoice to:</h5>
-          <p><?php echo isset($invoiceDataArray[0]['firstname']) ? $invoiceDataArray[0]['firstname'] : ''; ?> <?php echo isset($invoiceDataArray[0]['lastname']) ? $invoiceDataArray[0]['lastname'] : ''; ?></p>
-          <p><?php echo isset($invoiceDataArray[0]['barangay']) ? $invoiceDataArray[0]['barangay'] : ''; ?></p>
-          <p><?php echo isset($invoiceDataArray[0]['email']) ? $invoiceDataArray[0]['email'] : ''; ?></p>
+    <div class="container invoice-container" id="invoice">
+      <div class="invoice-header">
+        <h2 class="text-center">INVOICE</h2>
+      </div>
+
+      <div class="row invoice-details">
+        <div class="col-md-6">
+          <div class="invoice-to">
+            <h5><i class="fas fa-user me-2"></i>Invoice to:</h5>
+            <p class="mb-1"><strong><?php echo isset($invoiceDataArray[0]['firstname']) ? $invoiceDataArray[0]['firstname'] : ''; ?> <?php echo isset($invoiceDataArray[0]['lastname']) ? $invoiceDataArray[0]['lastname'] : ''; ?></strong></p>
+            <p class="mb-1"><?php echo isset($invoiceDataArray[0]['barangay']) ? $invoiceDataArray[0]['barangay'] : ''; ?></p>
+            <p><?php echo isset($invoiceDataArray[0]['email']) ? $invoiceDataArray[0]['email'] : ''; ?></p>
+          </div>
         </div>
-        <div class="col-md-6 text-dark">
-          <h5>Invoice No: # <?php echo $paymentData['payment_id'] ?></h5>
-          <h5>Date: <?php echo $paymentData['date']; ?></h5>
-          <h5>Mode of Payment: <?php echo $paymentData['payment_method']; ?></h5>
+        <div class="col-md-6">
+          <div class="invoice-info text-muted">
+            <h5><i class="fas fa-info-circle me-2"></i>Invoice Details:</h5>
+            <p class="mb-1"><strong>Invoice No:</strong> #<?php echo $paymentData['payment_id'] ?></p>
+            <p class="mb-1"><strong>Date:</strong> <?php echo $paymentData['date']; ?></p>
+            <p><strong>Payment Method:</strong> <?php echo $paymentData['payment_method']; ?></p>
+          </div>
         </div>
       </div>
 
+      <!-- Keep your existing table structure but add these classes -->
       <div class="table-responsive">
         <!-- First Table: Services -->
         <table class="table table-striped table-bordered">
@@ -564,7 +708,9 @@ mysqli_close($connection);
           </tbody>
         </table>
       </div>
-      <button id="print-button" class="btn btn-primary" type="button" onclick="printInvoice()">Print Invoice</button>
+      <button id="print-button" class="print-button" type="button" onclick="printInvoice()">
+        <i class="fas fa-print me-2"></i>Print Invoice
+      </button>
     </div>
 
     <script>
@@ -613,22 +759,3 @@ mysqli_close($connection);
 </body>
 
 </html>
-
-<!-- Logout Modal -->
-<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title text-dark" id="logoutModalLabel">Confirm Logout</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body text-dark">
-        <h4>Are you sure you want to log out?</h4>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-        <a href="logout.php" class="btn btn-primary">Logout</a>
-      </div>
-    </div>
-  </div>
-</div>

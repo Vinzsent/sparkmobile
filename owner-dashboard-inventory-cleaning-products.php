@@ -248,6 +248,329 @@ if (!$product_result) {
         border-radius: 5px;
         /* Remove rounded corners */
     }
+
+    .product-container {
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        margin: 30px 0 30px 220px;
+        width: calc(100% - 240px);
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .section-title {
+        color: #072797;
+        font-weight: 600;
+        font-size: 1.8rem;
+        margin: 0;
+    }
+
+    .search-section {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .search-input {
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 10px 15px;
+        width: 300px;
+        transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+        border-color: #072797;
+        box-shadow: 0 0 0 0.2rem rgba(7, 39, 151, 0.25);
+    }
+
+    .search-btn {
+        background-color: #072797;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        transition: all 0.3s ease;
+    }
+
+    .search-btn:hover {
+        background-color: orangered;
+        transform: translateY(-2px);
+    }
+
+    .add-product-btn {
+        background-color: orangered;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        transition: all 0.3s ease;
+    }
+
+    .add-product-btn:hover {
+        background-color: #072797;
+        transform: translateY(-2px);
+    }
+
+    .product-table {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .product-table thead {
+        background-color: #072797;
+        color: white;
+    }
+
+    .product-table th {
+        padding: 15px;
+        font-weight: 500;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+    }
+
+    .product-table td {
+        padding: 15px;
+        vertical-align: middle;
+    }
+
+    .product-image {
+        width: 60px;
+        height: 60px;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+
+    .product-name {
+        font-weight: 500;
+        color: #072797;
+    }
+
+    .stock-status {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .status-full {
+        background-color: #e6f4ea;
+        color: #1e7e34;
+    }
+
+    .status-low {
+        background-color: #fff3e0;
+        color: #f39c12;
+    }
+
+    .status-none {
+        background-color: #fde8e8;
+        color: #e74c3c;
+    }
+
+    .edit-btn {
+        background-color: #072797;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 16px;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+    }
+
+    .edit-btn:hover {
+        background-color: orangered;
+        transform: translateY(-2px);
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f8f9fa;
+        transition: background-color 0.3s ease;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .product-table {
+        min-width: 800px;
+        width: 100%;
+    }
+
+    .product-table th,
+    .product-table td {
+        padding: 15px 10px;
+        white-space: nowrap;
+    }
+
+    .product-table th:first-child,
+    .product-table td:first-child {
+        width: 80px;
+        min-width: 80px;
+    }
+
+    .product-table th:nth-child(2),
+    .product-table td:nth-child(2) {
+        min-width: 150px;
+    }
+
+    .product-table th:nth-child(3),
+    .product-table td:nth-child(3) {
+        min-width: 100px;
+    }
+
+    .product-table th:nth-child(4),
+    .product-table td:nth-child(4) {
+        min-width: 100px;
+    }
+
+    .product-table th:nth-child(5),
+    .product-table td:nth-child(5) {
+        min-width: 100px;
+    }
+
+    .product-table th:nth-child(6),
+    .product-table td:nth-child(6) {
+        min-width: 100px;
+    }
+
+    .product-table th:nth-child(7),
+    .product-table td:nth-child(7) {
+        min-width: 100px;
+    }
+
+    @media (max-width: 992px) {
+        .product-container {
+            margin-left: 0;
+            width: 100%;
+            padding: 15px;
+        }
+
+        .section-header {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .search-section {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+        }
+
+        .search-btn,
+        .add-product-btn {
+            width: 100%;
+        }
+    }
+
+    .section-header {
+        padding: 0 15px;
+    }
+
+    .edit-btn {
+        min-width: 80px;
+        padding: 10px 16px;
+    }
+
+    .stock-status {
+        display: inline-block;
+        min-width: 90px;
+        text-align: center;
+    }
+
+    @media (max-width: 768px) {
+        .product-container {
+            margin: 15px;
+            padding: 15px;
+            width: auto;
+        }
+
+        .product-table {
+            min-width: unset;
+        }
+
+        .product-table thead {
+            display: none; /* Hide table header on mobile */
+        }
+
+        .product-table, 
+        .product-table tbody, 
+        .product-table tr, 
+        .product-table td {
+            display: block;
+            width: 100%;
+        }
+
+        .product-table tr {
+            margin-bottom: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 15px;
+        }
+
+        .product-table td {
+            padding: 8px 0;
+            text-align: left;
+            border: none;
+        }
+
+        /* Add labels for each cell */
+        .product-table td::before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: #072797;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Adjust image display */
+        .product-image {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 10px;
+            display: block;
+        }
+
+        /* Adjust status badge */
+        .stock-status {
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        /* Make buttons full width */
+        .edit-btn {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* Adjust search section */
+        .search-section {
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .search-btn,
+        .add-product-btn {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    }
 </style>
 
 <body>
@@ -415,67 +738,98 @@ if (!$product_result) {
     </div>
     </div>
     <!-- main content -->
-    <main class="container product-table text-dark" style="margin-left: 15.6%;">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Products</h2>
-            <div class="" style="margin-right: 10%;">
-                <form class="d-flex" action="" method="GET">
-                    <input type="text" name="search" class="form-control me-3" placeholder="Search">
-                    <input type="hidden" name="shop_id" id="shop_id" value="<?php echo $shop_id; ?>">
-                    <button type="submit" class="btn btn-secondary me-3">Search</button>
-                </form>
-                <a href="owner-dashboard-inventory-cleaning-products-add.php?shop_id=<?php echo $shop_id; ?>">
-                    <button class="btn btn-primary btn-sm me-3">+ Add Product</button>
-                </a>
+    <main>
+        <div class="product-container">
+            <div class="section-header">
+                <h2 class="section-title">Cleaning Products</h2>
+                <div class="search-section">
+                    <form class="d-flex" action="" method="GET">
+                        <div class="input-group">
+                            <input type="text" name="search" class="search-input" placeholder="Search products...">
+                            <input type="hidden" name="shop_id" value="<?php echo $shop_id; ?>">
+                            <button type="submit" class="search-btn">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+                    </form>
+                    <a href="owner-dashboard-inventory-cleaning-products-add.php?shop_id=<?php echo $shop_id; ?>" class="mt-2">
+                        <button class="add-product-btn">
+                            <i class="fas fa-plus" > </i> Add Product
+                        </button>
+                    </a>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table product-table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Product Name</th>
+                            <th>Status</th>
+                            <th>Stock Info</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if (mysqli_num_rows($product_result) > 0) {
+                            while ($row = mysqli_fetch_assoc($product_result)) {
+                                // Determine stock status and class
+                                if ($row['stock_size'] <= 0) {
+                                    $status = "No stock";
+                                    $status_class = "status-none";
+                                } elseif ($row['stock_size'] < 50) {
+                                    $status = "Low stock";
+                                    $status_class = "status-low";
+                                } else {
+                                    $status = "In stock";
+                                    $status_class = "status-full";
+                                }
+                                ?>
+                                <tr>
+                                    <td data-label="Image">
+                                        <img src="<?php echo htmlspecialchars($row['profile']); ?>" 
+                                             alt="Product" 
+                                             class="product-image">
+                                    </td>
+                                    <td data-label="Product Name" class="product-name">
+                                        <?php echo htmlspecialchars($row['product_name']); ?>
+                                    </td>
+                                    <td data-label="Status">
+                                        <span class="stock-status <?php echo $status_class; ?>">
+                                            <?php echo $status; ?>
+                                        </span>
+                                    </td>
+                                    <td data-label="Stock Info">
+                                        <?php echo htmlspecialchars($row['stock_size']); ?> in stock
+                                    </td>
+                                    <td data-label="Category">
+                                        <?php echo htmlspecialchars($row['category']); ?>
+                                    </td>
+                                    <td data-label="Price">
+                                        ₱<?php echo htmlspecialchars($row['price']); ?>.00
+                                    </td>
+                                    <td data-label="Action">
+                                        <a href="owner-dashboard-inventory-cleaning-products-edit.php?shop_id=<?php echo $shop_id; ?>&inventory_id=<?php echo $row['inventory_id']; ?>">
+                                            <button type="button" class="edit-btn">
+                                                <i class="fas fa-edit me-2"></i>Edit
+                                            </button>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                        } else {
+                            echo '<tr><td colspan="7" class="text-center text-muted">No products found</td></tr>';
+                        }
+                        ?>
+                    </tbody>
+                </table>
             </div>
         </div>
-
-        <table class="table table-hover">
-            <thead class="v-2 text-light">
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col">Name of Product</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Stock Info</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Price per Pieces</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                // Check if there are results
-                if (mysqli_num_rows($product_result) > 0) {
-                    // Loop through the results and populate the table
-                    while ($row = mysqli_fetch_assoc($product_result)) {
-                        // Determine stock status and corresponding color classes
-                        if ($row['stock_size'] <= 0) {
-                            $status = "No stock";
-                            $status_class = "text-danger"; // Red color for no stock
-                        } elseif ($row['stock_size'] < 50) {
-                            $status = "Low on stock";
-                            $status_class = "text-warning"; // Warning color (yellow/orange) for low stock
-                        } else {
-                            $status = "Full stocks";
-                            $status_class = "text-success"; // Green color for full stock
-                        }
-
-                        echo "  </td>
-                         <td><img src='{$row['profile']}' alt='Profile Picture' class= 'img-account-profile' 'img-fluid' width='150' height='150'></td>
-                        <td>{$row['product_name']}</td>
-                        <td><span class='{$status_class}'>{$status}</span></td>
-                        <td>{$row['stock_size']} in stock</td>
-                        <td>{$row['category']}</td>
-                        <td>₱ {$row['price']} .00</td>
-                        <td><a href='owner-dashboard-inventory-cleaning-products-edit.php?shop_id={$shop_id}&inventory_id={$row['inventory_id']}'><button type='button' class='btn btn-primary btn-sm'>Edit Product</button></a></td>
-                    </tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='7' class='text-center'>No products found</td></tr>";
-                }
-                ?>
-            </tbody>
-        </table>
     </main>
 
     <?php

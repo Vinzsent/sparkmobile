@@ -244,6 +244,168 @@ mysqli_close($connection);
     .accept-btn {
         margin-left: 50%;
     }
+
+    .personal-details {
+        padding: 30px;
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .section-title {
+        color: #072797;
+        font-weight: 600;
+        margin: 0;
+        font-size: 1.8rem;
+    }
+
+    .back-btn {
+        padding: 8px 20px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        background-color: #072797;
+    }
+
+    .back-btn:hover {
+        transform: translateY(-5px);
+        background-color: orangered;
+    }
+
+    .back-btn i {
+        margin-right: 8px;
+    }
+
+    .profile-card {
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin-bottom: 25px;
+    }
+
+    .profile-card .card-header {
+        background-color: #072797;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        font-size: 1.2rem;
+    }
+
+    .profile-card .card-body {
+        padding: 25px;
+    }
+
+    .img-account-profile {
+        width: 180px;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 4px solid #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        color: #072797;
+        font-weight: 500;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .form-control {
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #072797;
+        box-shadow: 0 0 0 0.2rem rgba(7, 39, 151, 0.25);
+    }
+
+    .form-control[readonly] {
+        background-color: #f8f9fa;
+        border-color: #e0e0e0;
+    }
+
+    .document-section {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 25px;
+    }
+
+    .document-preview {
+        width: 100%;
+        max-height: 200px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+
+    .view-doc-btn {
+        background-color: #072797;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        transition: all 0.3s ease;
+    }
+
+    .view-doc-btn:hover {
+        background-color: orangered;
+        transform: translateY(-2px);
+    }
+
+    .accept-btn {
+        background-color: #072797;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 25px;
+        transition: all 0.3s ease;
+        margin-left: auto;
+        margin-right: 20px;
+    }
+
+    .accept-btn:hover {
+        background-color: orangered;
+        transform: translateY(-2px);
+    }
+
+    .modal-content {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .modal-header {
+        background-color: #072797;
+        color: white;
+        border-bottom: none;
+    }
+
+    .modal-body {
+        padding: 25px;
+    }
+
+    .img-fluid {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
 </style>
 
 <body>
@@ -409,165 +571,169 @@ mysqli_close($connection);
     </div>
     <!-- main content -->
     <main>
-
         <div class="personal-details">
-            <div class="container-fluid py-3">
-                <div class="row">
-                    <div class="container mt-3">
-                        <div class="d-flex">
-                            <h2 class="mb-0 text-dark">Applicant Details</h2>
-                            <a href="owner-application.php" class="owner-btn btn btn-primary">
-                                <i class="me-3 fas fa-arrow-left"></i>Back
-                            </a>
+            <div class="section-header">
+                <h2 class="section-title">Applicant Details</h2>
+                <a href="owner-application.php" class="back-btn btn text-white">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
 
+            <div class="row">
+                <!-- Profile Picture Section -->
+                <div class="col-xl-4 mb-4">
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <?php echo htmlspecialchars($applicationData['firstname']); ?>'s Profile
+                        </div>
+                        <div class="card-body text-center">
+                            <img class="img-account-profile" src="<?php echo htmlspecialchars($applicationData['profile']); ?>" alt="Profile Picture">
                         </div>
                     </div>
-                    <!-- Account page navigation-->
-                    <hr class="mt-0 mb-4">
-                    <div class="row">
-                        <!-- Profile picture card -->
-                        <div class="col-xl-4 mb-4 mb-xl-4">
-                            <div class="card">
-                                <center>
-                                    <div class="v-1 card-header text-light"><?php echo $applicationData['firstname']; ?>'s profile</div>
-                                </center>
-                                <div class="card-body text-center">
-                                    <img class="img-account-profile mb-3" src="<?php echo $applicationData['profile']; ?>" alt="">
+                </div>
 
-                                    <label for="profile"></label>
+                <!-- Personal Information -->
+                <div class="col-md-4 mb-4">
+                    <form action="owner-application-profile-backend.php" method="POST">
+                        <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($applicationData['user_id']); ?>">
+                        <input type="hidden" name="application_id" value="<?php echo htmlspecialchars($applicationData['application_id']); ?>">
+                        <input type="hidden" name="position" value="<?php echo htmlspecialchars($applicationData['role']); ?>">
 
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" class="form-control" value="<?php echo htmlspecialchars($applicationData['firstname']); ?>" readonly>
                         </div>
 
-                        <!-- First Name, Phone Number, Username and Gender -->
-                        <div class=" col-md-4 mb-4">
-                            <form action="owner-application-profile-backend.php" method="POST">
-                                <div class="form-group mb-3 text-dark">
-                                    <input type="hidden" name="user_id" id="user_id" value="<?php echo $applicationData['user_id']; ?>">
-                                    <input type="hidden" name="application_id" id="application_id" value="<?php echo $applicationData['application_id'];?>">
-                                    <input type="hidden" name="position" id="position" value="<?php echo $applicationData['role']; ?>">
-                                    <label for="shop_name">First Name:</label>
-                                    <input type="text" class="form-control" id="shop_name" name="shop_name" placeholder="Edit Shop Name" value=" <?php echo isset($applicationData['firstname']) ? htmlspecialchars($applicationData['firstname']) : ''; ?>" readonly>
-                                </div>
-
-                                <div class="form-group mb-3 text-dark">
-                                    <label for="shop_contact">Contact Number:</label>
-                                    <input type="text" class="form-control" id="shop_contact" name="shop_contact" placeholder="Edit Shop Contact Number" value="<?php echo isset($applicationData['contact']) ? htmlspecialchars($applicationData['contact']) : ''; ?>" readonly>
-                                </div>
-                                <div class="form-group mb-3 text-dark">
-                                    <label for="description">Interview Date:</label>
-                                    <input class="form-control" id="description" name="description" placeholder="Edit Shop Description" value="<?php echo isset($applicationData['interviewdate']) ? htmlspecialchars($applicationData['interviewdate']) : ''; ?>" readonly></input>
-                                </div>
-
-                        </div>
-                        <!-- Last Name, Email, Password, User Type and User Type -->
-                        <div class="col-md-4 mb-4">
-                            <div class="form-group mb-3 text-dark">
-                                <label for="shop_email">Last Name:</label>
-                                <input type="text" class="form-control" id="shop_email" name="shop_email" placeholder="Edit Shop Email" value="<?php echo isset($applicationData['lastname']) ? htmlspecialchars($applicationData['lastname']) : ''; ?>" readonly>
-                            </div>
-
-                            <div class="form-group mb-3 text-dark">
-                                <label for="website">Desired Position:</label>
-                                <input type="email" class="form-control" id="website" name="website" placeholder="Edit Shop Website Link" value="<?php echo isset($applicationData['position']) ? htmlspecialchars($applicationData['position']) : ''; ?>" readonly>
-                            </div>
-
-                        </div>
-                        <!-- Address, Address Line 2, Barangay, City,  and Province  -->
-                        <div class="container mt-3">
-                            <div class="d-flex">
-                                <h2 class="mb-0 text-dark">Other Information</h2>
-                                <button type="submit" class="accept-btn btn btn-primary">
-                                    Accept Application
-                                </button>
-
-                            </div>
-                        </div>
-                        </form>
-
-                        <div class="form-group mt-5 text-dark">
-                            <input type="hidden" name="application_id" id="application_id" value="<?php echo $applicationData['application_id']; ?>">
-                            <label for="street_address">Cover Letter:</label>
-                            <img class="img-account-file mb-3" src="<?php echo $applicationData['coverletter']; ?>" alt="">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#fileModal" onclick="viewFile('<?php echo $applicationData['coverletter']; ?>')">View Cover Letter</button>
+                        <div class="form-group">
+                            <label>Contact Number</label>
+                            <input type="text" class="form-control" value="<?php echo htmlspecialchars($applicationData['contact']); ?>" readonly>
                         </div>
 
-                        <div class="form-group mt-5 text-dark">
-                            <label for="optional_address">Resume:</label>
-                            <img class="img-account-file mb-3" src="<?php echo $applicationData['resume']; ?>" alt="">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#fileModal" onclick="viewFile('<?php echo $applicationData['resume']; ?>')">View Resume</button>
+                        <div class="form-group">
+                            <label>Interview Date</label>
+                            <input type="text" class="form-control" value="<?php echo htmlspecialchars($applicationData['interviewdate']); ?>" readonly>
                         </div>
-                        <div class="form-group mt-5 text-dark">
-                            <label for="otherdocuments">Other Documents:</label>
-                            <img class="img-account-file mb-3" src="<?php echo $applicationData['otherdocuments']; ?>" alt="">
+                    </form>
+                </div>
 
-                            <!-- Download Button -->
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#fileModal" onclick="viewFile('<?php echo $applicationData['otherdocuments']; ?>')">View Other Documents</button>
-                        </div>
+                <!-- Additional Information -->
+                <div class="col-md-4 mb-4">
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" class="form-control" value="<?php echo htmlspecialchars($applicationData['lastname']); ?>" readonly>
+                    </div>
 
-                        <div class="modal fade" id="fileModal" tabindex="-1" aria-labelledby="fileModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title text-dark" id="fileModalLabel">Document</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body text-center">
-                                        <!-- Image will be loaded here -->
-                                        <img id="filePreview" class="img-fluid" alt="File Preview">
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label>Desired Position</label>
+                        <input type="text" class="form-control" value="<?php echo htmlspecialchars($applicationData['position']); ?>" readonly>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Documents Section -->
+            <div class="section-header mt-4">
+                <h2 class="section-title">Documents</h2>
+                <form action="owner-application-profile-backend.php" method="POST">
+                    <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($applicationData['user_id']); ?>">
+                    <input type="hidden" name="application_id" value="<?php echo htmlspecialchars($applicationData['application_id']); ?>">
+                    <input type="hidden" name="position" value="<?php echo htmlspecialchars($applicationData['role']); ?>">
+                    <button type="submit" class="accept-btn">
+                        <i class="fas fa-check"></i> Accept Application
+                    </button>
+                </form>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="document-section">
+                        <h5 class="mb-3">Cover Letter</h5>
+                        <img class="document-preview" src="<?php echo htmlspecialchars($applicationData['coverletter']); ?>" alt="Cover Letter">
+                        <button type="button" class="view-doc-btn w-100" data-bs-toggle="modal" data-bs-target="#fileModal" 
+                                onclick="viewFile('<?php echo htmlspecialchars($applicationData['coverletter']); ?>')">
+                            View Cover Letter
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="document-section">
+                        <h5 class="mb-3">Resume</h5>
+                        <img class="document-preview" src="<?php echo htmlspecialchars($applicationData['resume']); ?>" alt="Resume">
+                        <button type="button" class="view-doc-btn w-100" data-bs-toggle="modal" data-bs-target="#fileModal" 
+                                onclick="viewFile('<?php echo htmlspecialchars($applicationData['resume']); ?>')">
+                            View Resume
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="document-section">
+                        <h5 class="mb-3">Additional Documents</h5>
+                        <img class="document-preview" src="<?php echo htmlspecialchars($applicationData['otherdocuments']); ?>" alt="Other Documents">
+                        <button type="button" class="view-doc-btn w-100" data-bs-toggle="modal" data-bs-target="#fileModal" 
+                                onclick="viewFile('<?php echo htmlspecialchars($applicationData['otherdocuments']); ?>')">
+                            View Other Documents
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <script>
-            function viewFile(fileSrc) {
-                // Set the source of the image inside the modal
-                document.getElementById('filePreview').src = fileSrc;
-            }
-        </script>
+        <!-- Document Preview Modal -->
+        <div class="modal fade" id="fileModal" tabindex="-1" aria-labelledby="fileModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="fileModalLabel">Document Preview</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <img id="filePreview" class="img-fluid" alt="File Preview">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
-        <script>
-            function updateDateTime() {
-                // Get the current date and time
-                var currentDateTime = new Date();
+    <script>
+        function viewFile(fileSrc) {
+            // Set the source of the image inside the modal
+            document.getElementById('filePreview').src = fileSrc;
+        }
+    </script>
 
-                // Format the date and time
-                var date = currentDateTime.toDateString();
-                var time = currentDateTime.toLocaleTimeString();
+    <script>
+        function updateDateTime() {
+            // Get the current date and time
+            var currentDateTime = new Date();
 
-                // Display the formatted date and time
-                document.getElementById('dateTime').innerHTML = '<p>Date: ' + date + '</p><p>Time: ' + time + '</p>';
-            }
+            // Format the date and time
+            var date = currentDateTime.toDateString();
+            var time = currentDateTime.toLocaleTimeString();
 
-            // Update the date and time every second
-            setInterval(updateDateTime, 1000);
+            // Display the formatted date and time
+            document.getElementById('dateTime').innerHTML = '<p>Date: ' + date + '</p><p>Time: ' + time + '</p>';
+        }
 
-            // Initial call to display date and time immediately
-            updateDateTime();
-        </script>
+        // Update the date and time every second
+        setInterval(updateDateTime, 1000);
+
+        // Initial call to display date and time immediately
+        updateDateTime();
+    </script>
 
 
 
 
 
 
-        <script src="./js/bootstrap.bundle.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
-        <script src="./js/jquery-3.5.1.js"></script>
-        <script src="./js/jquery.dataTables.min.js"></script>
-        <script src="./js/dataTables.bootstrap5.min.js"></script>
-        <script src="./js/script.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
+    <script src="./js/jquery-3.5.1.js"></script>
+    <script src="./js/jquery.dataTables.min.js"></script>
+    <script src="./js/dataTables.bootstrap5.min.js"></script>
+    <script src="./js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

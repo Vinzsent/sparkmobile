@@ -189,6 +189,92 @@ mysqli_close($connection);
         object-fit: cover;
         border-radius: 50%;
     }
+
+    .dashboard-container {
+        padding: 30px;
+        margin-top: 60px;
+    }
+
+    .status-card {
+        background: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        border-left: 4px solid #072797;
+        transition: transform 0.3s ease;
+    }
+
+    .status-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .status-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .status-title {
+        color: #072797;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin: 0;
+    }
+
+    .status-badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .badge-progress {
+        background: #e6f0ff;
+        color: #072797;
+    }
+
+    .badge-completed {
+        background: #e6fff0;
+        color: #00b341;
+    }
+
+    .vehicle-info {
+        color: #333;
+        margin: 10px 0;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .btn-action {
+        padding: 8px 15px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-view {
+        background: #072797;
+        color: white;
+    }
+
+    .btn-remove {
+        background: orangered;
+        color: white;
+    }
+
+    .btn-action:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+    }
 </style>
 
 <body>
@@ -284,7 +370,52 @@ mysqli_close($connection);
     </div>
     <!-- main content -->
     <main>
-        
+        <div class="dashboard-container">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="text-dark mb-4">Vehicle Service Status</h2>
+                    <div class="row">
+                        <!-- Service Status Cards -->
+                        <div class="col-md-6 col-lg-4">
+                            <div class="status-card">
+                                <div class="status-header">
+                                    <h3 class="status-title">Body Wash</h3>
+                                    <span class="status-badge badge-progress">In Progress</span>
+                                </div>
+                                <div class="vehicle-info">
+                                    <p><strong>Plate Number:</strong> ABC 123</p>
+                                    <p><strong>Time Started:</strong> 10:30 AM</p>
+                                    <p><strong>Estimated Completion:</strong> 11:30 AM</p>
+                                </div>
+                                <div class="action-buttons">
+                                    <button class="btn-action btn-view">View Details</button>
+                                    <button class="btn-action btn-remove">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Add more status cards as needed -->
+                        <div class="col-md-6 col-lg-4">
+                            <div class="status-card">
+                                <div class="status-header">
+                                    <h3 class="status-title">Exterior Wash</h3>
+                                    <span class="status-badge badge-completed">Completed</span>
+                                </div>
+                                <div class="vehicle-info">
+                                    <p><strong>Plate Number:</strong> XYZ 789</p>
+                                    <p><strong>Time Started:</strong> 9:00 AM</p>
+                                    <p><strong>Completed At:</strong> 10:00 AM</p>
+                                </div>
+                                <div class="action-buttons">
+                                    <button class="btn-action btn-view">View Details</button>
+                                    <button class="btn-action btn-remove">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
 

@@ -223,6 +223,107 @@ li :hover{
       color: red;
     }
 
+.payment-container {
+    padding: 40px;
+    margin-top: 60px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.payment-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.payment-header h3 {
+    color: #072797;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.payment-header h3:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: orangered;
+}
+
+.payment-option {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 2px solid #eee;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.payment-option:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-color: #072797;
+}
+
+.payment-option label {
+    cursor: pointer;
+    display: block;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.payment-option img {
+    width: 200px;
+    height: 100px;
+    object-fit: contain;
+    margin: 15px 0;
+    transition: all 0.3s ease;
+}
+
+.payment-option input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.payment-option input[type="radio"]:checked + img {
+    transform: scale(1.05);
+}
+
+.payment-option.selected {
+    border-color: #072797;
+    background: #f8f9fa;
+}
+
+.proceed-button {
+    background: #072797;
+    color: white;
+    padding: 12px 40px;
+    border-radius: 5px;
+    border: none;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+    margin-top: 30px;
+}
+
+.proceed-button:hover {
+    background: orangered;
+    transform: translateY(-2px);
+}
+
+.proceed-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
 </style>
   <body>
     <!-- top navigation bar -->
@@ -293,201 +394,217 @@ li :hover{
       id="sidebar"
       
     
-      <div class="offcanvas-body p-0">
+      <div class="offcanvas offcanvas-start sidebar-nav" tabindex="-1" id="sidebar" <div class="offcanvas-body p-0">
         <nav class="">
-          <ul class="navbar-nav">
-            
-            
-              <div class=" welcome fw-bold px-3 mb-3">
-              <h5 class="text-center">Welcome back <?php echo isset($_SESSION['firstname']) ? $_SESSION['firstname'] : ''; ?>!</h5>
-              </div>
-              <div class="ms-3"id="dateTime"></div>
-            </li>
-            <li>
-                <li class="">
-                    <a href="csdashboard.php" class="nav-link px-3">
-                      <span class="me-2"><i class="fas fa-user"></i></i></span>
-                      <span class="start">PROFILE</span>
-                    </a>
-                </li>
-                
-            <li>
-              <a href="cscars1.php" class="nav-link px-3">
-                <span class="me-2"><i class="fas fa-car"></i></i></span>
-                <span>MY CARS</span>
-              </a>
-            </li>
-            <li class="v-1">
-                  <a
-                    class="nav-link px-3 sidebar-link"
-                    data-bs-toggle="collapse"
-                    href="#layouts">
-                    <span class="me-2"><i class="fas fa-calendar"></i></i></span>
-                    <span>BOOKINGS</span>
-                    <span class="ms-auto">
-                      <span class="right-icon">
-                        <i class="bi bi-chevron-down"></i>
-                      </span>
-                    </span>
-                  </a>
-                </li>
-              <div class="collapse" id="layouts">
-                    <ul class="navbar-nav ps-3">
-                      <li class="v-1">
-                        <a href="setappoinment.php" class="nav-link px-3">
-                        <span class="me-2"
-                            >Set Appointment</span>
-                        </a>
-                    </li>  
-                    <li class="v-1">
-                        <a href="checkingcar.php" class="nav-link px-3">
-                        <span class="me-2"
-                            >Checking car condition</span>
-                        </a>
-                    </li>
-                    <li class="v-1">
-                        <a href="#" class="nav-link px-3">
-                        <span class="me-2"
-                          >Request Slot</span>
-                        </a>
-                    </li>
-                    <li class="v-1 v-2">
-                      <a href="csprocess3.php" class="nav-link px-3">
-                      <span class="me-2"
-                        >Select Service</span>
-                      </a>
-                   </li>
-                    <li class="v-1">
-                    <a href="#" class="nav-link px-3">
-                    <span class="me-2"
-                      >Register your car</span>
-                    </a>
-                  </li>
-                    <li class="v-1">
-                    <a href="#" class="nav-link px-3">
-                    <span class="me-2"
-                      >Booking Summary</span>
-                  </a>
-                  </li>
-                  <li class="v-1">
-                    <a href="#" class="nav-link px-3">
-                    <span class="me-2"
-                      >Booking History</span>
-                    </a>
-                  </li>
-                    </ul>
-              </div>
-            </li>
-            <li> 
-                <a
-                  class="nav-link px-3 sidebar-link"
-                  data-bs-toggle="collapse"
-                  href="#layouts2">
-                  <span class="me-2"><i class="fas fa-money-bill"></i>
-                  </i></i></span>
-                  <span>PAYMENTS</span>
-                  <span class="ms-auto">
-                    <span class="right-icon">
-                      <i class="bi bi-chevron-down"></i>
-                    </span>
-                  </span>
-                </a>
-                <div class="collapse" id="layouts2">
-                  <ul class="navbar-nav ps-3">
-                    <li class="v-1">
-                      <a href="#" class="nav-link px-3">
-                        <span class="me-2"
-                        >Payment options</span>
-                      </a>
-                    </li>
-                    <li class="v-1">
-                      <a href="#" class="nav-link px-3">
-                        <span class="me-2"
-                        >Car wash invoice</span>
-                      </a>
-                    </li>
-                    <li class="v-1">
-                      <a href="#" class="nav-link px-3">
-                        <span class="me-2"
-                        >Payment History</span>
-                      </a>
-                    </li>
-                  </ul>
+            <ul class="navbar-nav">
+
+
+                <div class=" welcome fw-bold px-3 mb-3">
+                    <h5 class="text-center">Welcome back <?php echo $userData['firstname']; ?>!</h5>
                 </div>
-              </li>
-            <li>
-            <li>
-                <a href="csreward.html" class="nav-link px-3">
-                  <span class="me-2"><i class="fas fa-medal"></i>
-                  </i></span>
-                  <span>REWARDS</span>
-                </a>
-            </li>
-            <li>
-                <a href="logout.php" class="nav-link px-3">
-                  <span class="me-2"><i class="fas fa-sign-out-alt"></i>
-                  </i></span>
-                  <span>LOG OUT</span>
-                </a>
-            </li>
-            
-          </ul>
+                <div class="ms-3" id="dateTime"></div>
+                </li>
+                <li>
+                <li class="">
+                    <a href="user-dashboard.php" class="nav-link px-3">
+                        <span class="me-2"><i class="fas fa-home"></i></i></span>
+                        <span class="start">DASHBOARD</span>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="user-profile.php" class="nav-link px-3">
+                        <span class="me-2"><i class="fas fa-user"></i></i></span>
+                        <span class="start">PROFILE</span>
+                    </a>
+                </li>
+                <li>
+
+                <li class="">
+                    <a href="cars-profile.php" class="nav-link px-3">
+                        <span class="me-2"><i class="fas fa-car"></i></i></span>
+                        <span>MY CARS</span>
+                    </a>
+                </li>
+                <li><a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#layouts">
+                        <span class="me-2"><i class="fas fa-calendar"></i></i></span>
+                        <span>BOOKINGS</span>
+                        <span class="ms-auto">
+                            <span class="right-icon">
+                                <i class="bi bi-chevron-down"></i>
+                            </span>
+                        </span>
+                    </a>
+                    <div class="collapse" id="layouts">
+                        <ul class="navbar-nav ps-3">
+                            <li class="v-1">
+                                <a href="user-appoinment.php" class="nav-link px-3">
+                                    <span class="me-2">Appointments</span>
+                                </a>
+                            </li>
+                            <li class="v-1">
+                                <a href="checkingcar.php" class="nav-link px-3">
+                                    <span class="me-2">Checking car condition</span>
+                                </a>
+                            </li>
+                            <li class="v-1">
+                                <a href="csrequest_slot.php" class="nav-link px-3">
+                                    <span class="me-2">Request Slot</span>
+                                </a>
+                            </li>
+                            <li class="v-1">
+                                <a href="csprocess3.php" class="nav-link px-3">
+                                    <span class="me-2">Select Service</span>
+                                </a>
+                            </li>
+                            <li class="v-1">
+                                <a href="#" class="nav-link px-3">
+                                    <span class="me-2">Register your car</span>
+                                </a>
+                            </li>
+                            <li class="v-1">
+                                <a href="user-service-summary.php" class="nav-link px-3">
+                                    <span class="me-2">Booking Summary</span>
+                                </a>
+
+                            </li>
+                            <li class="v-1">
+                                <a href="#" class="nav-link px-3">
+                                    <span class="me-2">Booking History</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="v-1">
+                    <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#layouts2">
+                        <span class="me-2"><i class="fas fa-money-bill"></i>
+                            </i></i></span>
+                        <span>PAYMENTS</span>
+                        <span class="ms-auto">
+                            <span class="right-icon">
+                                <i class="bi bi-chevron-down"></i>
+                            </span>
+                        </span>
+                    </a>
+                    <div class="collapse" id="layouts2">
+                        <ul class="navbar-nav ps-3">
+                            <li>
+                                <a href="#" class="nav-link px-3">
+                                    <span class="me-2">Payment options</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="nav-link px-3">
+                                    <span class="me-2">Car wash invoice</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="nav-link px-3">
+                                    <span class="me-2">Payment History</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <a href="#" class="nav-link px-3">
+                        <span class="me-2"><i class="fas fa-medal"></i>
+                            </i></span>
+                        <span>REWARDS</span>
+                    </a>
+                </li>
+                <li class="nav-link px-3" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                    <span class="me-2"><i class="fas fa-sign-out-alt"></i>
+                        </i></span>
+                    <span>LOG OUT</span>
+                </li>
+
+            </ul>
         </nav>
-      </div>
+    </div>
     </div>
     <!-- main content -->
     <main>
-      <div class="container-vinfo text-dark">
-      
-        <h3 class="mt-5 text-center">Please select a payment option</h3>
-        <div class="row mt-4 justify-content-center mt-5">
-          <div class="col-md-3 text-center">
-            <label for="paypal"> PAYPAL
-              <img src="paypal_logo.png" alt="Paypal Logo" class="img-fluid custom-img">
-              <input type="radio" id="paypal" name="payment-option" value="paypal">
-            </label>
-          </div>
-          <div class="col-md-3 text-center">
-            <label for="maybank"> MAYA
-              <img src="maybank_logo.jpg" alt="Maybank Logo" class="img-fluid custom-img">
-              <input type="radio" id="maybank" name="payment-option" value="maybank">
-            </label>
-          </div>
-          <div class="col-md-3 text-center">
-            <label for="gcash"> GCASH
-              <img src="gcash_logo.png" alt="GCash Logo" class="img-fluid custom-img">
-              <input type="radio" id="gcash" name="payment-option" value="gcash">
-            </label>
-          </div>
+      <div class="payment-container">
+        <div class="payment-header">
+            <h3><i class="fas fa-credit-card me-2"></i>Select Payment Method</h3>
         </div>
-        <button type="button" id="proceedBtn" class="col-md-4 mb-4 mt-5 offset-md-4 btn btn-primary btn-md">Proceed</button>
-      </div>
-    </main>
 
-    <script>
-      document.getElementById("proceedBtn").addEventListener("click", function() {
-        // Get the value of the selected payment option
-        var selectedPaymentOption = document.querySelector('input[name="payment-option"]:checked').value;
+        <div class="row justify-content-center">
+            <div class="col-md-3">
+                <div class="payment-option" onclick="selectPayment('paypal')">
+                    <label for="paypal">
+                        <span class="payment-label">PAYPAL</span>
+                        <img src="paypal_logo.png" alt="Paypal Logo" class="img-fluid">
+                        <input type="radio" id="paypal" name="payment-option" value="paypal">
+                    </label>
+                </div>
+            </div>
 
-        // Redirect based on the selected payment option
-        switch (selectedPaymentOption) {
-          case "paypal":
+            <div class="col-md-3">
+                <div class="payment-option" onclick="selectPayment('maya')">
+                    <label for="maybank">
+                        <span class="payment-label">MAYA</span>
+                        <img src="maybank_logo.jpg" alt="Maya Logo" class="img-fluid">
+                        <input type="radio" id="maybank" name="payment-option" value="maybank">
+                    </label>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="payment-option" onclick="selectPayment('gcash')">
+                    <label for="gcash">
+                        <span class="payment-label">GCASH</span>
+                        <img src="gcash_logo.png" alt="GCash Logo" class="img-fluid">
+                        <input type="radio" id="gcash" name="payment-option" value="gcash">
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button type="button" id="proceedBtn" class="proceed-button" disabled>
+                <i class="fas fa-arrow-right me-2"></i>Proceed to Payment
+            </button>
+        </div>
+    </div>
+</main>
+
+<script>
+function selectPayment(option) {
+    // Remove selected class from all options
+    document.querySelectorAll('.payment-option').forEach(el => {
+        el.classList.remove('selected');
+    });
+    
+    // Add selected class to clicked option
+    document.querySelector(`#${option}`).closest('.payment-option').classList.add('selected');
+    
+    // Check the radio button
+    document.querySelector(`#${option}`).checked = true;
+    
+    // Enable proceed button
+    document.getElementById('proceedBtn').disabled = false;
+}
+
+document.getElementById("proceedBtn").addEventListener("click", function() {
+    var selectedPaymentOption = document.querySelector('input[name="payment-option"]:checked').value;
+    
+    switch (selectedPaymentOption) {
+        case "paypal":
             window.location.href = "cspaypal.php";
             break;
-          case "maybank":
+        case "maybank":
             window.location.href = "csmaybank.php";
             break;
-          case "gcash":
+        case "gcash":
             window.location.href = "csgcash.php";
             break;
-          case "physical-cash":
-            window.location.href = "csphysical.php";
-            break;
-          default:
+        default:
             alert("Please select a payment option");
-        }
-      });
-    </script>
+    }
+});
+</script>
 
   
         

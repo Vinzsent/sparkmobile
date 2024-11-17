@@ -231,6 +231,119 @@ mysqli_close($connection);
     object-fit: cover;
     border-radius: 10%;
   }
+
+  .applicants-container {
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+  }
+
+  .section-title {
+    color: #072797;
+    font-weight: 600;
+    margin: 0;
+    font-size: 1.8rem;
+  }
+
+  .applicant-cards {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .applicant-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .applicant-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .card-header {
+    background-color: #072797;
+    color: white;
+    padding: 15px 20px;
+    border-bottom: none;
+  }
+
+  .card-header h5 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+
+  .card-body {
+    padding: 20px;
+  }
+
+  .profile-picture-container {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+
+  .profile-picture {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+  }
+
+  .applicant-info {
+    margin-bottom: 20px;
+  }
+
+  .info-label {
+    color: #666;
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+  }
+
+  .info-value {
+    color: #333;
+    margin-bottom: 15px;
+  }
+
+  .view-details-btn {
+    background-color: #072797;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    width: 100%;
+  }
+
+  .view-details-btn:hover {
+    background-color: orangered;
+    transform: translateY(-2px);
+  }
+
+  .no-applicants {
+    text-align: center;
+    color: #666;
+    padding: 40px;
+    font-size: 1.1rem;
+  }
 </style>
 
 <body>
@@ -432,50 +545,66 @@ mysqli_close($connection);
   </div>
   <!-- main content -->
   <main>
-    <div class="container-vinfo text-dark me-4">
-      <div class="container mt-3">
-        <div class="d-flex align-items-center">
-          <h4 class="mb-0">APPLICANTS</h4>
-          <!--<a href="owner-shop-profile-add.php?user_id=<?php echo $user_id; ?>" class="btn btn-primary ml-auto">
-           <i class="me-3 fas fa-plus"></i>  </a> -->
-        </div>
-      </div>
-      <div class="v-2 card-header mt-2">
-        <div class="row row-cols-1 row-cols-md-1 g-4">
-          <?php
-          // Check if there are any shops
-          if (!empty($applicationData)) {
-            $count = count($applicationData);
-            $colClass = $count > 1 ? 'col-md-6' : 'offset-md-3 col-md-6'; // Determine column class based on the number of shops
-
-            foreach ($applicationData as $row) {
-              echo '<div class="' . $colClass . '">'; // Apply column class
-              echo '<div class="card mb-2">';
-
-              // Profile picture section
-
-              echo '<div class="card-header v-1 text-light">';
-              echo '<h5 class="card-title">' . htmlspecialchars($row['position']) . '</h5>';
-              echo '</div>';
-              echo '<div class="card-body container-fluid">';
-              echo '<img src="' . htmlspecialchars($row['profile']) . '" alt="Profile Picture" class="card-img-top profile-picture container-fluid">';
-              echo '<p class="card-text mt-3"><strong>Name:</strong> ' . htmlspecialchars($row['firstname']) .  " " .htmlspecialchars($row['lastname']) . '</p>';
-              echo '<p class="card-text"><strong>Contact:</strong> ' . htmlspecialchars($row['contact']) . '</p>';
-              echo '<p class="card-text"><strong>Email:</strong> ' . htmlspecialchars($row['email']) . '</p>';
-              echo '<a href="owner-application-profile.php?application_id=' . htmlspecialchars($row['application_id']) . '" class="btn btn-primary">View More Details</a>';
-              echo '</div>';
-              echo '</div>';
-              echo '</div>';
-            }
-          } else {
-            echo '<p class="text-light">No applicants yet.</p>';
-          }
-          ?>
+    <div class="applicants-container">
+        <div class="section-header">
+            <h2 class="section-title">Applicants</h2>
         </div>
 
-      </div>
+        <div class="applicant-cards">
+            <div class="row">
+                <?php
+                if (!empty($applicationData)) {
+                    $count = count($applicationData);
+                    $colClass = $count > 1 ? 'col-md-6' : 'col-md-6 offset-md-3';
+
+                    foreach ($applicationData as $row) {
+                        echo '<div class="' . $colClass . '">';
+                        echo '<div class="applicant-card">';
+                        
+                        // Header
+                        echo '<div class="card-header">';
+                        echo '<h5>' . htmlspecialchars($row['position']) . '</h5>';
+                        echo '</div>';
+                        
+                        // Body
+                        echo '<div class="card-body">';
+                        
+                        // Profile Picture
+                        echo '<div class="profile-picture-container">';
+                        echo '<img src="' . htmlspecialchars($row['profile']) . '" alt="Profile Picture" class="profile-picture">';
+                        echo '</div>';
+                        
+                        // Applicant Information
+                        echo '<div class="applicant-info">';
+                        echo '<div class="info-label">Name</div>';
+                        echo '<div class="info-value">' . htmlspecialchars($row['firstname']) . ' ' . htmlspecialchars($row['lastname']) . '</div>';
+                        
+                        echo '<div class="info-label">Contact</div>';
+                        echo '<div class="info-value">' . htmlspecialchars($row['contact']) . '</div>';
+                        
+                        echo '<div class="info-label">Email</div>';
+                        echo '<div class="info-value">' . htmlspecialchars($row['email']) . '</div>';
+                        echo '</div>';
+                        
+                        // View Details Button
+                        echo '<a href="owner-application-profile.php?application_id=' . htmlspecialchars($row['application_id']) . '" class="btn view-details-btn">View More Details</a>';
+                        
+                        echo '</div>'; // End card-body
+                        echo '</div>'; // End applicant-card
+                        echo '</div>'; // End column
+                    }
+                } else {
+                    echo '<div class="col-12">';
+                    echo '<div class="no-applicants">';
+                    echo '<p>No applicants available at this time.</p>';
+                    echo '</div>';
+                    echo '</div>';
+                }
+                ?>
+            </div>
+        </div>
     </div>
-
+</main>
 
     <!-- Custom JavaScript to display the range value -->
     <script>

@@ -251,6 +251,137 @@ mysqli_close($connection);
       /* Hide the print button */
     }
   }
+
+  .invoice-container {
+    padding: 40px;
+    margin-top: 60px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  }
+
+  .invoice-header {
+    margin-bottom: 40px;
+  }
+
+  .invoice-header h2 {
+    color: #072797;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 10px;
+  }
+
+  .invoice-header h2:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: #072797;
+  }
+
+  .invoice-details {
+    margin-bottom: 30px;
+  }
+
+  .invoice-to {
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #072797;
+  }
+
+  .invoice-to h5 {
+    color: #072797;
+    margin-bottom: 15px;
+  }
+
+  .invoice-to p {
+    margin-bottom: 5px;
+    color: #555;
+  }
+
+  .invoice-info {
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid orangered;
+  }
+
+  .invoice-info h5 {
+    color: #072797;
+    margin-bottom: 8px;
+  }
+
+  .table {
+    margin-bottom: 30px;
+  }
+
+  .table thead {
+    background: #072797;
+  }
+
+  .table thead th {
+    color: white;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    padding: 15px;
+  }
+
+  .table tbody td {
+    padding: 12px;
+    vertical-align: middle;
+  }
+
+  .thick-border td {
+    border-top: 2px solid #072797;
+    background: #f8f9fa;
+    font-weight: 600;
+  }
+
+  .print-button {
+    background: #072797;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 5px;
+    border: none;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+  }
+
+  .print-button:hover {
+    background: orangered;
+    transform: translateY(-2px);
+  }
+
+  /* Print styles */
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+    
+    #invoice, #invoice * {
+      visibility: visible;
+    }
+    
+    #invoice {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+    }
+    
+    #print-button {
+      display: none;
+    }
+    
+    .navbar, .sidebar-nav {
+      display: none;
+    }
+  }
 </style>
 
 </style>
@@ -361,140 +492,151 @@ mysqli_close($connection);
     // Calculate subtota
     ?>
 
-    <div class="container" id="invoice">
-      <div class="row">
-        <h2 class="mb-4 text-dark text-center">INVOICE</h2>
-        <div class="col-md-6 text-dark mb-5">
-          <h5>Invoice to:</h5>
-          <p><?php echo isset($invoiceDataArray[0]['firstname']) ? $invoiceDataArray[0]['firstname'] : ''; ?> <?php echo isset($invoiceDataArray[0]['lastname']) ? $invoiceDataArray[0]['lastname'] : ''; ?></p>
-          <p><?php echo isset($invoiceDataArray[0]['barangay']) ? $invoiceDataArray[0]['barangay'] : ''; ?></p>
-          <p><?php echo isset($invoiceDataArray[0]['email']) ? $invoiceDataArray[0]['email'] : ''; ?></p>
+    <div class="container invoice-container" id="invoice">
+        <div class="invoice-header">
+            <h2 class="text-center">INVOICE</h2>
         </div>
-        <div class="col-md-6 text-dark">
-          <h5>Invoice No: # <?php echo $paymentData['payment_id']?></h5>
-          <h5>Date: <?php echo $paymentData['date'];?></h5>
-          <h5>Mode of Payment: <?php echo $paymentData['payment_method'];?></h5>
+        
+        <div class="row invoice-details">
+            <div class="col-md-6">
+                <div class="invoice-to">
+                    <h5><i class="fas fa-user me-2"></i>Invoice to:</h5>
+                    <p class="mb-1"><strong><?php echo isset($invoiceDataArray[0]['firstname']) ? $invoiceDataArray[0]['firstname'] : ''; ?> <?php echo isset($invoiceDataArray[0]['lastname']) ? $invoiceDataArray[0]['lastname'] : ''; ?></strong></p>
+                    <p class="mb-1"><?php echo isset($invoiceDataArray[0]['barangay']) ? $invoiceDataArray[0]['barangay'] : ''; ?></p>
+                    <p><?php echo isset($invoiceDataArray[0]['email']) ? $invoiceDataArray[0]['email'] : ''; ?></p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="invoice-info text-muted">
+                    <h5><i class="fas fa-info-circle me-2"></i>Invoice Details:</h5>
+                    <p class="mb-1"><strong>Invoice No:</strong> #<?php echo $paymentData['payment_id']?></p>
+                    <p class="mb-1"><strong>Date:</strong> <?php echo $paymentData['date'];?></p>
+                    <p><strong>Payment Method:</strong> <?php echo $paymentData['payment_method'];?></p>
+                </div>
+            </div>
         </div>
-      </div>
 
-      <div class="table-responsive">
-        <!-- First Table: Services -->
-        <table class="table table-striped table-bordered">
-          <thead class="table-dark">
-            <tr>
-              <th class="text-center" style="width: 40%;">Services</th>
-              <th class="text-center" style="width: 20%;">Quantity</th>
-              <th class="text-center" style="width: 40%;">Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
-            foreach ($invoiceDataArray as $invoiceData) {
-              // Explode services and prices into arrays
-              $services = explode(',', $invoiceData['service']); // Split services
-              $prices = explode(',', $invoiceData['price']); // Split prices
+        <!-- Keep your existing table structure but add these classes -->
+        <div class="table-responsive">
+            <!-- First Table: Services -->
+            <table class="table table-striped table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="text-center" style="width: 40%;">Services</th>
+                        <th class="text-center" style="width: 20%;">Quantity</th>
+                        <th class="text-center" style="width: 40%;">Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    foreach ($invoiceDataArray as $invoiceData) {
+                        // Explode services and prices into arrays
+                        $services = explode(',', $invoiceData['service']); // Split services
+                        $prices = explode(',', $invoiceData['price']); // Split prices
 
-              // Ensure the arrays have the same count
-              $count = max(count($services), count($prices));
+                        // Ensure the arrays have the same count
+                        $count = max(count($services), count($prices));
 
-              // Loop through each service and its corresponding price
-              for ($i = 0; $i < $count; $i++) {
-                // Get the service and price; use empty string as fallback
-                $service = isset($services[$i]) ? trim($services[$i]) : 'N/A';
+                        // Loop through each service and its corresponding price
+                        for ($i = 0; $i < $count; $i++) {
+                            // Get the service and price; use empty string as fallback
+                            $service = isset($services[$i]) ? trim($services[$i]) : 'N/A';
 
-                // Clean up the price and convert to float
-                $price = isset($prices[$i]) ? trim($prices[$i]) : '';
-                $priceFloat = floatval(str_replace(['₱', ' ', ','], '', $price)); // Remove currency symbol, spaces, and commas
-            ?>
-                <tr>
-                  <td class="text-center"><?php echo htmlspecialchars($service); ?></td> <!-- Display service -->
-                  <td class="text-center">1</td> <!-- Set quantity to always be '1' -->
-                  <td class="text-center">₱<?php echo number_format($priceFloat, 2); ?></td> <!-- Display price -->
-                </tr>
-            <?php
-              }
-            }
-            ?>
-          </tbody>
-        </table>
+                            // Clean up the price and convert to float
+                            $price = isset($prices[$i]) ? trim($prices[$i]) : '';
+                            $priceFloat = floatval(str_replace(['₱', ' ', ','], '', $price)); // Remove currency symbol, spaces, and commas
+                    ?>
+                        <tr>
+                            <td class="text-center"><?php echo htmlspecialchars($service); ?></td> <!-- Display service -->
+                            <td class="text-center">1</td> <!-- Set quantity to always be '1' -->
+                            <td class="text-center">₱<?php echo number_format($priceFloat, 2); ?></td> <!-- Display price -->
+                        </tr>
+                    <?php
+                        }
+                    }
+                    ?>
+                </tbody>
+            </table>
 
-        <!-- Second Table: Cleaning Products -->
-        <table class="table table-striped table-bordered">
-          <thead class="table-dark">
-            <tr>
-              <th class="text-center" style="width: 40%;">Cleaning Products</th>
-              <th class="text-center" style="width: 20%;">Quantity</th>
-              <th class="text-center" style="width: 40%;">Product Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
-            // Flag to track if any products exist
-            $hasProducts = false;
+            <!-- Second Table: Cleaning Products -->
+            <table class="table table-striped table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="text-center" style="width: 40%;">Cleaning Products</th>
+                        <th class="text-center" style="width: 20%;">Quantity</th>
+                        <th class="text-center" style="width: 40%;">Product Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    // Flag to track if any products exist
+                    $hasProducts = false;
 
-            foreach ($invoiceDataArray as $invoiceData) {
-              // Explode product names and prices into arrays
-              $product_names = explode(',', $invoiceData['product_name']); // Split product names
-              $product_prices = explode(',', $invoiceData['product_price']); // Split product prices
+                    foreach ($invoiceDataArray as $invoiceData) {
+                        // Explode product names and prices into arrays
+                        $product_names = explode(',', $invoiceData['product_name']); // Split product names
+                        $product_prices = explode(',', $invoiceData['product_price']); // Split product prices
 
-              // Ensure both arrays have the same count
-              $count = max(count($product_names), count($product_prices));
+                        // Ensure both arrays have the same count
+                        $count = max(count($product_names), count($product_prices));
 
-              // Loop through each product name and its corresponding price
-              for ($j = 0; $j < $count; $j++) {
-                // Get the product name and price; use empty string as fallback
-                $productName = isset($product_names[$j]) ? trim($product_names[$j]) : 'N/A';
+                        // Loop through each product name and its corresponding price
+                        for ($j = 0; $j < $count; $j++) {
+                            // Get the product name and price; use empty string as fallback
+                            $productName = isset($product_names[$j]) ? trim($product_names[$j]) : 'N/A';
 
-                // Clean up the product price and convert to float
-                $productPrice = isset($product_prices[$j]) ? trim($product_prices[$j]) : '';
-                $productPriceFloat = floatval(str_replace(['₱', ' ', ','], '', $productPrice)); // Remove currency symbol, spaces, and commas
+                            // Clean up the product price and convert to float
+                            $productPrice = isset($product_prices[$j]) ? trim($product_prices[$j]) : '';
+                            $productPriceFloat = floatval(str_replace(['₱', ' ', ','], '', $productPrice)); // Remove currency symbol, spaces, and commas
 
-                // Check if product name is not empty
-                if (!empty($productName)) {
-                  $hasProducts = true; // Set flag to true if at least one product exists
-            ?>
-                  <tr>
-                    <td class="text-center"><?php echo htmlspecialchars($productName); ?></td> <!-- Display product name -->
-                    <td class="text-center"><?php echo htmlspecialchars($invoiceData['quantity']); ?></td> <!-- Display quantity -->
-                    <td class="text-center">₱<?php echo number_format($productPriceFloat, 2); ?></td> <!-- Display product price -->
-                  </tr>
-              <?php
-                }
-              }
-            }
+                            // Check if product name is not empty
+                            if (!empty($productName)) {
+                                $hasProducts = true; // Set flag to true if at least one product exists
+                    ?>
+                            <tr>
+                                <td class="text-center"><?php echo htmlspecialchars($productName); ?></td> <!-- Display product name -->
+                                <td class="text-center"><?php echo htmlspecialchars($invoiceData['quantity']); ?></td> <!-- Display quantity -->
+                                <td class="text-center">₱<?php echo number_format($productPriceFloat, 2); ?></td> <!-- Display product price -->
+                            </tr>
+                    <?php
+                            }
+                        }
+                    }
 
-            // If no products exist, display empty placeholders
-            if (!$hasProducts) {
-              ?>
-              <tr>
-                <td class="text-center" colspan="3">No cleaning products available.</td>
-              </tr>
-            <?php
-            }
-            ?>
-            <tr class="thick-border">
-              <td colspan="2" class="text-end"><strong>Subtotal:</strong></td>
-              <td class="text-center">₱<?php echo number_format($paymentData['subtotal'], 2); ?></td>
-            </tr>
-            <tr>
-              <td colspan="2" class="text-end"><strong>Amount Paid:</strong></td>
-              <td class="text-center">₱<?php echo number_format($paymentData['amount'], 2); ?></td> <!-- Use the float for amount paid -->
-            </tr>
-            <tr>
-              <td colspan="2" class="text-end"><strong>Change:</strong></td>
-              <td class="text-center">₱<?php echo number_format($paymentData['change_amount'], 2); ?></td> <!-- Ensure to use the calculated change -->
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <button id="print-button" class="btn btn-primary" type="button" onclick="printInvoice()">Print Invoice</button>
+                    // If no products exist, display empty placeholders
+                    if (!$hasProducts) {
+                    ?>
+                    <tr>
+                        <td class="text-center" colspan="3">No cleaning products available.</td>
+                    </tr>
+                    <?php
+                    }
+                    ?>
+                    <tr class="thick-border">
+                        <td colspan="2" class="text-end"><strong>Subtotal:</strong></td>
+                        <td class="text-center">₱<?php echo number_format($paymentData['subtotal'], 2); ?></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="text-end"><strong>Amount Paid:</strong></td>
+                        <td class="text-center">₱<?php echo number_format($paymentData['amount'], 2); ?></td> <!-- Use the float for amount paid -->
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="text-end"><strong>Change:</strong></td>
+                        <td class="text-center">₱<?php echo number_format($paymentData['change_amount'], 2); ?></td> <!-- Ensure to use the calculated change -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <button id="print-button" class="print-button" type="button" onclick="printInvoice()">
+            <i class="fas fa-print me-2"></i>Print Invoice
+        </button>
     </div>
 
     <script>
-      function printInvoice() {
-        // Print the current window content (entire page)
-        window.print();
-      }
+        function printInvoice() {
+            // Print the current window content (entire page)
+            window.print();
+        }
     </script>
   </main>
 

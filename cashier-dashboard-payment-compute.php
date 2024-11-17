@@ -206,6 +206,114 @@ mysqli_close($connection);
         object-fit: cover;
         border-radius: 50%;
     }
+
+    .payment-compute {
+        padding: 30px;
+        margin-top: 60px;
+    }
+
+    .customer-header {
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 25px;
+    }
+
+    .customer-header h2 {
+        color: #072797;
+        margin-bottom: 10px;
+    }
+
+    .customer-header p {
+        color: #666;
+        margin-bottom: 0;
+    }
+
+    .services-card {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        border: none;
+    }
+
+    .services-card .card-header {
+        background: #072797;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px 10px 0 0;
+        font-weight: 500;
+    }
+
+    .service-item {
+        background: #fff;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .total-price-section {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+    }
+
+    .total-price-section h4 {
+        color: #072797;
+        margin-bottom: 0;
+    }
+
+    .btn-confirm {
+        background: #072797;
+        color: white;
+        padding: 10px 30px;
+        border-radius: 5px;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-confirm:hover {
+        background: orangered;
+        transform: translateY(-2px);
+    }
+
+    /* Modal Styles */
+    .modal-content {
+        border-radius: 10px;
+        border: none;
+    }
+
+    .modal-header {
+        background: #072797;
+        color: white;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .modal-header .btn-close {
+        color: white;
+    }
+
+    .payment-method-select {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    .amount-input {
+        font-size: 1.2rem;
+        padding: 10px;
+    }
+
+    .change-result {
+        font-size: 1.5rem;
+        margin-top: 15px;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+    }
 </style>
 
 <body>
@@ -301,119 +409,109 @@ mysqli_close($connection);
     </div>
     <!-- main content -->
     <main>
-        <div class="col-md-9 text-dark ms-5">
-            <!-- column 2 -->
-            <h2><strong><?php echo $paymentData['firstname']; ?> <?php echo $paymentData['lastname']; ?></strong></h2>
-            <p>Below is the services and the prices of the customer.</p>
-            <hr>
+        <div class="payment-compute">
+            <div class="container">
+                <div class="customer-header">
+                    <h2><i class="fas fa-user-circle me-2"></i><?php echo $paymentData['firstname'] . ' ' . $paymentData['lastname']; ?></h2>
+                    <p>Below are the services and prices for this customer.</p>
+                </div>
 
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header"><strong>All services</strong></div>
-                        <div class="card-body">
-                            <form action="cspayment_managerconfirm.php" method="POST">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="services-card">
+                            <div class="card-header">
+                                <strong><i class="fas fa-list me-2"></i>Services Details</strong>
+                            </div>
+                            <div class="card-body">
+                                <form action="cspayment_managerconfirm.php" method="POST">
+                                    <?php
+                                    if ($result) {
+                                        foreach ($result as $row) {
+                                            echo '<div class="service-item">';
+                                            echo '<h5 class="mb-3 text-dark"><i class="fas fa-cog me-2"></i>Services:</h5>';
 
+                                            $services = isset($row['services']) ? explode(',', $row['services']) : array();
+                                            foreach ($services as $service) {
+                                                echo '<div class="ms-4 mb-2 text-dark">' . htmlspecialchars($service) . '</div>';
+                                            }
 
-
-
-                                <?php
-                                $totalPrice = 0; // Initialize total price variable
-
-                                if ($result) {
-                                    // Loop through the results to create cards
-                                    foreach ($result as $row) {
-                                        echo '<div class="col-md-4 mb-3">';
-                                        echo '<div class="card">';
-                                        echo '<div class="card-header">' . (isset($row['firstname']) ? $row['firstname'] : 'N/A') . " " . (isset($row['lastname']) ? $row['lastname'] : 'N/A') . '</div>';
-                                        echo '<div class="card-body">';
-                                        echo '<p><strong>Services:</strong> ';
-
-                                        // Explode the services and display each one individually
-                                        $services = isset($row['services']) ? explode(',', $row['services']) : array();
-                                        foreach ($services as $service) {
-                                            echo htmlspecialchars($service) . '<br>'; // Added htmlspecialchars for safety
+                                            if (!empty($row['product_name'])) {
+                                                echo '<h5 class="mt-3 mb-3 text-dark"><i class="fas fa-spray-can me-2"></i>Cleaning Products:</h5>';
+                                                $products = explode(',', $row['product_name']);
+                                                foreach ($products as $product) {
+                                                    echo '<div class="ms-4 mb-2 text-dark">' . htmlspecialchars($product) . '</div>';
+                                                }
+                                            }
+                                            echo '</div>';
                                         }
-                                        echo '<p><strong>Cleaning Product:</strong> ';
-
-                                        $services = isset($row['product_name']) ? explode(',', $row['product_name']) : array();
-                                        foreach ($services as $service) {
-                                            echo htmlspecialchars($service) . '<br>'; // Added htmlspecialchars for safety
-                                        }
-
-                                        echo '<p><strong>Price:</strong> ₱ ' . number_format($paymentData['total_price'] / 100, 2) . '</p>'; // Display the total price directly
-                                        echo '</div>';
-                                        echo '</div>';
-                                        echo '</div>';
                                     }
-                                } else {
-                                    echo '<div class="col-md-12">';
-                                    echo '<div class="alert alert-danger" role="alert">Error: ' . mysqli_error($connection) . '</div>';
-                                    echo '</div>';
-                                }
-                                ?>
+                                    ?>
 
-                                <!-- Modal -->
-                                <div class="modal fade" id="changeModal" tabindex="-1" aria-labelledby="changeModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="changeModalLabel">Calculating Payment</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="mb-3">
-                                                    <label for="date" class="form-label">Date of Payment:</label>
-                                                    <input type="text" class="form-control" name="date" id="date" value="<?php echo date('Y-m-d'); ?>" readonly>
-                                                    <input type="hidden" name="user_id" id="user_id" value="<?php echo $paymentData['user_id']; ?>">
-                                                    <input type="hidden" name="vehicle_id" id="vehicle_id" value="<?php echo $paymentData['vehicle_id']; ?>">
-                                                    <input type="hidden" name="firstname" id="firstname" value="<?php echo $paymentData['firstname']; ?>">
-                                                    <input type="hidden" name="lastname" id="lastname" value="<?php echo $paymentData['lastname']; ?>">
-                                                    <input type="hidden" name="servicedone_id" id="servicedone_id" value="<?php echo $servicedone_id;?>">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="payment_method" class="form-label">Payment Method:</label>
-                                                    <select class="form-control" name="payment_method" id="payment_method" required>
-                                                        <option value="None">Select</option>
-                                                        <option value="Cash">Cash</option>
-                                                        <option value="G Cash">G Cash</option>
-                                                        <option value="Maya">Maya</option>
-                                                        <option value="Paypal">Paypal</option>
-                                                    </select>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <?php
-                                                    // Convert the total price to a float
-                                                    $totalPriceFloat = $paymentData['total_price'] / 100;
-                                                    ?>
-                                                    <h4>Total Price: <span id="modalTotalPrice"class="price text-dark" data-price="<?php echo $totalPriceFloat; ?>">₱<?php echo number_format($paymentData['total_price'] / 100, 2); ?></span></h4>
-                                                    <label for="modalAmount" class="form-label">Amount Paid (&#x20B1;): </label>
-                                                    <input type="number" class="form-control" name="modalAmount" id="modalAmount" value=".00" step="0.01" required>
-                                                    <h1 id="changeResult" style="color:red; font-weight: bold;"></h1>
-                                                    <input type="hidden" name="change_amount" id="change_amount">
-                                                    <input type="hidden" name="subtotal" id="subtotal" value="<?php echo $totalPriceFloat; ?>">₱<?php echo number_format($paymentData['total_price'] / 100, 2); ?>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-success" id="confirmChangeBtn">Accept</button>
-                                                <button type="submit" class="btn btn-primary">Submit</button>
-                                            </div>
-                                        </div>
+                                    <div class="total-price-section">
+                                        <h4><i class="fas fa-money-bill me-2"></i>Total Price: ₱<?php echo number_format($paymentData['total_price'], 2, '.', ','); ?></h4>
                                     </div>
-                                </div>
 
-
-                                <div style="margin-left: 10px; margin-bottom: 10px;">
-                                    <h4>Total Price: ₱<?php echo number_format($paymentData['total_price'] / 100, 2); ?></h4>
-
-                                </div>
-
-                                <button type="button" class="btn btn-primary" id="calculateChangeBtn" style="margin-left: 10px;">
-                                    Confirm
-                                </button>
+                                    <button type="button" class="btn btn-confirm" id="calculateChangeBtn">
+                                        <i class="fas fa-check"></i> Proceed to Payment
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="changeModal" tabindex="-1" aria-labelledby="changeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="changeModalLabel">Calculating Payment</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-dark">
+                        <div class="mb-3">
+                            <form action="cspayment_managerconfirm.php" method="POST">
+                                <label for="date" class="form-label">Date of Payment:</label>
+                                <input type="text" class="form-control" name="date" id="date" value="<?php echo date('Y-m-d'); ?>" readonly>
+                                <input type="hidden" name="user_id" id="user_id" value="<?php echo $paymentData['user_id']; ?>">
+                                <input type="hidden" name="vehicle_id" id="vehicle_id" value="<?php echo $paymentData['vehicle_id']; ?>">
+                                <input type="hidden" name="firstname" id="firstname" value="<?php echo $paymentData['firstname']; ?>">
+                                <input type="hidden" name="lastname" id="lastname" value="<?php echo $paymentData['lastname']; ?>">
+                                <input type="hidden" name="servicedone_id" id="servicedone_id" value="<?php echo $servicedone_id; ?>">
+                        </div>
+                        <div class="mb-3">
+                            <label for="payment_method" class="form-label">Payment Method:</label>
+                            <select class="form-control" name="payment_method" id="payment_method" required>
+                                <option value="None">Select</option>
+                                <option value="Cash">Cash</option>
+                                <option value="G Cash">G Cash</option>
+                                <option value="Maya">Maya</option>
+                                <option value="Paypal">Paypal</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <?php
+                            // Convert the total price to a float
+                            $totalPriceFloat = $paymentData['total_price'];
+                            ?>
+                            <h4>Total Price: <span id="modalTotalPrice" class="price text-dark" data-price="<?php echo $totalPriceFloat; ?>">₱<?php echo number_format($paymentData['total_price'], 2, '.', ','); ?></span></h4>
+                            <label for="modalAmount" class="form-label">Amount Paid (&#x20B1;): </label>
+                            <input type="number" class="form-control" name="modalAmount" id="modalAmount" value=".00" step="0.01" required>
+                            <h1 id="changeResult" style="color:red; font-weight: bold;"></h1>
+                            <input type="hidden" name="change_amount" id="change_amount">
+                            <input type="hidden" name="subtotal" id="subtotal" value="<?php echo $totalPriceFloat; ?>">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" id="confirmChangeBtn">Accept</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
     </main>
 
     <script>

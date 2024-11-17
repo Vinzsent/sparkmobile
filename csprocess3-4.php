@@ -255,17 +255,19 @@ $slotData = mysqli_fetch_assoc($slot_result);
   }
 
   .card {
-
     border-radius: 8px;
     padding: 20px;
     width: 200px;
+    height: 300px; /* Set a fixed height for uniform card sizes */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
     border: 2px solid orangered;
-    /* Replace #007bff with any color you want for the outline */
     border-radius: 5px;
-    /* Optional: adds rounded corners */
-  }
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 
   .card-header {
     background-color: #f8f9fa;
@@ -309,6 +311,188 @@ $slotData = mysqli_fetch_assoc($slot_result);
     padding: 8px 12px;
     border-radius: 5px;
     text-decoration: none;
+  }
+
+  /* Main Container Styles */
+  .container-vinfo {
+    background: #fff;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    margin: 25px;
+  }
+
+  /* Headings */
+  .container-vinfo h2 {
+    color: #072797;
+    font-weight: 600;
+    margin-bottom: 30px;
+    position: relative;
+  }
+
+  .container-vinfo h2:after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(to right, #072797, orangered);
+    border-radius: 3px;
+  }
+
+  /* Countdown Timer */
+  #countdown {
+    background: #f8f9fa;
+    padding: 15px 25px;
+    border-radius: 10px;
+    color: orangered;
+    font-size: 1.2rem;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+  }
+
+  /* Service Categories */
+  .service-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 20px;
+  }
+
+  .service-category {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+  }
+
+  .category-title {
+    color: #072797;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+  }
+
+  /* Service Cards */
+  .card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    border: none;
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  }
+
+  .card-header {
+    background: #072797;
+    color: white;
+    padding: 15px;
+    border: none;
+  }
+
+  .service-title {
+    font-size: 12px;
+    margin: 0;
+  }
+
+  .service-price {
+    color: orangered;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 15px 0;
+  }
+
+  .service-details {
+    color: #666;
+    font-size: 0.9rem;
+  }
+
+  .service-features {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+  }
+
+  .service-features li {
+    padding: 5px 0;
+    color: #555;
+    position: relative;
+    padding-left: 20px;
+  }
+
+  .service-features li:before {
+    content: '✓';
+    color: #072797;
+    position: absolute;
+    left: 0;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    background: #072797;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    background: orangered;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+
+  /* Form Controls */
+  .form-control {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px;
+    transition: all 0.3s ease;
+  }
+
+  .form-control:disabled {
+    background-color: #f8f9fa;
+    border-color: #e0e0e0;
+    color: #495057;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .container-vinfo {
+        padding: 15px;
+        margin: 15px;
+    }
+    
+    .service-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .card-container {
+        grid-template-columns: 1fr;
+    }
+    
+    #countdown {
+        font-size: 1rem;
+        padding: 10px;
+    }
   }
 </style>
 
@@ -369,7 +553,7 @@ $slotData = mysqli_fetch_assoc($slot_result);
     </div>
   </nav>
   <li class="my-4">
-    <hr class="dropdown-divider bg-primary" />
+    
   </li>
   <!-- top navigation bar -->
   <!-- offcanvas -->
@@ -526,7 +710,7 @@ $slotData = mysqli_fetch_assoc($slot_result);
       if ($result) {
         // Check if there are any vehicles for the user
         if (mysqli_num_rows($result) > 0) {
-          echo '<h2 class="mb-2"></h2>';
+          echo '<h1 class="mb-2"></h1>';
           echo '<div class="form-group mt-4 col-md-4 offset-md-3">';
           echo '<label for="platenumber" class="form-label">Plate Number</label>';
           echo '<input type="text" class="form-control mb-3" id="platenumber" name="platenumber" value="' . $vehicleData['platenumber'] . '" disabled>';
@@ -554,15 +738,14 @@ $slotData = mysqli_fetch_assoc($slot_result);
 
 
 
-      <div class="my-5 container-vinfo text-dark">
+      
 
 
 
 
 
-
-        <button type="button" class="btn btn-primary ms-5" onclick="window.history.back()">Back</button>
-        <h2 class="mb-2 ms-5 text-center">Choose Services</h2>
+        <h2 class="mb-2 ms-5">Choose Services</h2>
+        <button class="btn btn-primary" onclick="window.history.back()"> Cancel</button>
         <div class="container mx-auto mt-5">
           <?php
           // Fetch appearance data
@@ -628,7 +811,7 @@ $slotData = mysqli_fetch_assoc($slot_result);
                       echo '<input type="hidden" name="price" value="' . $detail['price'] . '">';
 
                       echo '<div class="card-header">';
-                      echo '<h5 class="service-title">' . $detail['services'] . '</h5>';
+                      echo '<h1 class="service-title text-white">' . $detail['services'] . '</h1>';
                       echo '</div>';
                       echo '<div class="card-body">';
                       echo '<p class="service-details">15 minutes maximum cleaning process</p>';

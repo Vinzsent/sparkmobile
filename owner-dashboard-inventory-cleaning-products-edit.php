@@ -204,6 +204,124 @@ mysqli_close($connection);
     .label {
         font-size: 12px;
     }
+
+    .edit-product-container {
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        margin: 30px 0 30px 80px;
+        width: calc(100% - 160px);
+    }
+
+    .section-title {
+        color: #072797;
+        font-weight: 600;
+        font-size: 1.8rem;
+        margin-bottom: 30px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #072797;
+    }
+
+    .form-label {
+        color: #072797;
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 10px 15px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #072797;
+        box-shadow: 0 0 0 0.2rem rgba(7, 39, 151, 0.25);
+    }
+
+    .img-container {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+    .img-account-profile {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 3px solid #072797;
+        margin: 0 auto 20px;
+        display: block;
+    }
+
+    .label {
+        color: #666;
+        font-size: 0.85rem;
+        margin-top: 5px;
+    }
+
+    .asterisk {
+        color: orangered;
+        margin-left: 3px;
+    }
+
+    .btn-primary {
+        background-color: #072797;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 30px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: orangered;
+        transform: translateY(-2px);
+    }
+
+    .button-group {
+        text-align: center;
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .btn-cancel {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 30px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-cancel:hover {
+        background-color: #dc3545;
+        transform: translateY(-2px);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+        .edit-product-container {
+            margin: 20px;
+            width: auto;
+        }
+
+        .button-group {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-primary, .btn-cancel {
+            width: 100%;
+        }
+    }
 </style>
 
 <body>
@@ -371,67 +489,69 @@ mysqli_close($connection);
     </div>
     </div>
     <!-- main content -->
-    <main class="text-dark">
-        <div class="container">
-            <h2 class="mb-4">Edit Product</h2>
+    <main>
+        <div class="edit-product-container">
+            <h2 class="section-title">Edit Product</h2>
+            
             <form action="owner-dashboard-inventory-cleaning-products-edit-backend.php" method="POST" enctype="multipart/form-data">
                 <div class="row">
                     <!-- Left Column -->
                     <div class="col-md-6">
-                        <div class="mb-3">
-                            <input type="hidden" name="shop_id" id="shop_id" value="<?php echo $shop_id; ?>">
-                            <input type="hidden" name="inventory_id" id="inventory_id" value="<?php echo $inventory_id; ?>">
-                            <div class="mb-3">
-                                <div class="col-xl-4 mb-4 mb-xl-4">
-                                    <div class="card-body text-center">
-                                        <img class="img-account-profile mb-3" src="<?php echo $productData['profile']; ?>" alt="">
-                                        
-                                    </div>
-                                </div>
-                                <label for="productPhotos" class="form-label">Upload Product Photo<span class="asterisk"></span></label>
+                        <input type="hidden" name="shop_id" id="shop_id" value="<?php echo $shop_id; ?>">
+                        <input type="hidden" name="inventory_id" id="inventory_id" value="<?php echo $inventory_id; ?>">
+                        
+                        <div class="form-group">
+                            <div class="img-container">
+                                <img class="img-account-profile" src="<?php echo $productData['profile']; ?>" alt="Product Image">
+                                <label for="profile" class="form-label">Upload Product Photo<span class="asterisk">*</span></label>
                                 <input type="file" name="profile" id="profile" accept="image/*" class="form-control">
-        
                             </div>
-                            <label for="productName" class="form-label">Name<span class="asterisk"></span></label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="product_name" class="form-label">Product Name<span class="asterisk">*</span></label>
                             <input type="text" class="form-control" name="product_name" id="product_name" value="<?php echo $productData['product_name']; ?>">
                         </div>
-                        <div class="mb-3">
-                            <label for="productDescription" class="form-label">Description (optional)</label>
-                            <input class="form-control" name="description" id="description" rows="3" value="<?php echo $productData['description']; ?>">
+
+                        <div class="form-group">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" name="description" id="description" rows="3"><?php echo $productData['description']; ?></textarea>
                         </div>
-                        
                     </div>
-                    
+
                     <!-- Right Column -->
                     <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="productCategory" class="form-label">Category<span class="asterisk"></span></label>
+                        <div class="form-group">
+                            <label for="category" class="form-label">Category<span class="asterisk">*</span></label>
                             <input type="text" class="form-control" name="category" id="category" value="<?php echo $productData['category']; ?>">
                         </div>
-                        <div class="mb-3">
-                            <label for="productPrice" class="form-label">Price<span class="asterisk"></span></label>
+
+                        <div class="form-group">
+                            <label for="price" class="form-label">Price<span class="asterisk">*</span></label>
                             <input type="number" class="form-control" name="price" id="price" value="<?php echo $productData['price']; ?>">
-                            <label for="" class="label">Please include decimals (100.00)</label>
+                            <small class="label">Please include decimals (100.00)</small>
                         </div>
-                        <div class="mb-3">
-                            <label for="itemCode" class="form-label">Item Code<span class="asterisk"></span></label>
+
+                        <div class="form-group">
+                            <label for="item_code" class="form-label">Item Code<span class="asterisk">*</span></label>
                             <input type="number" class="form-control" name="item_code" id="item_code" value="<?php echo $productData['item_code']; ?>">
                         </div>
-                        <div class="mb-3">
-                            <label for="stockSize" class="form-label">Stock Size<span class="asterisk"></span></label>
+
+                        <div class="form-group">
+                            <label for="stock_size" class="form-label">Stock Size<span class="asterisk">*</span></label>
                             <input type="number" class="form-control" name="stock_size" id="stock_size" value="<?php echo $productData['stock_size']; ?>">
                         </div>
-
-
-
                     </div>
                 </div>
-                </div>
 
-                <!-- Submit Button -->
-                <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary px-5 py-2">Save Changes</button>
-                 </div>
+                <div class="button-group">
+                    <a href="owner-dashboard-inventory-cleaning-products.php?shop_id=<?php echo $shop_id; ?>" class="btn btn-cancel">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Save Changes
+                    </button>
+                </div>
             </form>
         </div>
     </main>

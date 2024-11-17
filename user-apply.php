@@ -260,6 +260,39 @@ $shop_result = mysqli_query($connection, $shop_query);
         padding: 5px 10px; /* Adjust button size */
         font-size: 0.9rem; /* Reduce button font size */
     }
+
+    .hover-shadow:hover {
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+        transform: translateY(-2px);
+        transition: all .3s ease;
+    }
+
+    .hover-lift {
+        transition: all .3s ease;
+    }
+
+    .hover-lift:hover {
+        transform: translateY(-5px);
+    }
+
+    .card {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .btn-primary {
+        border-radius: 30px;
+        padding: 10px 25px;
+    }
+
+    .ratings .bi-star-fill {
+        font-size: 1rem;
+    }
+
+    .badge {
+        border-radius: 30px;
+        padding: 8px 15px;
+    }
 </style>
 
 
@@ -384,7 +417,7 @@ $shop_result = mysqli_query($connection, $shop_query);
                                 </a>
                             </li>
                             <li class="v-1">
-                                <a href="csservice_view.php?vehicle_id=<?php echo $vehicleData['vehicle_id']; ?>" class="nav-link px-3">
+                                <a href="user-service-summary.php" class="nav-link px-3">
                                     <span class="me-2">Booking Summary</span>
                                 </a>
 
@@ -464,96 +497,124 @@ $shop_result = mysqli_query($connection, $shop_query);
     </div>
     </div>
     <!-- main content -->
-    <main>
-        <div class="container mt-3">
-            <form action="" method="GET" id="search-form">
-                <div class="input-group input-group-sm">
-                    <input type="text" name="query" class="form-control form-control-sm" placeholder="Search Car Wash Shop">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary btn-lg ms-4" type="submit">
-                            <i class="fa fa-search"></i>
-                        </button>
+    <main class="py-4">
+        <!-- Search Section -->
+        <div class="container">
+            <div class="row justify-content-center mb-5">
+                <div class="col-md-8">
+                    <form action="" method="GET" id="search-form">
+                        <div class="input-group input-group-lg shadow-sm">
+                            <input type="text" name="query" class="form-control border-0" 
+                                placeholder="Search for car wash shops..." 
+                                style="border-radius: 30px 0 0 30px;">
+                            <button class="btn btn-primary px-4" type="submit" 
+                                style="background-color: #072797; border-radius: 0 30px 30px 0;">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Search Results Section -->
+            <?php if (isset($_GET['query'])): ?>
+            <div class="container mb-5">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h3 class="text-primary mb-4">
+                            Search Results for "<?php echo htmlspecialchars($_GET['query']); ?>"
+                        </h3>
+                        <?php 
+                        // Update the query to search by shop_name, barangay, and city
+                        $searchQuery = mysqli_real_escape_string($connection, $_GET['query']);
+                        $query = "SELECT * FROM shops WHERE shop_name LIKE '%$searchQuery%' OR barangay LIKE '%$searchQuery%' OR city LIKE '%$searchQuery%'";
+                        $result = mysqli_query($connection, $query); // Execute the updated query
+                        ?>
+                        <?php if ($result->num_rows > 0): ?>
+                            <div class="list-group">
+                                <?php while ($row = $result->fetch_assoc()): ?>
+                                    <a href="user-dashboard-select-shop.php?shop_id=<?php echo urlencode($row["shop_id"]); ?>" 
+                                       class="list-group-item list-group-item-action border-0 mb-2 rounded hover-shadow">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <img src="<?php echo htmlspecialchars($row['profile'] ?? 'default-shop.jpg'); ?>" 
+                                                     class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
+                                            </div>
+                                            <div class="ms-3">
+                                                <h5 class="mb-1"><?php echo htmlspecialchars($row["shop_name"]); ?></h5>
+                                                <p class="mb-0 text-muted"> <i class="fas fa-map-marker-alt"> </i><?php echo htmlspecialchars($row["barangay"]); ?></p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                <?php endwhile; ?>
+                            </div>
+                        <?php else: ?>
+                            <div class="text-center py-5">
+                                <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                                <p class="lead text-muted">No results found. Try different keywords.</p>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
-            </form>
-        </div>
+            </div>
+            <?php endif; ?>
 
-        <div class="container mt-3">
-            <?php
-            if (isset($_GET['query'])) {
-                // Include the config.php file to connect to the database
+            <!-- Shops Section -->
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="display-5 fw-bold" style="color: #072797;">Hiring Shops</h2>
+                    <p class="text-muted">Apply to the best car wash services in your area</p>
+                </div>
 
-
-                // Get the search query
-                $query = $connection->real_escape_string($_GET['query']);
-
-                $sql = "SELECT * FROM shops WHERE shop_name LIKE '%$query%' OR barangay LIKE '%$query%'";
-                $result = $connection->query($sql);
-
-                echo '<h3 class="text-dark">Search Results for "' . htmlspecialchars($query) . '"</h3>';
-                if ($result->num_rows > 0) {
-                    echo '<ul class="list-group">';
-                    while ($row = $result->fetch_assoc()) {
-                        echo '<div class="list-group-item">';
-                        echo '<a href="user-dashboard-select-shop.php?shop_id=' . urlencode($row["shop_id"]) . '" class="text-decoration-none list-group-item-action">';
-                        echo '<h5>' . htmlspecialchars($row["shop_name"]) . '</h5>';
-                        echo '<p>' . htmlspecialchars($row["barangay"]) . '</p>';
-                        echo '</div>';
-                    }
-                    echo '</ul>';
-                } else {
-                    echo '<p class="text-dark">No results found.</p>';
-                }
-
-                mysqli_close($connection);
-            }
-            ?>
-        </div>
-
-
-
-        <div>
-            <h2 class="ms-3 text-dark text-center mt-3">Hiring Shops Near You</h2>
-        </div>
-
-        <div class="container mt-3 text-dark">
-
-            <div class="row">
-                <?php if ($shop_result && mysqli_num_rows($shop_result) > 0) : ?>
-                    <?php while ($shopData = mysqli_fetch_assoc($shop_result)) : ?>
-                        <div class="col-md-4 mb-3">
-                            <div class="card">
-
-                                <img src="<?php echo htmlspecialchars($shopData['profile']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($shopData['shop_name']); ?> Profile Image">
-                                <h5 class="card-title text-center mb-5"><?php echo htmlspecialchars($shopData['shop_name']); ?></h5>
-                                <p>Hiring</p>
-                                <div class="container">
-                                    <div class="ratings justify-content-center">
-                                        <i class="bi-star-fill"></i>
-                                        <i class="bi-star-fill"></i>
-                                        <i class="bi-star-fill"></i>
-                                        <i class="bi-star-fill"></i>
-                                        <i class="bi-star-fill"></i>
-                                        <span class="rating-value">5.0</span>
+                <div class="row g-4">
+                    <?php if ($shop_result && mysqli_num_rows($shop_result) > 0): ?>
+                        <?php while ($shopData = mysqli_fetch_assoc($shop_result)): ?>
+                            <div class="col-md-4">
+                                <div class="card h-100 border-0 shadow-sm hover-lift">
+                                    <div class="position-relative">
+                                        <img src="<?php echo htmlspecialchars($shopData['profile']); ?>" 
+                                             class="card-img-top" alt="<?php echo htmlspecialchars($shopData['shop_name']); ?>"
+                                             style="height: 200px; object-fit: cover;">
+                                        <div class="position-absolute top-0 end-0 p-2">
+                                            <span class="badge" style="background-color: #072797;">
+                                                <i class="fas fa-clock me-1"></i> Open
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title mb-3"><?php echo htmlspecialchars($shopData['shop_name']); ?></h5>
+                                        <div class="mb-3">
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <div class="ratings">
+                                                    <?php for($i = 0; $i < 5; $i++): ?>
+                                                        <i class="bi-star-fill text-warning"></i>
+                                                    <?php endfor; ?>
+                                                    <span class="ms-2 text-muted">5.0</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="text-muted mb-4">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <?php echo htmlspecialchars($shopData['barangay']); ?>
+                                        </p>
+                                        <a href="user-apply-staff.php?shop_id=<?php echo $shopData['shop_id']; ?>" 
+                                           class="btn btn-primary btn-lg w-100" style="background-color: #072797;">
+                                            Apply to <?php echo htmlspecialchars($shopData['shop_name']); ?>
+                                        </a>
                                     </div>
                                 </div>
-                                <div class="card-body">
-                                    <center><a class="btn btn-primary" href="user-apply-staff.php?shop_id=<?php echo $shopData['shop_id']; ?>">Apply Shop</a></center>
-                                </div>
                             </div>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <div class="col-12 text-center py-5">
+                            <i class="fas fa-store-alt-slash fa-4x text-muted mb-4"></i>
+                            <h3>No Shops Available</h3>
+                            <p class="text-muted">Please check back later for available car wash shops.</p>
                         </div>
-                    <?php endwhile; ?>
-                <?php else : ?>
-
-                    <p class="text-center">No shops available.</p>
-                <?php endif; ?>
-
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
-
-        </div>
-
-
     </main>
 
 

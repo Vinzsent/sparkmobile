@@ -263,12 +263,15 @@ button {
           <form class="d-flex ms-auto my-3 my-lg-0">
           </form>
           <ul class="navbar-nav">
-            <li class="nav-item dropdown">
-              <li class="">
-                <a href="notifiation.html" class="nav-link px-3">
-                  <span class="me-2"><i class="fas fa-bell"></i></i></span>
+            <li class="nav-item">
+                <a href="notification.php" class="nav-link px-3">
+                    <span class="me-2">
+                        <i class="fas fa-bell"></i>
+                        <span id="notification-count" class="badge bg-danger"></span>
+                    </span>
                 </a>
-              </li>
+            </li>
+            <li class="nav-item dropdown">
               <a
                 class="nav-link dropdown-toggle ms-2"
                 href="#"
@@ -465,7 +468,7 @@ button {
                 <?php if (mysqli_num_rows($today_result) > 0): ?>
                     <?php while ($notification = mysqli_fetch_assoc($today_result)): ?>
                         <div onclick="window.location.href='redirect.php?id=<?php echo $notification['id']; ?>&type=<?php echo $notification['type']; ?>'" 
-                             class=" v-2 alert alert-info notification-card" 
+                             class=" alert alert-info notification-card" 
                              role="alert" 
                              style="cursor: pointer;">
                             <div class="d-flex align-items-center">
@@ -492,7 +495,7 @@ button {
                                     </p>
                                     <div class="click-request d-inline-flex align-items-center">
                                         <span class="v-2">Click to view details</span>
-                                        <i class="fas fa-chevron-right ms-1 small"></i>
+                                        <i class=" v-2 fas fa-chevron-right ms-1 small"></i>
                                     </div>
                                     <div class="text-muted mt-2">
                                         <small><i class="far fa-clock me-1"></i><?php echo timeAgo($notification['created_at']); ?></small>
@@ -601,5 +604,103 @@ button {
         }
     }
     ?>
+    <script>
+    // Function to check if it's time for monthly notifications
+    function checkMonthlyNotifications() {
+        // Get current date
+        const currentDate = new Date();
+        const currentDay = currentDate.getDate();
+        
+        // Only check on the first day of the month
+        if (currentDay === 1) {
+            fetch('trigger_monthly_notifications.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('Monthly notifications generated:', data.date);
+                        // Refresh notification display
+                        updateNotificationCount();
+                    }
+                })
+                .catch(error => console.error('Error checking monthly notifications:', error));
+        }
+    }
+
+    // Check for monthly notifications when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        checkMonthlyNotifications();
+        updateNotificationCount();
+    });
+
+    // Check every hour (you can adjust this interval)
+    setInterval(checkMonthlyNotifications, 3600000); // 1 hour in milliseconds
+    </script>
+    <script>
+    // Add this to your existing JavaScript
+    function updateNotificationCount() {
+        fetch('get_notification_count.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const countElement = document.getElementById('notification-count');
+                    if (countElement) {
+                        countElement.textContent = data.count;
+                        
+                        // Update the notification icon/badge
+                        if (data.count > 0) {
+                            countElement.style.display = 'inline';
+                            // You can also update category-specific counts if needed
+                            Object.entries(data.categories).forEach(([type, count]) => {
+                                const typeElement = document.getElementById(`${type}-count`);
+                                if (typeElement) {
+                                    typeElement.textContent = count;
+                                }
+                            });
+                        } else {
+                            countElement.style.display = 'none';
+                        }
+                    }
+                    
+                    // Update latest notification time if needed
+                    if (data.latest) {
+                        const latestElement = document.getElementById('latest-notification');
+                        if (latestElement) {
+                            const timeAgo = getTimeAgo(new Date(data.latest));
+                            latestElement.textContent = `Latest: ${timeAgo}`;
+                        }
+                    }
+                }
+            })
+            .catch(error => console.error('Error fetching notification count:', error));
+    }
+
+    // Helper function to format time ago
+    function getTimeAgo(date) {
+        const seconds = Math.floor((new Date() - date) / 1000);
+        
+        let interval = seconds / 31536000;
+        if (interval > 1) return Math.floor(interval) + " years ago";
+        
+        interval = seconds / 2592000;
+        if (interval > 1) return Math.floor(interval) + " months ago";
+        
+        interval = seconds / 86400;
+        if (interval > 1) return Math.floor(interval) + " days ago";
+        
+        interval = seconds / 3600;
+        if (interval > 1) return Math.floor(interval) + " hours ago";
+        
+        interval = seconds / 60;
+        if (interval > 1) return Math.floor(interval) + " minutes ago";
+        
+        return Math.floor(seconds) + " seconds ago";
+    }
+
+    // Update notification count every 30 seconds
+    setInterval(updateNotificationCount, 30000);
+
+    // Initial update
+    document.addEventListener('DOMContentLoaded', updateNotificationCount);
+    </script>
   </body>
 </html>

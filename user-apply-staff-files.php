@@ -225,6 +225,107 @@ $shop_result = mysqli_query($connection, $shop_query);
     .hr{
         position: center;
     }
+
+    .upload-form {
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        margin-top: 30px;
+        color: #333;
+    }
+
+    .form-title {
+        color: #072797;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .form-subtitle {
+        color: #666;
+        font-size: 0.95rem;
+        margin-bottom: 30px;
+    }
+
+    .upload-section {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 25px;
+        margin-bottom: 30px;
+        border: 2px dashed #dee2e6;
+        transition: all 0.3s ease;
+    }
+
+    .upload-section:hover {
+        border-color: #072797;
+        background-color: #f0f2f5;
+    }
+
+    .upload-title {
+        color: #072797;
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin-bottom: 15px;
+    }
+
+    .form-control[type="file"] {
+        padding: 12px;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        background-color: white;
+    }
+
+    .form-control[type="file"]:hover {
+        border-color: #072797;
+    }
+
+    .file-label {
+        color: #666;
+        font-size: 0.85rem;
+        margin-top: 8px;
+        font-style: italic;
+    }
+
+    .back-btn {
+        background-color: #6c757d;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 20px;
+        transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+        background-color: #5a6268;
+        transform: translateY(-2px);
+    }
+
+    .submit-btn {
+        background-color: #072797;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-weight: 500;
+        padding: 12px 40px;
+        margin-top: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover {
+        background-color: orangered;
+        transform: translateY(-2px);
+    }
+
+    .terms-text {
+        color: #666;
+        font-size: 0.9rem;
+        margin-top: 20px;
+        margin-bottom: 15px;
+    }
+
+    .asterisk {
+        color: orangered;
+        font-weight: bold;
+    }
 </style>
 
 
@@ -419,46 +520,47 @@ $shop_result = mysqli_query($connection, $shop_query);
     </div>
     <!-- main content -->
     <main class="container">
-        <div class="mb-3 text-dark">
-            <h2 class="text-center">Application Form</h2>
-            <p class="text-center mb-3">Fill out the neccessary information below.</p>
+        <div class="upload-form">
+            <h2 class="form-title text-center">Application Form</h2>
+            <p class="form-subtitle text-center">Upload your application documents below</p>
             <hr>
 
             <form action="user-apply-staff-backend-files.php" method="POST" enctype="multipart/form-data">
-               
-                
-                <div class="row justify-content-center mt-2">
-                    <div class="col-md-8 mt-5">
-                        <a href="user-apply-staff.php"><button type="button" class="btn btn-primary mb-5">Back</button></a>
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="d-flex justify-content-start mb-4">
+                            <a href="user-apply-staff.php" class="back-btn btn text-white" style="background-color: #072797;">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </a>
+                        </div>
+                        
                         <input type="hidden" name="user_id" id="user_id" value="<?php echo $userData['user_id'];?>">
                         <input type="hidden" name="shop_id" id="shop_id" value="<?php echo $shop_id;?>">
-                        <h5>Upload Cover Letter <span class="asterisk">*</span></h5>
-                        <input type="file" name="coverletter" id="coverletter" class="form-control">
-                        <label for="coverletter">You can scan the cover letter and upload it here only if it's written</label>
-                    </div>
-                </div>
 
-                <div class="row justify-content-center">
-                    <div class="col-md-8 mt-5">
-                        <h5>Upload Resume <span class="asterisk">*</span></h5>
-                        <label for="resume"></label>
-                        <input type="file" name="resume" id="resume" class="form-control">
-                    </div>
-                </div>
+                        <div class="upload-section">
+                            <h5 class="upload-title">Cover Letter <span class="asterisk">*</span></h5>
+                            <input type="file" name="coverletter" id="coverletter" class="form-control" required>
+                            <label class="file-label">Upload a scanned copy of your cover letter (PDF format recommended)</label>
+                        </div>
 
-                <div class="row justify-content-center">
-                    <div class="col-md-8 mt-5">
-                        <h5>Any Other Documents to Upload</h5>
-                        <input type="file" name="otherdocuments" id="otherdocuments" class="form-control">
-                        <label for="otherdocuments">You can share certificates, diplomas etc (optional).</label>
+                        <div class="upload-section">
+                            <h5 class="upload-title">Resume <span class="asterisk">*</span></h5>
+                            <input type="file" name="resume" id="resume" class="form-control" required>
+                            <label class="file-label">Upload your professional resume (PDF format recommended)</label>
+                        </div>
+
+                        <div class="upload-section">
+                            <h5 class="upload-title">Additional Documents</h5>
+                            <input type="file" name="otherdocuments" id="otherdocuments" class="form-control">
+                            <label class="file-label">Optional: Upload certificates, diplomas, or other relevant documents</label>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="row justify-content-center mt-5">
-                    <center> <label for="">by clicking apply, you are agree on the terms and condition.</label></center>
-                    <center><button type="submit" class="btn btn-primary">Apply</button></center>
-                </div>               
-
+                <div class="text-center">
+                    <p class="terms-text">By clicking Apply, you agree to our terms and conditions.</p>
+                    <button type="submit" class="submit-btn">Submit Application</button>
+                </div>
             </form>
         </div>
     </main>

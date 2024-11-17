@@ -15,7 +15,7 @@ $userData = mysqli_fetch_assoc($userresult);
 
 // Use a JOIN query to fetch data from multiple tables
 $query = "SELECT 
-sd.*, v.platenumber, v.brand, v.color, v.model, sn.service_name,co.firstname,co.lastname, sn.shop_id, sd.servicename_id
+sd.*, v.platenumber, v.brand, v.color, v.model, sn.service_name,co.firstname,co.lastname, sn.shop_id, sd.servicename_id, sd.total_price
 FROM finish_jobs sd
 INNER JOIN vehicles v ON sd.vehicle_id = v.vehicle_id
 INNER JOIN service_names sn ON sd.servicename_id = sn.servicename_id
@@ -241,6 +241,89 @@ mysqli_close($connection);
       width: 300px;
     }
   }
+
+  .appointment-container {
+    padding: 30px;
+    margin-top: 60px;
+  }
+
+  .service-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+
+  .service-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .card-header.v-1 {
+    background: #072797;
+    color: white;
+    padding: 15px 20px;
+    font-weight: 500;
+    font-size: 1.1rem;
+    border: none;
+  }
+
+  .card-body {
+    padding: 25px;
+    background: #fff;
+    color: #333;
+  }
+
+  .card-title {
+    color: #072797;
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+
+  .card-text {
+    margin-bottom: 10px;
+    color: #555;
+  }
+
+  .info-label {
+    font-weight: 500;
+    color: #072797;
+    margin-right: 8px;
+  }
+
+  .service-info {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+  }
+
+  .btn-view-service {
+    background: #072797;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 5px;
+    border: none;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    display: inline-block;
+  }
+
+  .btn-view-service:hover {
+    background: orangered;
+    transform: translateY(-2px);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .row {
+      flex-direction: column;
+    }
+    .col {
+      margin-bottom: 20px;
+    }
+  }
 </style>
 
 <body>
@@ -436,61 +519,92 @@ mysqli_close($connection);
   </div>
   <!-- main content -->
   <main>
-    <div class="container-fluid text-dark">
-      <!-- Loop through each fetched record -->
-      
-        <input type="hidden" name="user_id" id="user_id" value="<?php echo $userID ?>">
-        <input type="hidden" name="vehicle_id" id="vehicle_id" value="<?php echo $vehicleData['vehicle_id']; ?>">
-        <input type="hidden" name="servicename_id" name="servicename_id" value="<?php echo $vehicleData['servicename_id']; ?>">
+    <div class="appointment-container">
+        <div class="container-fluid">
+            <h2 class="mb-4 text-dark"><i class="fas fa-calendar-check me-2"></i>Current Appointment</h2>
+            
+            <input type="hidden" name="user_id" id="user_id" value="<?php echo $userID ?>">
+            <input type="hidden" name="vehicle_id" id="vehicle_id" value="<?php echo $vehicleData['vehicle_id']; ?>">
+            <input type="hidden" name="servicename_id" name="servicename_id" value="<?php echo $vehicleData['servicename_id']; ?>">
 
-        <div class="card mb-3">
-          <div class="card-body">
-            <div class="row">
-              <!-- User Information -->
-              <div class="col">
-                <div class="card-header v-1">
-                  User Information
-                </div>
+            <div class="service-card">
                 <div class="card-body">
-                  <h5 class="card-title">First Name: <?php echo $vehicleData['firstname']; ?></h5>
-                  <p class="card-text">Last Name: <?php echo $vehicleData['lastname']; ?></p>
-                </div>
-              </div>
+                    <div class="row">
+                        <!-- User Information -->
+                        <div class="col">
+                            <div class="card-header v-1">
+                                <i class="fas fa-user me-2"></i>User Information
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">
+                                    <span class="info-label">First Name:</span>
+                                    <?php echo $vehicleData['firstname']; ?>
+                                </p>
+                                <p class="card-text">
+                                    <span class="info-label">Last Name:</span>
+                                    <?php echo $vehicleData['lastname']; ?>
+                                </p>
+                            </div>
+                        </div>
 
-              <!-- Vehicle Details -->
-              <div class="col">
-                <div class="card-header v-1">
-                  Vehicle Details
-                </div>
-                <div class="card-body">
-                  <h5 class="card-title">Plate Number: <?php echo $vehicleData['platenumber']; ?></h5>
-                  <p class="card-text">Color: <?php echo $vehicleData['color']; ?></p>
-                  <p class="card-text">Brand: <?php echo $vehicleData['brand']; ?></p>
-                  <p class="card-text">Model: <?php echo $vehicleData['model']; ?></p>
-                </div>
-              </div>
+                        <!-- Vehicle Details -->
+                        <div class="col">
+                            <div class="card-header v-1">
+                                <i class="fas fa-car me-2"></i>Vehicle Details
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">
+                                    <span class="info-label">Plate Number:</span>
+                                    <?php echo $vehicleData['platenumber']; ?>
+                                </p>
+                                <p class="card-text">
+                                    <span class="info-label">Color:</span>
+                                    <?php echo $vehicleData['color']; ?>
+                                </p>
+                                <p class="card-text">
+                                    <span class="info-label">Brand:</span>
+                                    <?php echo $vehicleData['brand']; ?>
+                                </p>
+                                <p class="card-text">
+                                    <span class="info-label">Model:</span>
+                                    <?php echo $vehicleData['model']; ?>
+                                </p>
+                            </div>
+                        </div>
 
-              <!-- Services -->
-              <div class="col">
-                <div class="card-header v-1">
-                  Services
+                        <!-- Services -->
+                        <div class="col">
+                            <div class="card-header v-1">
+                                <i class="fas fa-tools me-2"></i>Services
+                            </div>
+                            <div class="card-body">
+                                <div class="service-info">
+                                    <p class="card-text">
+                                        <span class="info-label">Service Name:</span>
+                                        <?php echo $vehicleData['service_name']; ?>
+                                    </p>
+                                    <p class="card-text">
+                                        <span class="info-label">Services:</span>
+                                        <?php echo $vehicleData['services']; ?>
+                                    </p>
+                                    <p class="card-text">
+                                        <span class="info-label">Price:</span>
+                                        ₱<?php echo number_format($vehicleData['total_price'], 2, '.', ','); ?>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-             
+            </div>
 
-                    <h5 class="card-text">Service Name: <?php echo $vehicleData['service_name']; ?></h5>
-                    <p class="card-text">Services: <?php echo $vehicleData['services']; ?></p>
-                    <p class="card-text">Price: ₱ <?php echo $vehicleData['price']; ?></p>
-
-                </div>
-              </div>
-            </div> <!-- End of row -->
-          </div> <!-- End of card-body -->
-        </div> <!-- End of card -->
-        <a href="csservice_view1.php?user_id=<?php echo $userID; ?>&vehicle_id=<?php echo $vehicleData['vehicle_id']; ?>&shop_id=<?php echo $vehicleData['shop_id']; ?>&servicename_id=<?php echo $vehicleData['servicename_id']; ?>">
-          <button type="button" class="btn btn-primary offset-1">View Service</button>
-        </a> 
-    </div> <!-- End of container-fluid -->
+            <!-- button to view service details -->
+             <a href="csservice_view1.php?user_id=<?php echo $userID; ?>&vehicle_id=<?php echo $vehicleData['vehicle_id']; ?>&shop_id=<?php echo $vehicleData['shop_id']; ?>&servicename_id=<?php echo $vehicleData['servicename_id']; ?>" 
+               class="btn-view-service" style="text-decoration: none;">
+                <i class="fas fa-eye me-2"></i>View Service Details
+            </a>
+        </div>
+    </div>
   </main>
 
   <script>

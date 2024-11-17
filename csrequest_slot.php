@@ -28,26 +28,10 @@ if (!$result) {
 $vehicleData = mysqli_fetch_assoc($result);
 
 // Fetch the count of slot numbers currently serving (assuming you have a column `is_serving` that indicates a slot is in use)
-$query1 = "SELECT COUNT(slotNumber) AS taken_slots FROM queuing_slots WHERE is_serving = 1";
-
-// Execute the query
-$result1 = mysqli_query($connection, $query1);
-
-// Check if query was successful
-if (!$result1) {
-    echo "Error: " . mysqli_error($connection);
-    exit();
-}
-
-// Fetch the count data
-$slotData = mysqli_fetch_assoc($result1);
-$takenSlots = 0;
-
-// Check if slot data was fetched and is not null
-if ($slotData !== null) {
-    $takenSlots = $slotData['taken_slots'];
-}
-
+$slot_query = "SELECT COUNT(slotNumber) AS taken_slots FROM queuing_slots";
+$slot_result = mysqli_query($connection, $slot_query);
+$slotData = mysqli_fetch_assoc($slot_result);
+$takenSlots = $slotData['taken_slots'];
 
 
 // Close the database connection
@@ -209,6 +193,147 @@ li :hover{
   font-size: xx-large;
 }
 
+/* Main content styles */
+.container-vinfo {
+    background: #fff;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    margin: 25px;
+}
+
+/* Headings */
+.container-vinfo h2 {
+    color: #072797;
+    font-weight: 600;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.container-vinfo h2:after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(to right, #072797, orangered);
+    border-radius: 3px;
+}
+
+/* Form Controls */
+.form-control {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px;
+    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+}
+
+.form-control:disabled {
+    background-color: #f1f3f5;
+    border-color: #dee2e6;
+    color: #495057;
+    font-weight: 500;
+}
+
+/* Labels */
+label {
+    color: #072797;
+    font-weight: 500;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+/* Vehicle Information Grid */
+.row {
+    margin: 0 -10px;
+}
+
+.col-md-4 {
+    padding: 0 10px;
+}
+
+/* Divider */
+.dropdown-divider {
+    border-top: 2px solid rgba(7, 39, 151, 0.1);
+    margin: 30px 0;
+}
+
+/* Slot Counter Section */
+.list-inline {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.list-inline-item {
+    color: #072797;
+    font-size: 1.1rem;
+    margin-right: 15px !important;
+}
+
+.v-3.list-inline-item {
+    font-size: 2rem;
+    color: orangered;
+    font-weight: 700;
+}
+
+/* Submit Button */
+.btn-primary {
+    background: #072797;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-primary:hover {
+    background: orangered;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.container-vinfo {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .container-vinfo {
+        padding: 20px;
+        margin: 15px;
+    }
+    
+    .btn-primary {
+        width: 100%;
+        margin: 10px 0;
+    }
+    
+    .list-inline {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
 </style>
   <body>
     <!-- top navigation bar -->
@@ -270,7 +395,7 @@ li :hover{
         </div>
       </div>
     </nav>
-    <li class="my-4"><hr class="dropdown-divider bg-primary" /></li>
+    <li class="my-4"></li>
     <!-- top navigation bar -->
     <!-- offcanvas -->
     <div
@@ -462,7 +587,7 @@ li :hover{
                 <input type="text" class="form-control" id="color" name="color" value="<?php echo $vehicleData['color']; ?>" disabled>
             </div>
         </div>
-        <hr class="my-4 dropdown-divider bg-primary" />
+        
       </div>
 
                     

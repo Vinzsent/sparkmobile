@@ -280,7 +280,7 @@ mysqli_close($connection);
                 <li>
 
                 <li class="">
-                    <a href="owner-shop-profile1.php" class="nav-link px-3">
+                    <a href="staff-dashboard-history.php" class="nav-link px-3">
                         <span class="me-2"><i class="fas fa-calendar"></i></i></span>
                         <span>HISTORY</span>
                     </a>

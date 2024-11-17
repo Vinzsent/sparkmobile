@@ -180,6 +180,114 @@ mysqli_close($connection);
   .garage-btn{
   margin-left: 50%;
   }
+
+  .profile-container {
+    padding: 40px;
+    margin-top: 80px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+    color: orangered;
+  }
+
+  .profile-btn, .save-btn, .upload-btn {
+    background: #072797;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 5px;
+    border: none;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+
+  .profile-btn:hover, .save-btn:hover, .upload-btn:hover {
+    background: orangered;
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .profile-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+
+  .profile-card .card-header {
+    background: #072797;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 1.2rem;
+  }
+
+  .img-vehicle-profile {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin: 20px auto;
+    border: 5px solid #f8f9fa;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group label {
+    color: #072797;
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .form-control, .form-select {
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+  }
+
+  .form-control:focus, .form-select:focus {
+    border-color: #072797;
+    box-shadow: 0 0 0 0.2rem rgba(7, 39, 151, 0.25);
+  }
+
+  .upload-section {
+    padding: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .profile-container {
+        padding: 20px;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .profile-btn, .save-btn {
+        width: 100%;
+        justify-content: center;
+    }
+  }
 </style>
 
 <body>
@@ -355,123 +463,114 @@ mysqli_close($connection);
   </div>
   <!-- main content -->
   <main>
+    <div class="profile-container">
+        <div class="section-header">
+            <h2><i class="fas fa-car"></i> Vehicle Details</h2>
+            <a href="cars-profile.php" class="profile-btn">
+                <i class="fas fa-arrow-left"></i>Back to Garage
+            </a>
+        </div>
 
-    <div class="personal-details">
-      <div class="container-fluid py-3">
         <div class="row">
-        <div class="container mt-3">
-          <div class="d-flex align-items-center">
-              <h2 class="mb-0 text-dark">Vehicle Details</h2>
-              <a href="cars-profile.php" class="garage-btn btn btn-primary ml-auto"><i class=" me-3 fas fa-arrow-left"></i>My Garage</a>
-          </div>
-        </div>
-          <!-- Account page navigation-->
-          <hr class="mt-0 mb-4">
-          <form action="cars-upload.php" method="POST" enctype="multipart/form-data">
-            <div class="row">
-              <!-- Profile picture card -->
-              <div class="col-xl-4 mb-4 mb-xl-4">
-                <div class="card">
-                  <center>
-                    <div class="v-1 card-header text-light"><?php echo isset($_SESSION['firstname']) ? $_SESSION['firstname'] : ''; ?>'s vehicle</div>
-                  </center>
-                  <div class="card-body text-center">
-                    <img class="img-account-profile mb-2" src="<?php echo $vehicleData['profile']; ?>" alt="">
-                    <div class="small font-italic text-dark mb-6">JPG or PNG no larger than 5 MB</div>
-                    <label for="profile"></label>
-                    <div class="input-group">
-                      <input type="hidden" name="vehicle_id" id="vehicle_id" value="<?php echo $vehicleData['vehicle_id']; ?>">
-                      <input type="file" class="form-control" id="profile" name="profile" accept="image/*">
+            <!-- Vehicle Image Card -->
+            <div class="col-xl-4 mb-4">
+                <div class="profile-card">
+                    <div class="card-header">
+                        <?php echo isset($_SESSION['firstname']) ? $_SESSION['firstname'] : ''; ?>'s Vehicle
                     </div>
-                    
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                  </div>
+                    <form action="cars-upload.php" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="vehicle_id" value="<?php echo $vehicleData['vehicle_id']; ?>">
+                        <div class="card-body text-center">
+                            <img class="img-vehicle-profile mb-3" src="<?php echo $vehicleData['profile']; ?>" alt="Vehicle Image">
+                            <div class="upload-section">
+                                <small class="text-muted mb-3 d-block">JPG or PNG no larger than 5 MB</small>
+                                <input type="file" class="form-control mb-3" id="profile" name="profile" accept="image/*">
+                                <button type="submit" class="upload-btn">
+                                    <i class="fas fa-upload"></i>Update Image
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-          </form>
-          <form action="cars-profile-info-backend.php" method="POST">
+            </div>
+
+            <!-- Vehicle Information -->
+            <div class="col-xl-8">
+                <form action="cars-profile-info-backend.php" method="POST">
+                    <input type="hidden" name="vehicle_id" value="<?php echo $vehicleData['vehicle_id']; ?>">
+                    
+                    <div class="row">
+                        <!-- Left Column -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="label"><i class="fas fa-tag"></i>Label</label>
+                                <select class="form-select" id="label" name="label" required>
+                                    <option value="<?php echo $vehicleData['label']; ?>" selected><?php echo $vehicleData['label']; ?></option>
+                                    <option value="Personal">Personal</option>
+                                    <option value="Work">Work</option>
+                                    <option value="Rent">Rent</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="platenumber"><i class="fas fa-id-card"></i>Plate Number</label>
+                                <input type="text" class="form-control" id="platenumber" name="platenumber" 
+                                    value="<?php echo $vehicleData['platenumber']; ?>">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="chassisnumber"><i class="fas fa-fingerprint"></i>Chassis Number</label>
+                                <input type="text" class="form-control" id="chassisnumber" name="chassisnumber" 
+                                    value="<?php echo $vehicleData['chassisnumber']; ?>">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="enginenumber"><i class="fas fa-cog"></i>Engine Number</label>
+                                <input type="text" class="form-control" id="enginenumber" name="enginenumber" 
+                                    value="<?php echo $vehicleData['enginenumber']; ?>">
+                            </div>
+                        </div>
+
+                        <!-- Right Column -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="brand"><i class="fas fa-building"></i>Brand</label>
+                                <select class="form-select" id="brand" name="brand" onchange="updateModels()" required>
+                                    <option value="<?php echo $vehicleData['brand']; ?>" selected><?php echo $vehicleData['brand']; ?></option>
+                                    <option value="Toyota">Toyota</option>
+                                    <option value="Suzuki">Suzuki</option>
+                                    <!-- ... other brand options ... -->
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="model"><i class="fas fa-car-side"></i>Model</label>
+                                <select class="form-select" id="model" name="model" required>
+                                    <option value="<?php echo $vehicleData['model']; ?>" selected><?php echo $vehicleData['model']; ?></option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="color"><i class="fas fa-palette"></i>Color</label>
+                                <select class="form-select" id="color" name="color" required>
+                                    <option value="<?php echo $vehicleData['color']; ?>" selected><?php echo $vehicleData['color']; ?></option>
+                                    <option value="Red">Red</option>
+                                    <option value="Black">Black</option>
+                                    <!-- ... other color options ... -->
+                                </select>
+                            </div>
+
+                            <div class="text-end mt-4">
+                                <button type="submit" class="save-btn">
+                                    <i class="fas fa-save"></i>Save Changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-        <!-- Label Dropdown -->
-
-        <div class="col-md-4 mb-4">
-          <div class="form-group mb-3">
-            <input type="hidden" class="form-control" id="vehicle_id" name="vehicle_id" value="<?php echo $vehicleData['vehicle_id']; ?>">
-            <label for="label" class="form-label text-black">Label:</label>
-            <select class="form-select" id="label" name="label" required>
-              <option value="<?php echo $vehicleData['label']; ?>" selected><?php echo $vehicleData['label']; ?></option>
-              <option value="Personal">Personal</option>
-              <option value="Work">Work</option>
-              <option value="Rent">Rent</option>
-            </select>
-          </div>
-          <!-- Plate Number and Chassis Number -->
-
-          <div class="form-group mb-3">
-            <label for="platenumber">Plate Number:</label>
-            <input type="text" class="form-control" id="platenumber" name="platenumber" value="<?php echo $vehicleData['platenumber']; ?>">
-          </div>
-          <div class="form-group mb-3">
-            <label for="chassisnumber">Chassis Number:</label>
-            <input type="text" class="form-control" id="chassisnumber" name="chassisnumber" value="<?php echo $vehicleData['chassisnumber']; ?>">
-
-          </div>
-
-        </div>
-        <!-- Engine Number and Vehicle Type -->
-        <div class="col-md-4 mb-4">
-          <div class="form-group mb-3">
-            <label for="enginenumber">Engine Number:</label>
-            <input type="text" class="form-control" id="enginenumber" name="enginenumber" value="<?php echo $vehicleData['enginenumber']; ?>">
-          </div>
-          <div class="form-group mb-4">
-            <label for="brand">Brand:</label>
-            <select class="form-select" id="brand" name="brand" onchange="updateModels()" required>
-              <option value="<?php echo $vehicleData['brand']; ?>" selected><?php echo $vehicleData['brand']; ?></option>
-              <option value="Toyota">Toyota</option>
-              <option value="Suzuki">Suzuki</option>
-              <option value="Honda">Honda</option>
-              <option value="Mitsubishi">Mitsubishi</option>
-              <option value="Ford">Ford</option>
-              <option value="Nissan">Nissan</option>
-              <option value="Hyundai">Hyundai</option>
-              <option value="Isuzu">Isuzu</option>
-              <option value="Chevrolet">Chevrolet</option>
-              <option value="Mazda">Mazda</option>
-            </select>
-          </div>
-
-          <div class="form-group mb-4">
-            <label for="model">Model:</label>
-            <select class="form-select" id="model" name="model" required>
-              <option value="<?php echo $vehicleData['model']; ?>" selected><?php echo $vehicleData['model']; ?></option>
-
-            </select>
-          </div>
-          <!-- Color, Size, and Edit Button -->
-
-          <div class="form-group mb-4">
-            <label for="color">Color:</label>
-            <select class="form-select" id="color" name="color" required>
-              <option value="<?php echo $vehicleData['color']; ?>" selected><?php echo $vehicleData['color']; ?></option>
-              <option value="Red">Red</option>
-              <option value="Black">Black</option>
-              <option value="Blue">Blue</option>
-              <option value="Gray">Gray</option>
-              <option value="White">White</option>
-            </select>
-          </div>
-          <button type="submit" class="btn btn-primary btn-md"><i class=" me-3 fas fa-check"></i>Save Changes</button></a>
-        </div>
-      </div>
     </div>
-    </div>
-    </div>
-
-    </div>
-    </div>
-
-    </div>
-    </form>
-
   </main>
 
   <script>

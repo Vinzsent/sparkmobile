@@ -442,8 +442,8 @@ button {
                             </div>
                             <p class="text-dark mb-1">Your payment has been received!</p>
                             <a href="csinvoice.php" class="click-request d-inline-flex align-items-center">
-                                <span>View invoice</span>
-                                <i class="fas fa-chevron-right ms-1 small"></i>
+                                <span class="v-2">View invoice</span>
+                                <i class="fas fa-chevron-right ms-1 small v-2"></i>
                             </a>
                             <div class="text-muted mt-2">
                                 <small><i class="far fa-clock me-1"></i>2 mins ago</small>

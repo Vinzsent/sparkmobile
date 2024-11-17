@@ -226,6 +226,112 @@ li :hover{
     height: auto; /* Maintain aspect ratio */
 }
 
+.gcash-container {
+    padding: 40px;
+    margin-top: 80px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.payment-header {
+    margin-bottom: 40px;
+}
+
+.payment-header h3 {
+    color: #072797;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.payment-header h3:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: orangered;
+}
+
+.payment-form-container {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 10px;
+    border-left: 4px solid #072797;
+}
+
+.gcash-logo {
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 30px;
+    transition: transform 0.3s ease;
+}
+
+.gcash-logo:hover {
+    transform: scale(1.05);
+}
+
+.form-label {
+    color: #333;
+    font-weight: 500;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.file-upload-container {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.file-upload-input {
+    padding: 12px;
+    border: 2px dashed #072797;
+    border-radius: 8px;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.file-upload-input:hover {
+    border-color: orangered;
+    background: #f8f9fa;
+}
+
+.submit-button {
+    background: #072797;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 5px;
+    border: none;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.submit-button:hover {
+    background: orangered;
+    transform: translateY(-2px);
+}
+
+.payment-instructions {
+    margin-top: 30px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.payment-instructions h4 {
+    color: #072797;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
 </style>
   <body>
     <!-- top navigation bar -->
@@ -290,172 +396,186 @@ li :hover{
     <li class="my-4"><hr class="dropdown-divider bg-primary" /></li>
     <!-- top navigation bar -->
     <!-- offcanvas -->
-    <div
-      class="offcanvas offcanvas-start sidebar-nav"
-      tabindex="-1"
-      id="sidebar"
-      
-    
-       class="offcanvas-body p-0">
+    <div class="offcanvas offcanvas-start sidebar-nav" tabindex="-1" id="sidebar" <div class="offcanvas-body p-0">
         <nav class="">
-          <ul class="navbar-nav">
-            
-            
-              <div class=" welcome fw-bold px-3 mb-3">
-              <h5 class="text-center">Welcome back <?php echo isset($_SESSION['firstname']) ? $_SESSION['firstname'] : ''; ?>!</h5>
-              </div>
-              <div class="ms-3"id="dateTime"></div>
-            </li>
-            <li>
-                <li class="">
-                    <a href="csdashboard.php" class="nav-link px-3">
-                      <span class="me-2"><i class="fas fa-user"></i></i></span>
-                      <span class="start">PROFILE</span>
-                    </a>
-                </li>
-                
-            <li>
-              <a href="cscars1.php" class="nav-link px-3">
-                <span class="me-2"><i class="fas fa-car"></i></i></span>
-                <span>MY CARS</span>
-              </a>
-            </li>
-            <li class="v-1">
-                  <a
-                    class="nav-link px-3 sidebar-link"
-                    data-bs-toggle="collapse"
-                    href="#layouts">
-                    <span class="me-2"><i class="fas fa-calendar"></i></i></span>
-                    <span>BOOKINGS</span>
-                    <span class="ms-auto">
-                      <span class="right-icon">
-                        <i class="bi bi-chevron-down"></i>
-                      </span>
-                    </span>
-                  </a>
-                </li>
-              <div class="collapse" id="layouts">
-                    <ul class="navbar-nav ps-3">
-                      <li class="v-1">
-                        <a href="setappoinment.php" class="nav-link px-3">
-                        <span class="me-2"
-                            >Set Appointment</span>
-                        </a>
-                    </li>  
-                    <li class="v-1">
-                        <a href="checkingcar.php" class="nav-link px-3">
-                        <span class="me-2"
-                            >Checking car condition</span>
-                        </a>
-                    </li>
-                    <li class="v-1">
-                        <a href="#" class="nav-link px-3">
-                        <span class="me-2"
-                          >Request Slot</span>
-                        </a>
-                    </li>
-                    <li class="v-1 v-2">
-                      <a href="csprocess3.php" class="nav-link px-3">
-                      <span class="me-2"
-                        >Select Service</span>
-                      </a>
-                   </li>
-                    <li class="v-1">
-                    <a href="#" class="nav-link px-3">
-                    <span class="me-2"
-                      >Register your car</span>
-                    </a>
-                  </li>
-                    <li class="v-1">
-                    <a href="#" class="nav-link px-3">
-                    <span class="me-2"
-                      >Booking Summary</span>
-                  </a>
-                  </li>
-                  <li class="v-1">
-                    <a href="#" class="nav-link px-3">
-                    <span class="me-2"
-                      >Booking History</span>
-                    </a>
-                  </li>
-                    </ul>
-              </div>
-            </li>
-            <li> 
-                <a
-                  class="nav-link px-3 sidebar-link"
-                  data-bs-toggle="collapse"
-                  href="#layouts2">
-                  <span class="me-2"><i class="fas fa-money-bill"></i>
-                  </i></i></span>
-                  <span>PAYMENTS</span>
-                  <span class="ms-auto">
-                    <span class="right-icon">
-                      <i class="bi bi-chevron-down"></i>
-                    </span>
-                  </span>
-                </a>
-                <div class="collapse" id="layouts2">
-                  <ul class="navbar-nav ps-3">
-                    <li class="v-1">
-                      <a href="#" class="nav-link px-3">
-                        <span class="me-2"
-                        >Payment options</span>
-                      </a>
-                    </li>
-                    <li class="v-1">
-                      <a href="#" class="nav-link px-3">
-                        <span class="me-2"
-                        >Car wash invoice</span>
-                      </a>
-                    </li>
-                    <li class="v-1">
-                      <a href="#" class="nav-link px-3">
-                        <span class="me-2"
-                        >Payment History</span>
-                      </a>
-                    </li>
-                  </ul>
+            <ul class="navbar-nav">
+
+
+                <div class=" welcome fw-bold px-3 mb-3">
+                    <h5 class="text-center">Welcome back <?php echo $userData['firstname']; ?>!</h5>
                 </div>
-              </li>
-            <li>
-            <li>
-                <a href="csreward.html" class="nav-link px-3">
-                  <span class="me-2"><i class="fas fa-medal"></i>
-                  </i></span>
-                  <span>REWARDS</span>
-                </a>
-            </li>
-            <li>
-                <a href="index.php" class="nav-link px-3">
-                  <span class="me-2"><i class="fas fa-sign-out-alt"></i>
-                  </i></span>
-                  <span>LOG OUT</span>
-                </a>
-            </li>
-            
-          </ul>
+                <div class="ms-3" id="dateTime"></div>
+                </li>
+                <li>
+                <li class="">
+                    <a href="user-dashboard.php" class="nav-link px-3">
+                        <span class="me-2"><i class="fas fa-home"></i></i></span>
+                        <span class="start">DASHBOARD</span>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="user-profile.php" class="nav-link px-3">
+                        <span class="me-2"><i class="fas fa-user"></i></i></span>
+                        <span class="start">PROFILE</span>
+                    </a>
+                </li>
+                <li>
+
+                <li class="">
+                    <a href="cars-profile.php" class="nav-link px-3">
+                        <span class="me-2"><i class="fas fa-car"></i></i></span>
+                        <span>MY CARS</span>
+                    </a>
+                </li>
+                <li><a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#layouts">
+                        <span class="me-2"><i class="fas fa-calendar"></i></i></span>
+                        <span>BOOKINGS</span>
+                        <span class="ms-auto">
+                            <span class="right-icon">
+                                <i class="bi bi-chevron-down"></i>
+                            </span>
+                        </span>
+                    </a>
+                    <div class="collapse" id="layouts">
+                        <ul class="navbar-nav ps-3">
+                            <li class="v-1">
+                                <a href="user-appoinment.php" class="nav-link px-3">
+                                    <span class="me-2">Appointments</span>
+                                </a>
+                            </li>
+                            <li class="v-1">
+                                <a href="checkingcar.php" class="nav-link px-3">
+                                    <span class="me-2">Checking car condition</span>
+                                </a>
+                            </li>
+                            <li class="v-1">
+                                <a href="csrequest_slot.php" class="nav-link px-3">
+                                    <span class="me-2">Request Slot</span>
+                                </a>
+                            </li>
+                            <li class="v-1">
+                                <a href="csprocess3.php" class="nav-link px-3">
+                                    <span class="me-2">Select Service</span>
+                                </a>
+                            </li>
+                            <li class="v-1">
+                                <a href="#" class="nav-link px-3">
+                                    <span class="me-2">Register your car</span>
+                                </a>
+                            </li>
+                            <li class="v-1">
+                                <a href="user-service-summary.php" class="nav-link px-3">
+                                    <span class="me-2">Booking Summary</span>
+                                </a>
+
+                            </li>
+                            <li class="v-1">
+                                <a href="#" class="nav-link px-3">
+                                    <span class="me-2">Booking History</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="v-1">
+                    <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#layouts2">
+                        <span class="me-2"><i class="fas fa-money-bill"></i>
+                            </i></i></span>
+                        <span>PAYMENTS</span>
+                        <span class="ms-auto">
+                            <span class="right-icon">
+                                <i class="bi bi-chevron-down"></i>
+                            </span>
+                        </span>
+                    </a>
+                    <div class="collapse" id="layouts2">
+                        <ul class="navbar-nav ps-3">
+                            <li class="v-2">
+                                <a href="#" class="nav-link px-3">
+                                    <span class="me-2">Payment options</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="nav-link px-3">
+                                    <span class="me-2">Car wash invoice</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="nav-link px-3">
+                                    <span class="me-2">Payment History</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <a href="#" class="nav-link px-3">
+                        <span class="me-2"><i class="fas fa-medal"></i>
+                            </i></span>
+                        <span>REWARDS</span>
+                    </a>
+                </li>
+                <li class="nav-link px-3" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                    <span class="me-2"><i class="fas fa-sign-out-alt"></i>
+                        </i></span>
+                    <span>LOG OUT</span>
+                </li>
+
+            </ul>
         </nav>
-      </div>
     </div>
     <!-- main content -->
     <main>
-        <div class="container mt-5">
-        <h3 class="text-dark ms-5 mb-5">Mode of Payment: G-CASH</h3>
-        <div class="row">
-          <div class="col-md-6">
-              <div class="container-vinfo text-dark">
-                  <img class="gcash-logo mb-5" src="gcash_logo.png" alt="">
-                  <form action="cssubmit_gcash_qr.php" method="POST">
-                      <input type="hidden" name="user_id" id="user_id" value="<?php echo $userData['user_id'];?>">
-                      <label for="gcash_qr_code" class="form-label">G-Cash QR Code:</label>
-                      <input type="file" id="gcash_qr_code" name="qrcode" class="form-control mb-3" placeholder="Enter your G-Cash QR code" required>
-                      <!-- Additional fields can be added as needed -->
-                      <button type="submit" class="btn btn-primary">Submit</button>
-                  </form>
-              </div>
-          </div>
-        </div>
+        <div class="container gcash-container">
+            <div class="payment-header">
+                <h3>
+                    <i class="fas fa-wallet me-2"></i>
+                    GCash Payment
+                </h3>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="payment-form-container">
+                        <img class="gcash-logo" src="gcash_logo.png" alt="GCash Logo">
+                        
+                        <form action="cssubmit_gcash_qr.php" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" name="user_id" id="user_id" value="<?php echo $userData['user_id'];?>">
+                            
+                            <div class="file-upload-container">
+                                <label for="gcash_qr_code" class="form-label">
+                                    <i class="fas fa-qrcode me-2"></i>Upload GCash QR Code
+                                </label>
+                                <input type="file" 
+                                       id="gcash_qr_code" 
+                                       name="qrcode" 
+                                       class="form-control file-upload-input" 
+                                       accept="image/*"
+                                       required>
+                            </div>
+
+                            <button type="submit" class="submit-button">
+                                <i class="fas fa-paper-plane"></i>
+                                Submit Payment
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="payment-instructions">
+                        <h4><i class="fas fa-info-circle me-2"></i>Payment Instructions:</h4>
+                        <ol class="text-dark">
+                            <li>Open your GCash app</li>
+                            <li>Go to QR Code section</li>
+                            <li>Upload your personal QR Code</li>
+                            <li>Wait for payment confirmation</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <!-- You can add additional content here, such as payment summary -->
+                </div>
+            </div>
         </div>
     </main>
 

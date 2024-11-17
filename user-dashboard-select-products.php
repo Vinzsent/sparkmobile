@@ -195,6 +195,132 @@ $product_result = mysqli_query($connection, $product_query);
     .star-icon {
         color: orangered;
     }
+
+    /* Add these new styles */
+    .container.my-4.text-dark {
+        background: #fff;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+
+    .btn-primary {
+        background-color: #072797;
+        border: none;
+        padding: 10px 20px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: orangered;
+        transform: translateY(-2px);
+    }
+
+    .list-group-item {
+        border: 1px solid #eee;
+        border-radius: 10px !important;
+        transition: all 0.3s ease;
+        padding: 15px;
+    }
+
+    .list-group-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .btn-outline-danger {
+        color: orangered;
+        border-color: orangered;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: orangered;
+        color: white;
+    }
+
+    .input-group {
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .input-group .form-control {
+        border: none;
+        padding: 15px;
+    }
+
+    .input-group .btn {
+        background-color: orangered;
+        border: none;
+        padding: 15px 25px;
+    }
+
+    .modal-content {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .modal-header {
+        background-color: #072797;
+        color: white;
+        border: none;
+    }
+
+    .modal-footer .btn-primary {
+        background-color: #072797;
+    }
+
+    .modal-footer .btn-secondary {
+        background-color: #6c757d;
+    }
+
+    .quantity-input {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .quantity-input .btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #072797;
+        color: white;
+        font-weight: bold;
+    }
+
+    .quantity-input input {
+        width: 60px !important;
+        text-align: center;
+        border: 1px solid #dee2e6;
+        border-radius: 8px !important;
+        margin: 0 !important;
+    }
+
+    h2.text-center {
+        color: #072797;
+        font-weight: bold;
+        margin-bottom: 30px;
+        position: relative;
+        padding-bottom: 15px;
+    }
+
+    h2.text-center:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 3px;
+        background: linear-gradient(to right, #072797, orangered);
+        border-radius: 3px;
+    }
 </style>
 
 <body>

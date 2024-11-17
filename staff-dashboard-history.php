@@ -474,9 +474,10 @@ mysqli_close($connection);
                                                             ?>
                                                         </p>
                                                         <p><strong>Total Price:</strong> ₱<?php 
-                                                            $price = (string)$job['total_price'];
-                                                            $formatted_price = substr_replace($price, '.', -2, 0);
-                                                            echo number_format((float)$formatted_price, 2, '.', ',');
+                                                            // Get the integer price from database
+                                                            $price = $job['total_price'];
+                                                            // Format the integer price to show as currency
+                                                            echo number_format($price, 2, '.', ',');
                                                         ?></p>
                                                     </div>
                                                 </div>

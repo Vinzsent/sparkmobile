@@ -1,45 +1,47 @@
 <?php
+session_start();
+include('config.php');
 
-include_once('config.php');
+// Set headers to prevent caching
+header('Cache-Control: no-cache, must-revalidate');
+header('Content-Type: application/json');
 
-// Create connection
-$connection = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($connection->connect_error) {
-    die("Connection failed: " . $connection->connect_error);
-}
-
-// Check if the form data has been submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve vehicle_id and user_id from POST data
-    $vehicle_id = $_POST['vehicle_id'];
-    $user_id = $_POST['user_id'];
-    $shop_id = $_POST['shop_id'];
-    
-    // Validate input (optional)
-
-    // Prepare and execute SQL statement to delete slot
-    $sql = "DELETE FROM queuing_slots WHERE vehicle_id = ? AND user_id = ? AND shop_id =?";
-    $stmt = $connection->prepare($sql);
-    $stmt->bind_param("iii", $vehicle_id, $user_id, $shop_id); // Assuming both vehicle_id and user_id are integers
-    $stmt->execute();
-
-    // Check if deletion was successful
-    if ($stmt->affected_rows > 0) {
-       
-        
-    } else {
-     
+try {
+    // Validate inputs
+    if (!isset($_POST['vehicle_id']) || !isset($_POST['user_id']) || !isset($_POST['shop_id'])) {
+        throw new Exception('Missing required parameters');
     }
 
-    // Close statement
-    $stmt->close();
-} else {
-    // If the request method is not POST, handle the error accordingly
-    echo "Error: Invalid request method";
+    // Sanitize inputs
+    $vehicle_id = mysqli_real_escape_string($connection, $_POST['vehicle_id']);
+    $user_id = mysqli_real_escape_string($connection, $_POST['user_id']);
+    $shop_id = mysqli_real_escape_string($connection, $_POST['shop_id']);
+
+    // Prepare and execute delete query
+    $delete_query = "DELETE FROM queuing_slots WHERE vehicle_id = ? AND user_id = ? AND shop_id = ?";
+    $stmt = mysqli_prepare($connection, $delete_query);
+    
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, "sss", $vehicle_id, $user_id, $shop_id);
+        $success = mysqli_stmt_execute($stmt);
+        
+        if ($success) {
+            echo json_encode(['status' => 'success', 'message' => 'Slot deleted successfully']);
+        } else {
+            throw new Exception('Failed to delete slot: ' . mysqli_stmt_error($stmt));
+        }
+        
+        mysqli_stmt_close($stmt);
+    } else {
+        throw new Exception('Failed to prepare statement: ' . mysqli_error($connection));
+    }
+
+} catch (Exception $e) {
+    // Log error and send response
+    error_log('Slot deletion error: ' . $e->getMessage());
+    echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
 }
 
 // Close connection
-$connection->close();
+mysqli_close($connection);
 ?>

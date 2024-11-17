@@ -233,6 +233,76 @@ mysqli_close($connection);
         object-fit: cover;
         border-radius: 50%;
     }
+
+    .dashboard-payment {
+        padding: 30px;
+        margin-top: 60px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+
+    .dashboard-payment h2 {
+        color: #072797;
+        margin-bottom: 10px;
+        font-size: 1.8rem;
+    }
+
+    .dashboard-payment p {
+        color: #666;
+        margin-bottom: 25px;
+    }
+
+    .payment-table {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    .payment-table thead {
+        background: #072797;
+    }
+
+    .payment-table th {
+        color: white;
+        font-weight: 500;
+        padding: 15px;
+        font-size: 1rem;
+    }
+
+    .payment-table td {
+        padding: 15px;
+        color: #333;
+        vertical-align: middle;
+    }
+
+    .payment-table tbody tr {
+        transition: background-color 0.3s ease;
+    }
+
+    .payment-table tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+
+    .btn-view-details {
+        background: #072797;
+        color: white;
+        padding: 8px 20px;
+        border-radius: 5px;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-view-details:hover {
+        background: orangered;
+        transform: translateY(-2px);
+    }
+
+    .price-column {
+        font-weight: 600;
+        color: #072797;
+    }
 </style>
 
 <body>
@@ -328,40 +398,42 @@ mysqli_close($connection);
     </div>
     <!-- main content -->
     <main>
-    <div class="col-md-9 text-dark ms-5">
-        <h2><strong><i></i>Payments</strong></h2>
-        <p>Click the button in the action column to view the payment details.</p>
-        <div class="row">
-            <table class="table table-bordered border-gray">
-                <thead class="v-2 text-light">
-                    <tr>
-                        <th scope="col">Customer Name</th>
-                        <th scope="col">Total Price(&#x20B1;)</th>
-                        <th scope="col-md-4">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    if (!empty($finishData)) {
-                        // Output the data in a single row for each user
-                        foreach ($finishData as $userId => $user) {
-                            echo '<tr>';
-                            echo '<td>' . htmlspecialchars($user['firstname'] . ' ' . $user['lastname']) . '</td>';
-                            
-                            
-                            
-                            // Display the total price directly
-                            echo '<td>₱ ' . number_format($user['totalPrice'] / 100, 2) . '</td>'; // Directly display total_price as a decimal
-
-                            echo '<td><a href="cashier-dashboard-payment-compute.php?user_id=' . urlencode($userId) . '&servicedone_id=' . urlencode($servicedoneId) . '" class="btn btn-primary">View Details</a></td>';
-                            echo '</tr>';
+    <div class="dashboard-payment">
+        <div class="container">
+            <h2><i class="fas fa-money-bill me-2"></i>Payments</h2>
+            <p>Click the button in the action column to view the payment details.</p>
+            
+            <div class="payment-table">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Customer Name</th>
+                            <th>Total Price (₱)</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if (!empty($finishData)) {
+                            foreach ($finishData as $userId => $user) {
+                                echo '<tr>';
+                                echo '<td><i class="fas fa-user me-2 text-dark"> </i>' . htmlspecialchars($user['firstname'] . ' ' . $user['lastname']) . '</td>';
+                                echo '<td class="price-column">₱ ' . number_format($user['totalPrice'], 2, '.', ',') . '</td>';
+                                echo '<td>
+                                        <a href="cashier-dashboard-payment-compute.php?user_id=' . urlencode($userId) . '&servicedone_id=' . urlencode($servicedoneId) . '" 
+                                           class="btn btn-view-details">
+                                           <i class="fas fa-eye me-2"></i>View Details
+                                        </a>
+                                     </td>';
+                                echo '</tr>';
+                            }
+                        } else {
+                            echo '<tr><td colspan="3" class="text-center">No payment records available</td></tr>';
                         }
-                    } else {
-                        echo '<tr><td colspan="5">Error: No data available</td></tr>';
-                    }
-                    ?>
-                </tbody>
-            </table>
+                        ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </main>

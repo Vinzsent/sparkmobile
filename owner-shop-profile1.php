@@ -218,11 +218,140 @@ mysqli_close($connection);
   }
 
   .profile-picture {
-    width: 300px;
-    /* Adjust the size as needed */
-    height: 150px;
-    object-fit: cover;
-    border-radius: 10%;
+    width: 100%;
+    height: 250px;
+    object-fit: contain;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background: #fff;
+    padding: 15px;
+  }
+
+  .shop-container {
+    padding: 40px;
+    margin-top: 80px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+  }
+
+  .page-header h4 {
+    color: #072797;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .add-shop-btn {
+    background: #072797;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .add-shop-btn:hover {
+    background: orangered;
+    transform: translateY(-2px);
+    color: white;
+    text-decoration: none;
+  }
+
+  .shop-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    padding: 0;
+  }
+
+  .shop-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .shop-card-header {
+    background: #072797;
+    color: white;
+    padding: 15px 20px;
+  }
+
+  .shop-card-header h5 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+
+  .shop-card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-picture {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .shop-info {
+    margin-bottom: 20px;
+  }
+
+  .shop-info p {
+    margin-bottom: 12px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .shop-info strong {
+    color: #072797;
+    min-width: 120px;
+  }
+
+  .edit-shop-btn {
+    background: #072797;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    transition: all 0.3s ease;
+    width: 100%;
+    text-align: center;
+  }
+
+  .edit-shop-btn:hover {
+    background: orangered;
+    color: white;
+    text-decoration: none;
+  }
+
+  .no-shops-message {
+    text-align: center;
+    padding: 40px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    color: #666;
+    font-size: 1.1rem;
   }
 </style>
 
@@ -451,51 +580,59 @@ mysqli_close($connection);
   </div>
   <!-- main content -->
   <main>
-    <div class="container-vinfo text-dark me-4">
-      <div class="container mt-3">
-        <div class="d-flex align-items-center">
-          <h4 class="mb-0">MY SHOP</h4>
-          <a href="owner-shop-profile-add.php?user_id=<?php echo $user_id; ?>" class="btn btn-primary ml-auto">
-            <i class="me-3 fas fa-plus"></i>Add Shop</a>
+    <div class="shop-container">
+        <div class="page-header">
+            <h4><i class="fas fa-store me-2"></i>MY SHOPS</h4>
+            <a href="owner-shop-profile-add.php?user_id=<?php echo $user_id; ?>" class="add-shop-btn">
+                <i class="fas fa-plus"></i>
+                Add Shop
+            </a>
         </div>
-      </div>
-      <div class="v-2 card-header mt-2">
-        <div class="row row-cols-1 row-cols-md-1 g-4">
-          <?php
-          // Check if there are any shops
-          if (!empty($shops)) {
-            $count = count($shops);
-            $colClass = $count > 1 ? 'col-md-6' : 'offset-md-3 col-md-6'; // Determine column class based on the number of shops
 
-            foreach ($shops as $row) {
-              echo '<div class="' . $colClass . '">'; // Apply column class
-              echo '<div class="card mb-2">';
+        <div class="row">
+            <?php
+            if (!empty($shops)) {
+                $count = count($shops);
+                $colClass = $count > 1 ? 'col-md-6' : 'col-md-6 offset-md-3';
 
-              // Profile picture section
-
-              echo '<div class="card-header v-1 text-light">';
-              echo '<h5 class="card-title">' . htmlspecialchars($row['shop_name']) . '</h5>';
-              echo '</div>';
-              echo '<div class="card-body container-fluid">';
-              echo '<img src="' . htmlspecialchars($row['profile']) . '" alt="Profile Picture" class="card-img-top profile-picture container-fluid">';
-              echo '<p class="card-text mt-3"><strong>Street Address:</strong> ' . htmlspecialchars($row['street_address']) . '</p>';
-              echo '<p class="card-text"><strong>Barangay:</strong> ' . htmlspecialchars($row['barangay']) . '</p>';
-              echo '<p class="card-text"><strong>City:</strong> ' . htmlspecialchars($row['city']) . '</p>';
-              echo '<p class="card-text"><strong>Postal Code:</strong> ' . htmlspecialchars($row['postal']) . '</p>';
-              echo '<a href="owner-shop-profile2.php?shop_id=' . htmlspecialchars($row['shop_id']) . '" class="btn btn-primary">Edit Shop</a>';
-              echo '</div>';
-              echo '</div>';
-              echo '</div>';
+                foreach ($shops as $row) {
+                    echo '<div class="' . $colClass . '">';
+                    echo '<div class="shop-card">';
+                    
+                    echo '<div class="shop-card-header">';
+                    echo '<h5><i class="fas fa-store-alt me-2"></i>' . htmlspecialchars($row['shop_name']) . '</h5>';
+                    echo '</div>';
+                    
+                    echo '<div class="shop-card-body">';
+                    echo '<img src="' . htmlspecialchars($row['profile']) . '" alt="Shop Profile" class="profile-picture">';
+                    
+                    echo '<div class="shop-info">';
+                    echo '<p><strong><i class="fas fa-map-marker-alt me-2"></i>Street Address:</strong> ' . htmlspecialchars($row['street_address']) . '</p>';
+                    echo '<p><strong><i class="fas fa-map me-2"></i>Barangay:</strong> ' . htmlspecialchars($row['barangay']) . '</p>';
+                    echo '<p><strong><i class="fas fa-city me-2"></i>City:</strong> ' . htmlspecialchars($row['city']) . '</p>';
+                    echo '<p><strong><i class="fas fa-mail-bulk me-2"></i>Postal Code:</strong> ' . htmlspecialchars($row['postal']) . '</p>';
+                    echo '</div>';
+                    
+                    echo '<a href="owner-shop-profile2.php?shop_id=' . htmlspecialchars($row['shop_id']) . '" class="edit-shop-btn">';
+                    echo '<i class="fas fa-edit me-2"></i>Edit Shop';
+                    echo '</a>';
+                    
+                    echo '</div>';
+                    echo '</div>';
+                    echo '</div>';
+                }
+            } else {
+                echo '<div class="col-12">';
+                echo '<div class="no-shops-message">';
+                echo '<i class="fas fa-store-slash fa-3x mb-3"></i>';
+                echo '<p>No shops found. Click the "Add Shop" button to create your first shop.</p>';
+                echo '</div>';
+                echo '</div>';
             }
-          } else {
-            echo '<p class="text-light">No shops found.</p>';
-          }
-          ?>
+            ?>
         </div>
-
-      </div>
     </div>
-
+</main>
 
     <!-- Custom JavaScript to display the range value -->
     <script>

@@ -21,6 +21,10 @@ $query = "SELECT * FROM users WHERE user_id = '$userID'";
 $result = mysqli_query($connection, $query);
 $userData = mysqli_fetch_assoc($result);
 
+$shop_query = "SELECT * FROM shops WHERE user_id = '$userID'";
+$shop_result = mysqli_query($connection, $shop_query);
+$shopData = mysqli_fetch_assoc($shop_result);
+
 $total_users_query = "SELECT COUNT(*) as total_count FROM users WHERE role = 'User'";
 $total_result = mysqli_query($connection, $total_users_query);
 $total_users_in_db = mysqli_fetch_assoc($total_result)['total_count'];
@@ -121,7 +125,7 @@ $service_count = mysqli_fetch_assoc($service_count_result)['service_count'];
 
 // Check if service count is less than minimum required (4)
 if ($service_count < 4) {
-    $notification_message = "This is a reminder to update your services. Minimum requirement is 4 services per month. Current count: $service_count";
+    $notification_message = "This is a reminder to update your services on ". $shopData['shop_name'] .". Minimum requirement is 4 services per month. Current count: $service_count";
     
     // Insert notification into database
     $insert_notification = "INSERT INTO notifications 
@@ -157,7 +161,7 @@ $outdated_result = mysqli_query($connection, $outdated_services_query);
 
 if (mysqli_num_rows($outdated_result) > 0) {
     while ($service = mysqli_fetch_assoc($outdated_result)) {
-        $notification_message = "This is a reminder to update your services. Minimum requirement is 4 services per month. Current count: $service_count";
+        $notification_message = "This is a reminder to update your services on ". $shopData['shop_name'] .". Minimum requirement is 4 services per month. Current count: $service_count";
         
         // Use INSERT ... ON DUPLICATE KEY UPDATE
         $insert_notification = "INSERT INTO notifications 
@@ -184,8 +188,35 @@ if (mysqli_num_rows($outdated_result) > 0) {
     }
 }
 
-// Close the database connection
-mysqli_close($connection);
+// Add this query near your other queries
+$current_services_query = "SELECT 
+    fj.slotNumber AS slot_number,
+    u.firstname AS user_firstname,
+    u.lastname AS user_lastname,
+    s.firstname AS staff_firstname,
+    s.lastname AS staff_lastname,
+    v.brand AS vehicle_brand,
+    v.model AS vehicle_model,
+    v.color AS vehicle_color,
+    fj.services AS service_name,
+    fj.start_time,
+    fj.end_time,
+    fj.total_price,
+    fj.timer,
+    fj.is_finished
+FROM finish_jobs fj
+LEFT JOIN users u ON fj.user_id = u.user_id
+LEFT JOIN users s ON fj.staff_id = s.user_id
+LEFT JOIN vehicles v ON fj.vehicle_id = v.vehicle_id
+WHERE fj.is_finished = 1
+ORDER BY fj.slotNumber";
+
+$current_services_result = mysqli_query($connection, $current_services_query);
+$current_services = [];
+while ($service = mysqli_fetch_assoc($current_services_result)) {
+    $current_services[] = $service;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -590,17 +621,50 @@ mysqli_close($connection);
     /* Add to your existing styles */
     .notification-bell {
         position: relative;
+        cursor: pointer;
     }
 
-    .notification-bell.has-notification::after {
-        content: '';
+    .notification-bell .notification-count {
         position: absolute;
-        top: 0;
-        right: 0;
-        width: 8px;
-        height: 8px;
+        top: -8px;
+        right: -8px;
         background-color: red;
+        color: white;
         border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 12px;
+        min-width: 18px;
+        text-align: center;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1.2);
+            opacity: 0.8;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .notification-bell.has-notification i {
+        animation: bell-ring 1s ease-in-out infinite;
+        transform-origin: top center;
+    }
+
+    @keyframes bell-ring {
+        0% { transform: rotate(0); }
+        20% { transform: rotate(15deg); }
+        40% { transform: rotate(-15deg); }
+        60% { transform: rotate(7deg); }
+        80% { transform: rotate(-7deg); }
+        100% { transform: rotate(0); }
     }
 
     .toast-container {
@@ -635,6 +699,24 @@ mysqli_close($connection);
                     <li class="nav-item">
                         <a href="notification.php" class="nav-link px-3 notification-bell">
                             <i class="fas fa-bell"></i>
+                            <?php
+                            // Check if connection is still valid
+                            if ($connection && mysqli_ping($connection)) {
+                                // Query to count unread notifications
+                                $notif_count_query = "SELECT COUNT(*) as count FROM notifications WHERE user_id = '$userID' AND is_read = 0";
+                                $notif_result = mysqli_query($connection, $notif_count_query);
+                                if ($notif_result) {
+                                    $notif_count = mysqli_fetch_assoc($notif_result)['count'];
+                                    
+                                    if ($notif_count > 0) {
+                                        echo "<span class='notification-count'>$notif_count</span>";
+                                    }
+                                }
+                            } else {
+                                // Reconnect if connection is lost
+                                include('config.php');
+                            }
+                            ?>
                         </a>
                     </li>
                     <li class="nav-item dropdown">
@@ -865,7 +947,6 @@ mysqli_close($connection);
                                                 <th scope="col">Profile</th>
                                                 <th scope="col">First Name</th>
                                                 <th scope="col">Last Name</th>
-                                                <th scope="col">Email</th>
                                                 <th scope="col">Login Time</th>
                                                 <th scope="col">Status</th>
                                             </tr>
@@ -873,7 +954,7 @@ mysqli_close($connection);
                                         <tbody>
                                             <?php foreach ($user_activities as $activity): ?>
                                                 <tr>
-                                                    <td data-label="">
+                                                    <td data-label="PROFILE">
                                                         <img src="<?php echo $activity['profile']; ?>" 
                                                              alt="Profile Picture" 
                                                              class="img-fluid rounded-circle profile-img">
@@ -883,9 +964,6 @@ mysqli_close($connection);
                                                     </td>
                                                     <td data-label="LAST NAME">
                                                         <?php echo $activity['lastname']; ?>
-                                                    </td>
-                                                    <td data-label="ACTIVITY">
-                                                        <?php echo $activity['email']; ?>
                                                     </td>
                                                     <td data-label="LOGIN TIME">
                                                         <?php echo $activity['login_time']; ?>
@@ -897,6 +975,69 @@ mysqli_close($connection);
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add this after your User Activities Table -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                Current Services
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Slot</th>
+                                                <th scope="col">Customer Name</th>
+                                                <th scope="col">Staff Name</th>
+                                                <th scope="col">Vehicle</th>
+                                                <th scope="col">Service</th>
+                                                <th scope="col">Start Time</th>
+                                                <th scope="col">End Time</th>
+                                                <th scope="col">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php if (empty($current_services)): ?>
+                                                <tr>
+                                                    <td colspan="7" class="text-center">No active services at the moment</td>
+                                                </tr>
+                                            <?php else: ?>
+                                                <?php foreach ($current_services as $service): ?>
+                                                    <tr>
+                                                        <td data-label="SLOT"><?php echo $service['slot_number']; ?></td>
+                                                        <td data-label="CUSTOMER NAME">
+                                                            <?php echo $service['user_firstname'] . ' ' . $service['user_lastname']; ?>
+                                                        </td>
+                                                        <td data-label="STAFF NAME">
+                                                            <?php echo $service['staff_firstname'] . ' ' . $service['staff_lastname']; ?>
+                                                        </td>
+                                                        <td data-label="VEHICLE">
+                                                            <?php echo $service['vehicle_brand'] . ' ' . $service['vehicle_model']; ?>
+                                                        </td>
+                                                        <td data-label="SERVICE"><?php echo $service['service_name']; ?></td>
+                                                        <td data-label="START TIME">
+                                                            <?php echo date('h:i A', strtotime($service['start_time'])); ?>
+                                                        </td>
+                                                        <td data-label="END TIME">
+                                                            <?php echo date('h:i A', strtotime($service['end_time'])); ?>
+                                                        </td>
+                                                        <td data-label="STATUS">
+                                                            <span class="badge <?php echo ($service['is_finished'] === 1) ? 'bg-warning' : 'bg-success'; ?>">
+                                                                <?php echo ($service['is_finished'] === 1) ? 'Ongoing' : 'Finished'; ?>
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -1039,7 +1180,7 @@ mysqli_close($connection);
                 response.user_activities.forEach(function(activity) {
                     tableBody += `
                         <tr>
-                            <td data-label="">
+                            <td data-label="PROFILE">
                                 <img src="${activity.profile}" 
                                      alt="Profile Picture" 
                                      class="img-fluid rounded-circle profile-img">
@@ -1060,6 +1201,38 @@ mysqli_close($connection);
 
                 // Update charts
                 updateCharts(response);
+
+                // Update current services table
+                if (response.current_services) {
+                    let servicesTableBody = '';
+                    response.current_services.forEach(function(service) {
+                        const startTime = new Date(service.start_time);
+                        const now = new Date();
+                        const duration = Math.floor((now - startTime) / 1000); // duration in seconds
+                        
+                        const hours = Math.floor(duration / 3600);
+                        const minutes = Math.floor((duration % 3600) / 60);
+                        const seconds = duration % 60;
+                        
+                        servicesTableBody += `
+                            <tr>
+                                <td data-label="SLOT">${service.slot_number}</td>
+                                <td data-label="CUSTOMER">${service.user_firstname} ${service.user_lastname}</td>
+                                <td data-label="STAFF">${service.staff_firstname} ${service.staff_lastname}</td>
+                                <td data-label="VEHICLE">${service.vehicle_brand} ${service.vehicle_model} (${service.vehicle_type})</td>
+                                <td data-label="SERVICE">${service.service_name}</td>
+                                <td data-label="START TIME">${new Date(service.start_time).toLocaleTimeString()}</td>
+                                <td data-label="DURATION">${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}</td>
+                            </tr>
+                        `;
+                    });
+                    
+                    if (servicesTableBody === '') {
+                        servicesTableBody = '<tr><td colspan="7" class="text-center">No active services at the moment</td></tr>';
+                    }
+                    
+                    $('.current-services-table tbody').html(servicesTableBody);
+                }
             },
             error: function(xhr, status, error) {
                 console.error('Error fetching dashboard data:', error);
@@ -1169,6 +1342,38 @@ function showNotificationToast(message) {
 setInterval(checkServiceUpdates, 300000);
 // Initial check
 checkServiceUpdates();
+</script>
+
+<script>
+// Add this to your existing JavaScript
+function updateNotificationBell() {
+    $.ajax({
+        url: 'get_notification_count.php',
+        method: 'GET',
+        success: function(response) {
+            const count = parseInt(response.count);
+            const bell = $('.notification-bell');
+            const existingCount = bell.find('.notification-count');
+            
+            if (count > 0) {
+                bell.addClass('has-notification');
+                if (existingCount.length) {
+                    existingCount.text(count);
+                } else {
+                    bell.append(`<span class="notification-count">${count}</span>`);
+                }
+            } else {
+                bell.removeClass('has-notification');
+                existingCount.remove();
+            }
+        }
+    });
+}
+
+// Update notification bell every 30 seconds
+setInterval(updateNotificationBell, 30000);
+// Initial check
+updateNotificationBell();
 </script>
 </body>
 

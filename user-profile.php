@@ -193,6 +193,122 @@ mysqli_close($connection);
 
 margin-left: 51%;
 }
+
+.profile-container {
+    padding: 40px;
+    margin-top: 80px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.section-header h2 {
+    color: orangered;
+    font-weight: 600;
+    margin: 0;
+    font-size: 1.75rem;
+}
+
+.profile-btn {
+    background: #072797;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 5px;
+    border: none;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    margin: 0;
+}
+
+.profile-btn:hover {
+    background: orangered;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.profile-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.profile-card .card-header {
+    background: #072797;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+.img-account-profile {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 20px auto;
+    border: 5px solid #f8f9fa;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    color: #072797;
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.form-control {
+    border: 1px solid #dee2e6;
+    padding: 12px;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.form-control:read-only {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+}
+
+.address-section {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 2px solid #f0f0f0;
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 20px;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .profile-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
 </style>
 
 <body>
@@ -387,107 +503,136 @@ margin-left: 51%;
       
   <!-- main content -->
   <main>
-    <form action="" method="POST">
-      <div class="personal-details">
-        <div class="container-fluid py-3">
-          <div class="row">
-            <div class="container mt-3">
-              <div class="d-flex">
-                <h2 class="mb-0 text-dark">User Details</h2>
-                <a href="user-profile-edit.php" class="profile-btn btn btn-primary">Edit Personal Details <i class=" ms-2 fas fa-arrow-right"></i></a>
-              </div>
-            </div>
-            <!-- Account page navigation-->
-            <hr class="mt-0 mb-4">
-            <div class="row">
-              <!-- Profile picture card -->
-              <div class="col-xl-4 mb-4 mb-xl-4">
-                <div class="card">
-                  <center>
-                    <div class="v-1 card-header text-light"><?php echo $userData['firstname']; ?>'s profile</div>
-                  </center>
-                  <div class="card-body text-center">
-                    <img class="img-account-profile mb-3" src="<?php echo $userData['profile']; ?>" alt="">
-
-                    <label for="profile"></label>
-
-                  </div>
-                </div>
-              </div>
-
-              <!-- First Name, Phone Number, Username and Gender -->
-              <div class=" col-md-4 mb-4">
-                <div class="form-group mb-3 text-dark">
-                  <label for="firstname">First Name:</label>
-                  <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Edit your First Name" value="<?php echo $userData['firstname']; ?>" readonly>
-                </div>
-                
-                <div class="form-group mb-3 text-dark">
-                  <label for="contact">Phone Number:</label>
-                  <input type="text" class="form-control" id="contact" name="contact" placeholder="Edit your Contact" value="<?php echo $userData['contact']; ?>"  readonly>
-                </div>
-
-                <div class="form-group mb-3 text-dark">
-                  <label for="username">Username:</label>
-                  <input type="text" class="form-control" id="username" name="username" value="<?php echo $userData['username']; ?>" readonly>
-                </div>
-
-                <div class="form-group mb-3 text-dark">
-                  <label for="gender">Gender:</label>
-                  <input type="text" class="form-control" id="gender" name="gender" value="<?php echo isset($userData['gender']) ? htmlspecialchars($userData['gender']) : ''; ?>" readonly>
-                </div>
-                
-              </div>
-              <!-- Last Name, Email, Password, User Type and User Type -->
-              <div class="col-md-4 mb-4">
-                <div class="form-group mb-3 text-dark">
-                  <label for="lastname">Last Name:</label>
-                  <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Edit your Last Name" value="<?php echo $userData['lastname']; ?>" readonly>
-                </div>
-
-                <div class="form-group mb-3 text-dark">
-                  <label for="email">Email:</label>
-                  <input type="email" class="form-control" id="email" name="email" placeholder="Edit your Email" value="<?php echo $userData['email']; ?>" readonly>
-                </div>
-
-                <div class="form-group mb-3 text-dark">
-                  <label for="password">Password:</label>
-                  <input type="password" class="form-control" id="password" name="password" value="<?php echo $userData['password']; ?>" readonly>
-                </div>
-
-                <div class="form-group mb-3 text-dark">
-                  <label for="rolw">User Type:</label>
-                  <input type="text" class="form-control" id="role" name="role" value="<?php echo $userData['role']; ?>" readonly>
-                </div>
-              
-
-              </div>
-              <!-- Address, Address Line 2, Barangay, City,  and Province  -->
-              <h2 class="text-dark">Compelete Address</h2>
-              <div class="form-group mb-3 text-dark">
-                  <label for="street_address">Street Address:</label>  
-                  <input type="text" class="form-control" id="street_address" name="street_address" placeholder="Edit your Complete Address" value="<?php echo isset($userData['street_address']) ? htmlspecialchars($userData['street_address']) : ''; ?>" readonly>
-                </div>
-                <div class="form-group mb-3 text-dark">
-                  <label for="optional_address">Address Line 2 (optional):</label>
-                  <input type="text" class="form-control" id="optional_address" name="optional_address" placeholder="(e.g., apartment, suite, unit, building, floor, block, lot)" value="<?php echo isset($userData['optional_address']) ? htmlspecialchars($userData['optional_address']) : ''; ?>" readonly>
-                </div>
-                <div class="form-group mb-3 text-dark">
-                  <label for="barangay">Barangay:</label>
-                  <input type="text" class="form-control" id="barangay" name="barangay" placeholder="Edit your Barangay" value="<?php echo isset($userData['barangay']) ? htmlspecialchars($userData['barangay']) : ''; ?>" readonly>
-                </div>
-                <div class="form-group mb-3 text-dark">
-                  <label for="city">City:</label>
-                  <input type="text" class="form-control" id="city" name="city"  placeholder="Edit your City" value="<?php echo isset($userData['city']) ? htmlspecialchars($userData['city']) : ''; ?>" readonly>
-                </div>
-                <div class="form-group mb-3 text-dark">
-                  <label for="province">Province:</label>
-                  <input type="text" class="form-control" id="province" name="province"  placeholder="Edit your Province" value="<?php echo isset($userData['province']) ? htmlspecialchars($userData['province']) : ''; ?>" readonly>
-                </div>
-            </div>
-          </div>
+    <div class="profile-container">
+        <div class="section-header">
+            <h2><i class="fas fa-user-circle"></i> User Details</h2>
+            <a href="user-profile-edit.php" class="profile-btn">
+                <i class="fas fa-edit"></i>Edit Personal Details
+            </a>
         </div>
-      </div>
+
+        <div class="row">
+            <!-- Profile picture card -->
+            <div class="col-xl-4 mb-4">
+                <div class="profile-card">
+                    <div class="card-header">
+                        <?php echo $userData['firstname']; ?>'s Profile
+                    </div>
+                    <div class="card-body text-center">
+                        <img class="img-account-profile mb-3" src="<?php echo $userData['profile']; ?>" alt="Profile Picture">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Personal Information -->
+            <div class="col-xl-8">
+                <div class="row">
+                    <!-- Left Column -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="firstname"><i class="fas fa-user"></i> First Name</label>
+                            <input type="text" class="form-control" id="firstname" name="firstname" 
+                                value="<?php echo $userData['firstname']; ?>" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contact"><i class="fas fa-phone"></i> Phone Number</label>
+                            <input type="text" class="form-control" id="contact" name="contact" 
+                                value="<?php echo $userData['contact']; ?>" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="username"><i class="fas fa-user-tag"></i> Username</label>
+                            <input type="text" class="form-control" id="username" name="username" 
+                                value="<?php echo $userData['username']; ?>" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="gender"><i class="fas fa-venus-mars"></i> Gender</label>
+                            <input type="text" class="form-control" id="gender" name="gender" 
+                                value="<?php echo isset($userData['gender']) ? htmlspecialchars($userData['gender']) : ''; ?>" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="lastname"><i class="fas fa-user"></i> Last Name</label>
+                            <input type="text" class="form-control" id="lastname" name="lastname" 
+                                value="<?php echo $userData['lastname']; ?>" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" 
+                                value="<?php echo $userData['email']; ?>" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password"><i class="fas fa-lock me-2"></i> Password</label>
+                            <input type="password" class="form-control" id="password" name="password" 
+                                value="<?php echo $userData['password']; ?>" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="role"><i class="fas fa-user-shield"></i> User Type</label>
+                            <input type="text" class="form-control" id="role" name="role" 
+                                value="<?php echo $userData['role']; ?>" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Address Section -->
+            <div class="col-12 address-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-map-marked-alt"></i> Complete Address</h2>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="street_address"><i class="fas fa-road"></i> Street Address</label>
+                            <input type="text" class="form-control" id="street_address" name="street_address" 
+                                value="<?php echo isset($userData['street_address']) ? htmlspecialchars($userData['street_address']) : ''; ?>" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="optional_address"><i class="fas fa-building"></i> Address Line 2 (Optional)</label>
+                            <input type="text" class="form-control" id="optional_address" name="optional_address" 
+                                placeholder="Apartment, suite, unit, building, floor, etc."
+                                value="<?php echo isset($userData['optional_address']) ? htmlspecialchars($userData['optional_address']) : ''; ?>" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="barangay"><i class="fas fa-map-marker"></i> Barangay</label>
+                            <input type="text" class="form-control" id="barangay" name="barangay" 
+                                value="<?php echo isset($userData['barangay']) ? htmlspecialchars($userData['barangay']) : ''; ?>" readonly>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="city"><i class="fas fa-city"></i> City</label>
+                            <input type="text" class="form-control" id="city" name="city" 
+                                value="<?php echo isset($userData['city']) ? htmlspecialchars($userData['city']) : ''; ?>" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="province"><i class="fas fa-map"></i> Province</label>
+                            <input type="text" class="form-control" id="province" name="province" 
+                                value="<?php echo isset($userData['province']) ? htmlspecialchars($userData['province']) : ''; ?>" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+
+
 
 
       <script>

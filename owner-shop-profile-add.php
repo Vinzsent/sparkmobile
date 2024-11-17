@@ -386,7 +386,7 @@ mysqli_close($connection);
             <div class="container mt-3">
               <div class="d-flex">
                 <h2 class="mb-0 text-dark">Edit Shop Details</h2>
-                <a href="owner-shop-profile.php?user_id=<?php echo $userData['user_id']; ?>" class="shop-btn btn btn-primary">
+                <a href="owner-shop-profile1.php?user_id=<?php echo $userData['user_id']; ?>" class="shop-btn btn btn-primary">
                   <i class="ms-2 fas fa-arrow-left me-3"></i>Cancel 
                 </a>
 

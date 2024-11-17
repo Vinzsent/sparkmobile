@@ -282,6 +282,160 @@ $shopData = mysqli_fetch_assoc($shop_result);
         width: 50px;
         height: 50px;
     }
+
+    .container {
+        padding: 40px;
+        margin-top: 80px;
+    }
+
+    .game-card {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        display: flex;
+        gap: 30px;
+        margin-bottom: 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .game-details {
+        flex: 1;
+    }
+
+    .game-logo {
+        width: 300px;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .game-name {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #072797;
+        margin-bottom: 15px;
+    }
+
+    .badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        padding: 8px 16px;
+        font-size: 14px;
+        border-radius: 20px;
+    }
+
+    .btn-primary {
+        background-color: #072797;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .btn-primary:hover {
+        background-color: orangered;
+        transform: translateY(-2px);
+    }
+
+    .ratings {
+        margin: 20px 0;
+    }
+
+    .bi-star-fill {
+        color: orangered;
+        font-size: 20px;
+        margin-right: 2px;
+    }
+
+    .rating-value {
+        font-size: 18px;
+        font-weight: 600;
+        color: #072797;
+    }
+
+    .description {
+        color: #666;
+        line-height: 1.6;
+        font-size: 16px;
+        margin: 20px 0;
+    }
+
+    /* Testimonials Section */
+    .testimonial-card {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease;
+    }
+
+    .testimonial-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .testimonial-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 auto 15px;
+        border: 3px solid #072797;
+    }
+
+    .testimonial-card h5 {
+        color: #072797;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .rating {
+        color: orangered;
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+    .testimonial-card p {
+        color: #666;
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    /* Service Status Section */
+    .service-status {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        margin-top: 30px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .game-card {
+            flex-direction: column;
+        }
+
+        .game-logo {
+            width: 100%;
+            height: 200px;
+            margin-top: 20px;
+        }
+
+        .badge {
+            position: static;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .container {
+            padding: 20px;
+        }
+    }
 </style>
 
 
@@ -479,13 +633,13 @@ $shopData = mysqli_fetch_assoc($shop_result);
         <div class="container text-dark">
             <!-- Shop Details Section -->
             <div class="row mb-4">
-                <div class="col-12">
-                    <div class="game-card">
+         
+                  
                         <div class="game-details">
                             <!-- Back Button -->
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <a href="user-dashboard.php" class="btn btn-primary">
-                                    <i class="fas fa-arrow-left me-2"></i>Back
+                                    <i class="fas fa-arrow-left"></i> Back
                                 </a>
                                 <span class="badge bg-success">Open Now</span>
                             </div>
@@ -522,7 +676,7 @@ $shopData = mysqli_fetch_assoc($shop_result);
                             <!-- Action Button -->
                             <a href="user-select-car.php?shop_id=<?php echo $shopData['shop_id'];?>" 
                                class="btn btn-primary d-block d-md-inline-block">
-                                <i class="fas fa-car me-2"></i>
+                                <i class="fas fa-car"></i>
                                 Choose <?php echo $shopData['shop_name'];?>
                             </a>
                         </div>
@@ -539,7 +693,7 @@ $shopData = mysqli_fetch_assoc($shop_result);
 
             <!-- Testimonials Section -->
             <div class="py-4">
-                <h2 class="text-center mb-4">What Our Users Say</h2>
+                <h2 class="text-center text-dark mt-5">What Our Users Say</h2>
                 
                 <div class="row g-4">
                     <!-- Testimonial 1 -->

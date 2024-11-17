@@ -212,6 +212,170 @@ mysqli_close($connection);
   .v-3 {
     font-weight: bold;
   }
+
+  .container-vinfo {
+    background: #fff;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    margin: 20px;
+  }
+
+  /* Headings */
+  .container-vinfo h2 {
+    color: #072797;
+    font-weight: 600;
+    margin-bottom: 25px;
+    position: relative;
+  }
+
+  .container-vinfo h2:after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(to right, #072797, orangered);
+    border-radius: 3px;
+  }
+
+  /* Form Controls */
+  .form-control {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px;
+    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+  }
+
+  .form-control:disabled {
+    background-color: #f8f9fa;
+    border-color: #e0e0e0;
+    color: #495057;
+  }
+
+  /* Labels */
+  label {
+    color: #072797;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  /* Range Inputs */
+  .form-range {
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, orangered, #072797);
+  }
+
+  .form-range::-webkit-slider-thumb {
+    background: #072797;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .form-range::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+  }
+
+  /* Legends and Text */
+  .v-3 {
+    color: #072797;
+    font-weight: 500;
+  }
+
+  .list-inline-item {
+    margin-right: 15px;
+    color: #555;
+  }
+
+  /* Dividers */
+  .dropdown-divider {
+    border-top: 2px solid rgba(7, 39, 151, 0.1);
+    margin: 30px 0;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    background: #072797;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    background: orangered;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+
+  /* Car Condition Section */
+  .class {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 12px;
+    margin-top: 30px;
+  }
+
+  /* Range Value Indicators */
+  .d-flex.justify-content-between {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 5px;
+  }
+
+  .d-flex.justify-content-between span {
+    color: #072797;
+    font-weight: 500;
+  }
+
+  /* Total Result Section */
+  #totalResult, #appearanceResult {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #072797;
+    background: #fff;
+    border: 2px solid #072797;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .container-vinfo {
+      padding: 20px;
+      margin: 10px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .btn-primary {
+      width: 100%;
+      margin: 10px 0;
+    }
+  }
+
+  /* Animation for form elements */
+  .form-group {
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 </style>
 
 <body>
@@ -271,7 +435,7 @@ mysqli_close($connection);
     </div>
   </nav>
   <li class="my-4">
-    <hr class="dropdown-divider bg-primary" />
+    
   </li>
   <!-- top navigation bar -->
   <!-- offcanvas -->

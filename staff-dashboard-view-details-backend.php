@@ -6,6 +6,7 @@ include('config.php');
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve form data
     $selected_id = isset($_POST['selected_id']) ? $_POST['selected_id'] : '';
+    $staff_id = isset($_POST['staff_id']) ? $_POST['staff_id'] : '';
     $vehicle_id = isset($_POST['vehicle_id']) ? $_POST['vehicle_id'] : '';
     $servicename_id = isset($_POST['servicename_id']) ? $_POST['servicename_id'] : '';
     $user_id = isset($_POST['user_id']) ? $_POST['user_id'] : '';
@@ -20,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Update the status column in the vehicles table
     $query = "UPDATE vehicles SET status = 'Currently Washing' WHERE vehicle_id = $vehicle_id";
     $status_query = "UPDATE service_details SET status = 'Finish' WHERE vehicle_id = $vehicle_id";
-    $queuing_query = "UPDATE queuing_slots SET is_serving = 1 WHERE slotNumber = $slotNumber";
+    $queuing_query = "UPDATE queuing_slots SET is_serving = 1, staff_id = $staff_id, service_id = $selected_id WHERE slotNumber = $slotNumber";
 
     // Execute the queuing query
     if (mysqli_query($connection, $queuing_query)) {

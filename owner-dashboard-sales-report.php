@@ -239,6 +239,149 @@ mysqli_close($connection);
             visibility: hidden;
         }
     }
+
+    .sales-container {
+        padding: 40px;
+        margin-top: 80px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+
+    .page-header {
+        margin-bottom: 40px;
+    }
+
+    .page-header h1 {
+        color: #072797;
+        font-weight: 600;
+        position: relative;
+        padding-bottom: 15px;
+        text-align: center;
+    }
+
+    .page-header h1:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background: orangered;
+    }
+
+    .date-filter {
+        background: #f8f9fa;
+        padding: 25px;
+        border-radius: 8px;
+        border-left: 4px solid #072797;
+        margin-bottom: 30px;
+    }
+
+    .form-label {
+        color: #333;
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        border: 1px solid #dee2e6;
+        padding: 10px;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #072797;
+        box-shadow: 0 0 0 0.2rem rgba(7, 39, 151, 0.25);
+    }
+
+    .search-button {
+        background: #072797;
+        color: white;
+        padding: 12px;
+        border-radius: 5px;
+        border: none;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+    .search-button:hover {
+        background: orangered;
+        transform: translateY(-2px);
+    }
+
+    .sales-table {
+        margin-top: 30px;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 0 15px rgba(0,0,0,0.05);
+    }
+
+    .sales-table thead {
+        background: orangered;
+    }
+
+    .sales-table th {
+        color: white;
+        font-weight: 500;
+        padding: 15px;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .sales-table td {
+        padding: 12px 15px;
+        vertical-align: middle;
+    }
+
+    .total-amount {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 30px 0;
+        border-left: 4px solid orangered;
+    }
+
+    .total-amount strong {
+        color: #072797;
+        font-size: 1.2rem;
+    }
+
+    .action-buttons {
+        gap: 15px;
+    }
+
+    .action-button {
+        background: #072797;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        border: none;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .action-button:hover {
+        background: orangered;
+        transform: translateY(-2px);
+    }
+
+    @media print {
+        .no-print {
+            display: none;
+        }
+        
+        .sales-container {
+            margin: 0;
+            padding: 20px;
+            box-shadow: none;
+        }
+    }
 </style>
 
 </style>
@@ -415,162 +558,181 @@ mysqli_close($connection);
     </div>
     <!-- main content -->
     <main>
-        <div class="container-fluid text-dark">
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <div class="page-header">
-                        <h1 class="text-center">Sales Report</h1>
+        <div class="sales-container">
+            <div class="page-header">
+                <h1><i class="fas fa-chart-line me-2"></i>Sales Report</h1>
+            </div>
+
+            <div class="date-filter no-print">
+                <form action="owner-dashboard-sales-report.php" method="GET">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="mb-3">
+                                <label for="start_date" class="form-label">Start Date</label>
+                                <input type="date" id="start_date" name="start_date" class="form-control" value="<?php echo isset($_GET['start_date']) ? $_GET['start_date'] : ''; ?>">
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="mb-3">
+                                <label for="end_date" class="form-label">End Date</label>
+                                <input type="date" id="end_date" name="end_date" class="form-control" value="<?php echo isset($_GET['end_date']) ? $_GET['end_date'] : ''; ?>">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label class="form-label">&nbsp;</label>
+                                <button class="search-button" type="submit">
+                                    <i class="fas fa-search me-2"></i>Search
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="">
-                    <form action="cashier-dashboard-sales-report.php" method="GET">
-                        <div class="row mb-3">
-                            <div class="col-md-6" id="invoice">
-                                <label for="start_date" class="form-label">Start Date:</label>
-                                <input type="date" id="start_date" name="start_date" class="form-control">
-                            </div>
-                            <div class="col-md-6" id="invoice">
-                                <label for="end_date" class="form-label">End Date:</label>
-                                <input type="date" id="end_date" name="end_date" class="form-control">
-                            </div>
-                        </div>
-                        <div class="d-grid">
-                            <button id="invoice" class="btn btn-primary" type="submit">Search</button>
-                        </div>
-                    </form>
-                    <br>
-                    <br>
+                </form>
+            </div>
 
-                    <table class="table table-hover table-bordered table-striped table-responsive">
-                        <thead class="v-2 text-light">
-                            <tr>
-                                <th class="px-4">Date</th>
-                                <th class="px-4">Transaction ID</th>
-                                <th class="px-4">Customer Name</th>
-                                <th class="px-4">Vehicle Details</th>
-                                <th class="px-4">Type of Service & Price</th>
-                                <th class="px-4">Cleaning Products & Price</th>
-                                <th class="px-4">Payment Method</th>
-                                <th class="px-4">Transaction Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            include('config.php');
+            <div class="sales-table">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Transaction ID</th>
+                            <th>Customer Name</th>
+                            <th>Vehicle Details</th>
+                            <th>Services & Price</th>
+                            <th>Products & Price</th>
+                            <th>Payment Method</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        include('config.php');
 
-                            // Initialize search parameters
-                            $whereClause = '';
+                        // Initialize search parameters
+                        $whereClause = '';
 
-                            // Check if search dates are provided
-                            if (isset($_GET['start_date']) && isset($_GET['end_date'])) {
-                                $start_date = $_GET['start_date'];
-                                $end_date = $_GET['end_date'];
+                        // Check if search dates are provided
+                        if (isset($_GET['start_date']) && isset($_GET['end_date'])) {
+                            $start_date = $_GET['start_date'];
+                            $end_date = $_GET['end_date'];
 
-                                // Add the date range filter to the WHERE clause
-                                $whereClause = " WHERE payment_details.date BETWEEN '$start_date' AND '$end_date'";
-                            } elseif (isset($_GET['start_date'])) {
-                                $start_date = $_GET['start_date'];
-                                $whereClause = " WHERE payment_details.date >= '$start_date'";
-                            } elseif (isset($_GET['end_date'])) {
-                                $end_date = $_GET['end_date'];
-                                $whereClause = " WHERE payment_details.date <= '$end_date'";
-                            }
+                            // Add the date range filter to the WHERE clause
+                            $whereClause = " WHERE payment_details.date BETWEEN '$start_date' AND '$end_date'";
+                        } elseif (isset($_GET['start_date'])) {
+                            $start_date = $_GET['start_date'];
+                            $whereClause = " WHERE payment_details.date >= '$start_date'";
+                        } elseif (isset($_GET['end_date'])) {
+                            $end_date = $_GET['end_date'];
+                            $whereClause = " WHERE payment_details.date <= '$end_date'";
+                        }
 
-                            // Construct SQL query with search parameters
-                            $query = "SELECT finish_jobs.*, users.firstname, users.lastname, vehicles.model, payment_details.*, service_names.service_name
+                        // Construct SQL query with search parameters
+                        $query = "SELECT finish_jobs.*, users.firstname, users.lastname, vehicles.model, payment_details.*, service_names.service_name
                                   FROM finish_jobs
                                   INNER JOIN users ON finish_jobs.user_id = users.user_id
                                   INNER JOIN vehicles ON finish_jobs.vehicle_id = vehicles.vehicle_id
                                   INNER JOIN payment_details ON finish_jobs.user_id = payment_details.user_id
                                   INNER JOIN service_names ON finish_jobs.servicename_id = service_names.servicename_id $whereClause";
 
-                            $result = mysqli_query($connection, $query);
+                        $result = mysqli_query($connection, $query);
 
-                            // Initialize total amount variable
-                            $totalAmount = 0;
+                        // Initialize total amount variable
+                        $totalAmount = 0;
 
-                            // Check if any rows are returned
-                            if (mysqli_num_rows($result) > 0) {
-                                // Loop through the results and display the table
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    echo '<tr>';
-                                    echo '<td>' . $row['date'] . '</td>';
-                                    echo '<td>' . $row['payment_id'] . '</td>';
-                                    echo '<td>' . $row['firstname'] . ' ' . $row['lastname'] . '</td>';
-                                    echo '<td>' . $row['model'] . '</td>';
+                        // Check if any rows are returned
+                        if (mysqli_num_rows($result) > 0) {
+                            // Loop through the results and display the table
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                echo '<tr>';
+                                echo '<td>' . $row['date'] . '</td>';
+                                echo '<td>' . $row['payment_id'] . '</td>';
+                                echo '<td>' . $row['firstname'] . ' ' . $row['lastname'] . '</td>';
+                                echo '<td>' . $row['model'] . '</td>';
 
-                                    // Displaying type of services and prices
-                                    $services = explode(',', $row['services']); // Assuming service_name is comma-separated
-                                    $prices = explode(',', $row['price']); // Assuming price is comma-separated
+                                // Displaying type of services and prices
+                                $services = explode(',', $row['services']); // Assuming service_name is comma-separated
+                                $prices = explode(',', $row['price']); // Assuming price is comma-separated
 
 
-                                    // Check if both arrays have the same length to avoid errors
-                                    $output = '';
-                                    if (count($services) === count($prices)) {
-                                        for ($i = 0; $i < count($services); $i++) {
-                                            // Append each service and price with a line break
-                                            $output .= trim($services[$i]) . ' - ' . trim($prices[$i]) . '<br>';
+                                // Check if both arrays have the same length to avoid errors
+                                $output = '';
+                                if (count($services) === count($prices)) {
+                                    for ($i = 0; $i < count($services); $i++) {
+                                        // Append each service and price with a line break
+                                        $output .= trim($services[$i]) . ' - ' . trim($prices[$i]) . '<br>';
 
-                                            // Sum the price to total amount, removing peso sign and converting to float
-                                            $price = str_replace(['₱', ' '], '', $prices[$i]);  // Remove peso sign and spaces
-                                            $totalAmount += (float)$price;  // Add to total amount
-                                        }
+                                        // Sum the price to total amount, removing peso sign and converting to float
+                                        $price = str_replace(['₱', ' '], '', $prices[$i]);  // Remove peso sign and spaces
+                                        $totalAmount += (float)$price;  // Add to total amount
                                     }
-
-                                    echo '<td>' . $output . '</td>'; // Display the formatted output
-
-                                    // Displaying type of services and prices
-                                    $product_name = explode(',', $row['product_name']); // Assuming product_name is comma-separated
-                                    $product_price = explode(',', $row['product_price']); // Assuming product_price is comma-separated
-
-                                    // Check if both arrays have the same length to avoid errors
-                                    $product_output = '';
-                                    if (count($product_name) === count($product_price)) {
-                                        for ($i = 0; $i < count($product_name); $i++) {
-                                            // Append each product and price with a line break
-                                            $product_output .= trim($product_name[$i]) . ' - ' . trim($product_price[$i]) . '<br>';
-
-                                            // Create a new variable for cleaned price instead of overwriting the array
-                                            $clean_price = str_replace(['₱', ' '], '', $product_price[$i]);  // Remove peso sign and spaces
-                                            $totalAmount += (float)$clean_price;  // Add to total amount
-                                        }
-                                    } else {
-                                        // Handle the case where the product_name and product_price arrays don't match in length
-                                        $product_output = 'Error: Mismatch between product names and prices.';
-                                    }
-
-                                    echo '<td>' . $product_output . '</td>'; // Display the formatted output
-                                    echo '<td>' . $row['payment_method'] . '</td>';
-                                    echo '<td>Paid</td>';
-                                    echo '</tr>';
                                 }
-                            } else {
-                                // Display a message if no data is found for the selected dates
-                                echo '<tr><td colspan="8" class="text-center">No data found for the selected date range.</td></tr>';
+
+                                echo '<td>' . $output . '</td>'; // Display the formatted output
+
+                                // Displaying type of services and prices
+                                $product_name = explode(',', $row['product_name']); // Assuming product_name is comma-separated
+                                $product_price = explode(',', $row['product_price']); // Assuming product_price is comma-separated
+
+                                // Check if both arrays have the same length to avoid errors
+                                $product_output = '';
+                                if (count($product_name) === count($product_price)) {
+                                    for ($i = 0; $i < count($product_name); $i++) {
+                                        // Append each product and price with a line break
+                                        $product_output .= trim($product_name[$i]) . ' - ' . trim($product_price[$i]) . '<br>';
+
+                                        // Create a new variable for cleaned price instead of overwriting the array
+                                        $clean_price = str_replace(['₱', ' '], '', $product_price[$i]);  // Remove peso sign and spaces
+                                        $totalAmount += (float)$clean_price;  // Add to total amount
+                                    }
+                                } else {
+                                    // Handle the case where the product_name and product_price arrays don't match in length
+                                    $product_output = 'Error: Mismatch between product names and prices.';
+                                }
+
+                                echo '<td>' . $product_output . '</td>'; // Display the formatted output
+                                echo '<td>' . $row['payment_method'] . '</td>';
+                                echo '<td>Paid</td>';
+                                echo '</tr>';
                             }
-                            ?>
-                        </tbody>
-                    </table>
+                        } else {
+                            // Display a message if no data is found for the selected dates
+                            echo '<tr><td colspan="8" class="text-center">No data found for the selected date range.</td></tr>';
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
 
-                    <div class="alert alert-info">
-                        Total Amount: ₱ <?php echo number_format($totalAmount, 2); ?>
-                    </div>
+            <div class="total-amount">
+                <strong>Total Sales: ₱<?php echo number_format($totalAmount, 2); ?></strong>
+            </div>
 
-                    <div class="d-flex justify-content-between">
-                        <a href="cashier-dashboard-sales-report1.php"><button class="btn btn-primary" id="invoice">View Next Page</button></a>
-                        <button id="print-button" class="btn btn-primary" type="button" onclick="printInvoice()">Print Sales</button>
-                    </div>
-                </div>
+            <div class="d-flex justify-content-between action-buttons no-print">
+                <a href="owner-dashboard-sales-report1.php" class="action-button" style="text-decoration: none;">
+                    <i class="fas fa-arrow-right"></i>
+                    Next Page
+                </a>
+                <button class="action-button" onclick="printInvoice()">
+                    <i class="fas fa-print"></i>
+                    Print Report
+                </button>
             </div>
         </div>
-
-        <script>
-            function printInvoice() {
-                // Print the current window content (entire page)
-                window.print();
-            }
-        </script>
     </main>
+
+
+    <script>
+        function printInvoice() {
+            // Print the current window content (entire page)
+            window.print();
+        }
+    </script>
+
+
+
+
+
+
 
 
     <script>

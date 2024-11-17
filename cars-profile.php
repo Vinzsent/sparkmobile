@@ -193,6 +193,197 @@ li :hover{
   height: 150px;
 }
 
+.garage-container {
+    padding: 40px;
+    margin: 80px auto 20px auto;
+    max-width: 1200px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.header-content h2 {
+    color: #072797;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-content p {
+    margin: 15px 0 0 0;
+    font-size: 14px;
+}
+
+.garage-btn {
+    background: #072797;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.garage-btn:hover {
+    background: orangered;
+    color: white;
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+.vehicles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 350px));
+    gap: 24px;
+    padding: 20px 0;
+    justify-content: center;
+}
+
+.vehicle-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    width: 100%;
+    max-width: 350px;
+}
+
+.vehicle-card:hover {
+    transform: translateY(-5px);
+}
+
+.vehicle-header {
+    background: #072797;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 12px 12px 0 0;
+}
+
+.vehicle-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.vehicle-status {
+    background: orangered;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.vehicle-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: #f8f9fa;
+    padding: 20px;
+}
+
+.vehicle-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.vehicle-details {
+    padding: 20px;
+    color: #333;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.detail-item i {
+    color: #072797;
+    width: 20px;
+    font-size: 16px;
+}
+
+.detail-item strong {
+    color: #072797;
+    min-width: 100px;
+}
+
+.edit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px;
+    background: #072797;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.edit-btn:hover {
+    background: orangered;
+    color: white;
+    text-decoration: none;
+}
+
+.no-vehicles {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    color: #6c757d;
+}
+
+.no-vehicles i {
+    font-size: 48px;
+    margin-bottom: 16px;
+    color: #072797;
+}
+
+@media (max-width: 768px) {
+    .garage-container {
+        padding: 20px;
+        margin-top: 70px;
+        width: 95%;
+    }
+
+    .section-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .garage-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .vehicles-grid {
+        grid-template-columns: minmax(280px, 350px);
+        padding: 10px;
+    }
+}
+
 </style>
   <body>
     <!-- top navigation bar -->
@@ -413,49 +604,73 @@ li :hover{
     </div>
     <!-- main content -->
     <main>
-    <div class="container-vinfo text-dark me-4">
-    <div class="container mt-3">
-        <div class="d-flex align-items-center">
-            <h4 class="mb-0">MY GARAGE</h4>
-            <a href="cars-register.php" class="btn btn-primary ml-auto">Add Vehicles</a>
-        </div>
-    </div>
-    <div class="v-2 card-header mt-2">
-            <div class="row row-cols-1 row-cols-md-1 g-4">
-            <?php
-              // Assuming $result contains the vehicles associated with the user
-              if ($result) {
-                  $count = mysqli_num_rows($result);
-                  $colClass = $count > 1 ? 'col-md-6' : 'offset-md-3 col-md-6'; // Determine column class based on the number of cars
-
-                  foreach ($result as $row) {
-                      echo '<div class="' . $colClass . '">'; // Apply column class
-                      echo '<div class="card mb-2">';
-                      
-                      // Profile picture section
-                      
-                      echo '<div class="card-header v-1 text-light">';
-                      echo '<h5 class="card-title">' . (isset($row['label']) ? $row['label'] : 'label') . '</h5>';
-                      echo '</div>';
-                      echo '<div class="card-body container-fluid">';
-                      echo '<img class="profile-pic" src="' . (isset($row['profile']) ? $row['profile'] : 'N/A') . '" />';
-                      echo '<p class="card-text mt-3"><strong>Plate Number:</strong> ' . (isset($row['platenumber']) ? $row['platenumber'] : 'N/A') . '</p>';
-                      echo '<p class="card-text"><strong>Brand:</strong> ' . (isset($row['brand']) ? $row['brand'] : 'N/A') . '</p>';
-                      echo '<p class="card-text"><strong>Model:</strong> ' . (isset($row['model']) ? $row['model'] : 'N/A') . '</p>';
-                      echo '<p class="card-text"><strong>Color:</strong> ' . (isset($row['color']) ? $row['color'] : 'N/A') . '</p>';
-                      // Add other card details as needed
-                      echo '<a href="cars-profile-info.php?vehicle_id=' . (isset($row['vehicle_id']) ? $row['vehicle_id'] : '') . '" class="btn btn-primary">Edit Vehicle</a>';
-                      echo '</div>';
-                      echo '</div>';
-                      echo '</div>';
-                  }
-              } else {
-                  echo '<p class="text-danger">Error: ' . mysqli_error($connection) . '</p>';
-              }
-              ?>
+    <div class="garage-container">
+        <div class="section-header">
+            <div class="header-content">
+                <h2><i class="fas fa-warehouse"></i> My Garage</h2>
+                <p class="text-muted">Manage your registered vehicles</p>
             </div>
+            <a href="cars-register.php" class="garage-btn">
+                <i class="fas fa-plus-circle"></i>Add Vehicle
+            </a>
+        </div>
+
+        <div class="vehicles-grid">
+            <?php
+            if ($result) {
+                $count = mysqli_num_rows($result);
+                foreach ($result as $row) {
+                    echo '<div class="vehicle-card">';
+                    echo '<div class="vehicle-header">';
+                    echo '<h3>' . (isset($row['label']) ? $row['label'] : 'label') . '</h3>';
+                    echo '<div class="vehicle-status">Active</div>';
+                    echo '</div>';
+                    
+                    echo '<div class="vehicle-image">';
+                    echo '<img src="' . (isset($row['profile']) ? $row['profile'] : 'N/A') . '" alt="Vehicle Image"/>';
+                    echo '</div>';
+                    
+                    echo '<div class="vehicle-details">';
+                    echo '<div class="detail-item">';
+                    echo '<i class="fas fa-id-card"></i>';
+                    echo '<strong>Plate Number:</strong>';
+                    echo '<span class="text-dark">' . (isset($row['platenumber']) ? $row['platenumber'] : 'N/A') . '</span>';
+                    echo '</div>';
+                    
+                    echo '<div class="detail-item">';
+                    echo '<i class="fas fa-building"></i>';
+                    echo '<strong>Brand:</strong>';
+                    echo '<span class="text-dark">' . (isset($row['brand']) ? $row['brand'] : 'N/A') . '</span>';
+                    echo '</div>';
+                    
+                    echo '<div class="detail-item">';
+                    echo '<i class="fas fa-car"></i>';
+                    echo '<strong>Model:</strong>';
+                    echo '<span class="text-dark">' . (isset($row['model']) ? $row['model'] : 'N/A') . '</span>';
+                    echo '</div>';
+                    
+                    echo '<div class="detail-item">';
+                    echo '<i class="fas fa-palette"></i>';
+                    echo '<strong>Color:</strong>';
+                    echo '<span class="text-dark">' . (isset($row['color']) ? $row['color'] : 'N/A') . '</span>';
+                    echo '</div>';
+                    
+                    echo '<a href="cars-profile-info.php?vehicle_id=' . (isset($row['vehicle_id']) ? $row['vehicle_id'] : '') . '" class="edit-btn">';
+                    echo '<i class="fas fa-edit me-2"></i>Edit Vehicle';
+                    echo '</a>';
+                    echo '</div>';
+                    echo '</div>';
+                }
+            } else {
+                echo '<div class="no-vehicles">';
+                echo '<i class="fas fa-car-alt"></i>';
+                echo '<p>No vehicles found. Add your first vehicle to get started!</p>';
+                echo '</div>';
+            }
+            ?>
         </div>
     </div>
+</main>
 
 
     <!-- Custom JavaScript to display the range value -->

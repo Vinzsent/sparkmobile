@@ -75,7 +75,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         is_finished,
         is_deleted, 
         product_name, 
-        product_price
+        product_price,
+        staff_id,
+        slotNumber
     ) VALUES (
         '$selected_id', 
         '$vehicle_id', 
@@ -89,7 +91,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         '$is_finished',
         '$is_deleted', 
         '$product_name', 
-        '$product_price'
+        '$product_price',
+        '$staff_id',
+        '$slotNumber'
     )";
 
     if (mysqli_query($connection, $insert_query)) {
